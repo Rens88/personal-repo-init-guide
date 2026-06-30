@@ -1,0 +1,1808 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Human-Readable Startup Checklist</title>
+  <style>
+    :root {
+      --base-blue: #01378A;
+      --base-red: #E1011A;
+      --base-orange: #EA6D08;
+      --ink: #07152f;
+      --muted: #53647f;
+      --paper: #f5f8fd;
+      --panel: #ffffff;
+      --line: #d2ddec;
+      --line-strong: #9fb0ca;
+      --accent: var(--base-blue);
+      --accent-dark: #00265f;
+      --accent-soft: #e5eefc;
+      --action: var(--base-orange);
+      --action-dark: #ba5300;
+      --warn: var(--base-red);
+      --warn-soft: #ffe6ea;
+      --code: #07152f;
+      --code-ink: #eef4ff;
+      --shadow: 0 18px 45px rgba(1, 55, 138, 0.14);
+      --radius: 8px;
+      font-family: "Aptos", "Segoe UI", "Helvetica Neue", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(1, 55, 138, 0.12), transparent 34rem),
+        linear-gradient(35deg, transparent 52%, rgba(234, 109, 8, 0.10)),
+        radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.72), transparent 18rem),
+        var(--paper);
+      line-height: 1.5;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    a {
+      color: var(--accent-dark);
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.2em;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+    }
+
+    .hero {
+      padding: 34px 32px 22px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.68)),
+        linear-gradient(130deg, rgba(1, 55, 138, 0.10), transparent 52%),
+        repeating-linear-gradient(90deg, rgba(1, 55, 138, 0.08) 0 1px, transparent 1px 56px);
+    }
+
+    .hero-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(280px, 1.1fr) minmax(280px, 0.9fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(2rem, 5vw, 4.8rem);
+      line-height: 0.95;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+    }
+
+    .context-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .context-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaf6;
+    }
+
+    .context-heading h2 {
+      margin: 0;
+      font-size: 0.98rem;
+    }
+
+    .context-heading span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .context-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .reset-progress {
+      min-height: 34px;
+      border: 1px solid var(--base-red);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--base-red);
+      cursor: pointer;
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .reset-progress:hover,
+    .reset-progress:focus-visible {
+      background: var(--base-red);
+      color: #fff;
+    }
+
+    .context-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      padding: 9px 10px;
+      min-height: 38px;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: 2px solid var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .layout {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 32px 48px;
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.86);
+      overflow: hidden;
+    }
+
+    .sidebar-top {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 12px;
+    }
+
+    .search {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 9px 10px;
+      width: 100%;
+      background: var(--panel);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .segmented.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .segmented button,
+    .mini-tabs button {
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 0.84rem;
+      min-height: 36px;
+    }
+
+    .segmented button:last-child,
+    .mini-tabs button:last-child {
+      border-right: 0;
+    }
+
+    .segmented button.active,
+    .mini-tabs button.active {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 750;
+    }
+
+    .nav {
+      max-height: calc(100vh - 250px);
+      overflow: auto;
+      padding: 8px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 8px 9px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    .nav a:hover {
+      background: var(--accent-soft);
+    }
+
+    .nav a.chapter-complete {
+      border-color: rgba(25, 128, 78, 0.28);
+      background: rgba(25, 128, 78, 0.13);
+    }
+
+    .nav a.chapter-partial {
+      border-color: rgba(234, 109, 8, 0.34);
+      background: rgba(234, 109, 8, 0.15);
+    }
+
+    .nav a.chapter-not-started {
+      border-color: rgba(225, 1, 26, 0.25);
+      background: rgba(225, 1, 26, 0.10);
+    }
+
+    .nav a.chapter-complete:hover {
+      background: rgba(25, 128, 78, 0.20);
+    }
+
+    .nav a.chapter-partial:hover {
+      background: rgba(234, 109, 8, 0.23);
+    }
+
+    .nav a.chapter-not-started:hover {
+      background: rgba(225, 1, 26, 0.16);
+    }
+
+    .content {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      overflow: hidden;
+      scroll-margin-top: 18px;
+    }
+
+    .section.hidden {
+      display: none;
+    }
+
+    .section-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaf6;
+    }
+
+    .section-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      justify-content: space-between;
+    }
+
+    .section-title-main {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .section-progress {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: flex-end;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 750;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .section-header p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      max-width: 820px;
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .card.note {
+      background: #fbfaf6;
+    }
+
+    .card[data-task-state="finished"] {
+      border-color: rgba(1, 55, 138, 0.38);
+    }
+
+    .card[data-task-state="skipped"] {
+      border-color: rgba(234, 109, 8, 0.48);
+      background: #fff8f1;
+    }
+
+    .card.warn {
+      border-color: #d9b75d;
+      background: var(--warn-soft);
+    }
+
+    .card-head {
+      padding: 13px 14px;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .card-head h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .card-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.91rem;
+    }
+
+    .card-body {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .rich-text {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .rich-text p {
+      margin: 0 0 10px;
+    }
+
+    .rich-text ul {
+      margin: 0;
+      padding-left: 19px;
+    }
+
+    .rich-text li + li {
+      margin-top: 5px;
+    }
+
+    .status-control {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--line-strong);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 0.9rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .status-control:hover,
+    .status-control:focus-visible {
+      border-color: var(--base-blue);
+      outline: 2px solid var(--accent-soft);
+      outline-offset: 1px;
+    }
+
+    .status-control[data-task-state="finished"] {
+      border-color: var(--base-blue);
+      background: var(--base-blue);
+      color: #fff;
+    }
+
+    .status-control[data-task-state="skipped"] {
+      border-color: var(--base-orange);
+      background: var(--base-orange);
+      color: #fff;
+    }
+
+    .status-control[data-chapter-state="complete"] {
+      border-color: var(--base-blue);
+      background: var(--base-blue);
+      color: #fff;
+    }
+
+    .status-control[data-chapter-state="partial"] {
+      border-color: var(--base-orange);
+      background: #fff;
+      color: var(--base-orange);
+    }
+
+    .status-label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      padding: 3px 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .status-label.finished {
+      border-color: rgba(1, 55, 138, 0.3);
+      color: var(--base-blue);
+      background: var(--accent-soft);
+    }
+
+    .status-label.skipped {
+      border-color: rgba(234, 109, 8, 0.36);
+      color: var(--base-orange);
+      background: #fff4e9;
+    }
+
+    .command-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mini-tabs {
+      display: inline-grid;
+      grid-auto-flow: column;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .copy-button {
+      border: 1px solid var(--action);
+      border-radius: 6px;
+      background: var(--action);
+      color: #fff;
+      padding: 8px 11px;
+      cursor: pointer;
+      min-height: 36px;
+      font-weight: 750;
+    }
+
+    .copy-button:hover {
+      background: var(--action-dark);
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow: auto;
+      border-radius: 6px;
+      background: var(--code);
+      color: var(--code-ink);
+      padding: 14px;
+      font: 0.88rem/1.45 "Cascadia Mono", "Consolas", "SFMono-Regular", monospace;
+    }
+
+    code {
+      font-family: "Cascadia Mono", "Consolas", "SFMono-Regular", monospace;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      min-height: 28px;
+      padding: 4px 9px;
+      font-size: 0.79rem;
+      font-weight: 700;
+    }
+
+    .download-panel {
+      margin-top: 18px;
+      display: grid;
+      gap: 9px;
+      max-width: 720px;
+    }
+
+    .download-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .agent-note {
+      border-left: 4px solid var(--base-red);
+      background: rgba(225, 1, 26, 0.08);
+      color: var(--ink);
+      padding: 9px 11px;
+      font-weight: 750;
+    }
+
+    .download-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .download-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      border: 1px solid var(--action);
+      border-radius: 6px;
+      background: var(--action);
+      color: #fff;
+      cursor: pointer;
+      padding: 8px 11px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 750;
+    }
+
+    .download-link:hover {
+      background: var(--action-dark);
+      color: #fff;
+    }
+
+    .download-link::after {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 8px);
+      z-index: 20;
+      width: min(340px, 80vw);
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      content: attr(data-purpose);
+      opacity: 0;
+      padding: 10px 11px;
+      pointer-events: none;
+      transform: translateY(-4px);
+      transition: opacity 160ms ease, transform 160ms ease;
+      font-size: 0.82rem;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .download-link:hover::after,
+    .download-link:focus-visible::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .brand-logo-panel {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0 0;
+    }
+
+    .brand-logo {
+      display: block;
+      width: min(320px, 100%);
+      height: auto;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      background: var(--code);
+      color: var(--code-ink);
+      border-radius: 6px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      transition: opacity 180ms ease, transform 180ms ease;
+      z-index: 50;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 18px;
+      bottom: 72px;
+      z-index: 45;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      border: 1px solid var(--base-blue);
+      border-radius: 6px;
+      background: var(--base-blue);
+      color: #fff;
+      padding: 9px 12px;
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .back-to-top:hover,
+    .back-to-top:focus-visible {
+      background: var(--accent-dark);
+      color: #fff;
+    }
+
+    @media (max-width: 980px) {
+      .hero-inner,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .nav {
+        max-height: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero,
+      .layout {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .context-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-head,
+      .command-actions,
+      .section-title-row {
+        display: grid;
+      }
+
+      .section-progress {
+        justify-content: flex-start;
+      }
+
+      .mini-tabs,
+      .segmented {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+      }
+
+      .segmented button,
+      .mini-tabs button {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .segmented button:last-child,
+      .mini-tabs button:last-child {
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero" id="top">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">Repo bootstrap</p>
+          <h1>Human-readable startup checklist</h1>
+          <p class="hero-copy">A copy-friendly startup guide for new repositories. Fill in the context once, then copy commands that are already shaped for your shell and Git host.</p>
+          <div class="pill-row">
+            <span class="pill">Git first</span>
+            <span class="pill">Bootstrap second</span>
+            <span class="pill">Baseline commit third</span>
+            <span class="pill">Agent work fourth</span>
+          </div>
+          <div class="download-panel">
+            <p>Download the repo-standard starter files. These downloads are embedded in this HTML file.</p>
+            <p class="agent-note">Agent note: when updating <code>bootstrap_repo.py</code>, <code>AGENTS.md</code>, or <code>AGENTS_INIT.md</code>, check whether the embedded download copies in this HTML file also need to be refreshed.</p>
+            <div class="download-row">
+              <button type="button" class="download-link" data-download-file="bootstrap_repo.py" data-purpose="Creates the clean repo folder structure and starter files. Download it into the root of the repository you are bootstrapping.">Download bootstrap_repo.py</button>
+              <button type="button" class="download-link" data-download-file="AGENTS.md" data-purpose="Defines the stable operating rules for AI agents in the repository. Download it into the new repository root.">Download AGENTS.md</button>
+              <button type="button" class="download-link" data-download-file="AGENTS_INIT.md" data-purpose="Gives agents the startup sequence for inspecting, planning, and bootstrapping the repo. Download it into the new repository root.">Download AGENTS_INIT.md</button>
+            </div>
+            <div class="brand-logo-panel" aria-label="TeamNL Sport Science Centre logo">
+              <img class="brand-logo" src="assets/teamnl_sport_science_centre_LOGO.png" alt="TeamNL Sport Science Centre">
+            </div>
+          </div>
+        </div>
+
+        <section class="context-panel" aria-labelledby="context-title">
+          <div class="context-heading">
+            <h2 id="context-title">Project context</h2>
+            <div class="context-actions">
+              <span>Used in copied commands</span>
+              <button type="button" class="reset-progress" id="resetProgress">Reset progress</button>
+            </div>
+          </div>
+          <div class="context-grid">
+            <div class="field">
+              <label for="projectName">Project folder</label>
+              <input id="projectName" data-field="projectName" value="projexcellent-app">
+            </div>
+            <div class="field">
+              <label for="parentWindows">Windows parent folder</label>
+              <input id="parentWindows" data-field="parentWindows" value="C:\Users\rmeer\CodeLibrary">
+            </div>
+            <div class="field">
+              <label for="parentBash">Bash parent folder</label>
+              <input id="parentBash" data-field="parentBash" value="/mnt/c/Users/rmeer/CodeLibrary">
+            </div>
+            <div class="field">
+              <label for="defaultBranch">Default branch</label>
+              <input id="defaultBranch" data-field="defaultBranch" value="main">
+            </div>
+            <div class="field">
+              <label for="repoOwner">GitHub owner</label>
+              <input id="repoOwner" data-field="repoOwner" value="Rens88">
+            </div>
+            <div class="field">
+              <label for="repoName">Repository name</label>
+              <input id="repoName" data-field="repoName" value="projexcellent-app">
+            </div>
+            <div class="field">
+              <label for="devOpsOrg">Azure DevOps organization</label>
+              <input id="devOpsOrg" data-field="devOpsOrg" value="YOUR-ORG">
+            </div>
+            <div class="field">
+              <label for="devOpsProject">Azure DevOps project</label>
+              <input id="devOpsProject" data-field="devOpsProject" value="YOUR-PROJECT">
+            </div>
+            <div class="field">
+              <label for="featureBranch">Feature branch</label>
+              <input id="featureBranch" data-field="featureBranch" value="feature/initialize-repo-standard">
+            </div>
+            <div class="field">
+              <label for="sandboxName">Docker Sandbox name</label>
+              <input id="sandboxName" data-field="sandboxName" value="projexcellent-codex">
+            </div>
+            <div class="field">
+              <label for="oldRepoPath">Old repo path</label>
+              <input id="oldRepoPath" data-field="oldRepoPath" value="C:\path\to\old-repo">
+            </div>
+            <div class="field">
+              <label for="privacy">New remote visibility</label>
+              <select id="privacy" data-field="privacy">
+                <option value="private" selected>private</option>
+                <option value="public">public</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Checklist controls">
+        <div class="sidebar-top">
+          <input class="search" id="search" placeholder="Filter checklist" aria-label="Filter checklist">
+          <div>
+            <div class="eyebrow">Default shell</div>
+            <div class="segmented" data-global-tabs="shell">
+              <button type="button" data-value="powershell" class="active">PowerShell</button>
+              <button type="button" data-value="cmd">cmd</button>
+              <button type="button" data-value="bash">Bash</button>
+            </div>
+          </div>
+          <div>
+            <div class="eyebrow">Git host</div>
+            <div class="segmented two" data-global-tabs="provider">
+              <button type="button" data-value="github" class="active">GitHub</button>
+              <button type="button" data-value="devops">DevOps</button>
+            </div>
+          </div>
+        </div>
+        <nav class="nav" id="nav"></nav>
+      </aside>
+
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+
+  <a class="back-to-top" href="#top" aria-label="Back to project context">Back to top</a>
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    const PROGRESS_STORAGE_KEY = "startupChecklistProgress:v1";
+    const EMBEDDED_DOWNLOADS = {
+      "bootstrap_repo.py": "#!/usr/bin/env python3\n\"\"\"\nbootstrap_repo.py\n\nCreate a clean AI-lab style repository shell for rapid prototypes,\nproof-of-concept apps, or MVP/PRD-oriented apps.\n\nDesign philosophy:\n- Start clean.\n- Do not mutate old repositories by default.\n- If continuing from old work, copy the old repo into archive/ and redesign from it.\n- Existing files are not overwritten unless --force is used.\n- The folder structure is for humans first, agents second.\n\nTypical use:\n\n  python bootstrap_repo.py --target my-new-project --profile streamlit-poc\n\n  python bootstrap_repo.py --target my-new-project --profile react-mvp --with playwright --with azure-docker\n\n  python bootstrap_repo.py --target my-new-project --profile streamlit-poc --from-archive C:\\path\\to\\old-repo\n\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport datetime as dt\nimport os\nimport shutil\nfrom pathlib import Path\nfrom typing import Iterable\n\n\nBASE_DIRS = [\n    \"docs\",\n    \"project-brain/session-summaries\",\n    \"prototypes/html/build\",\n    \"prototypes/notebooks\",\n    \"app/streamlit\",\n    \"app/frontend\",\n    \"app/backend\",\n    \"src/domain\",\n    \"src/services\",\n    \"src/data\",\n    \"src/utils\",\n    \"tests/unit\",\n    \"tests/integration\",\n    \"tests/e2e\",\n    \"data/example\",\n    \"data/private\",\n    \"assets\",\n    \"scripts\",\n    \"infra/docker\",\n    \"infra/azure\",\n    \"infra/pipelines\",\n    \"skills\",\n    \"archive\",\n]\n\nPROFILE_DIRS = {\n    \"base\": [],\n    \"html-prototype\": [\n        \"prototypes/html/build\",\n        \"assets\",\n    ],\n    \"streamlit-poc\": [\n        \"app/streamlit\",\n        \"src/domain\",\n        \"src/services\",\n        \"src/data\",\n        \"src/utils\",\n        \"data/example\",\n        \"tests/unit\",\n    ],\n    \"react-mvp\": [\n        \"app/frontend\",\n        \"app/backend\",\n        \"src/domain\",\n        \"src/services\",\n        \"src/data\",\n        \"src/utils\",\n        \"tests/unit\",\n        \"tests/integration\",\n        \"tests/e2e\",\n    ],\n    \"azure-docker\": [\n        \"infra/docker\",\n        \"infra/azure\",\n        \"infra/pipelines\",\n    ],\n    \"playwright\": [\n        \"tests/e2e\",\n    ],\n    \"skills\": [\n        \"skills\",\n    ],\n}\n\nBASE_FILES = {\n    \"README.md\": \"\"\"# Project Title\n\nBriefly describe the project, user problem, and intended maturity level.\n\n## Maturity level\n\n- [ ] Rapid prototype\n- [ ] Proof of concept\n- [ ] MVP / PRD app\n\n## Quick start\n\nSee `GETTING_STARTED.md`.\n\n## Project knowledge\n\n- Stable project docs: `docs/`\n- Evolving project memory: `project-brain/`\n- Agent operating rules: `AGENTS.md`\n- Startup checklist for agents: `AGENTS_INIT.md`\n\"\"\",\n    \"GETTING_STARTED.md\": \"\"\"# Getting Started\n\n## 1. Create environment\n\n```bash\npython -m venv .venv\n```\n\nWindows:\n\n```cmd\n.venv\\\\Scripts\\\\activate\n```\n\nmacOS/Linux:\n\n```bash\nsource .venv/bin/activate\n```\n\n## 2. Install dependencies\n\n```bash\npip install -r requirements.txt\n```\n\n## 3. Run the app\n\nStreamlit example:\n\n```bash\nstreamlit run app/streamlit/app.py\n```\n\nStandalone HTML prototype example:\n\n```bash\npython prototypes/html/generate.py\n```\n\nThen open:\n\n```text\nprototypes/html/build/index.html\n```\n\"\"\",\n    \".env.example\": \"\"\"# Copy this file to .env and fill in local values.\n# Never commit .env.\n\nENVIRONMENT=local\n\"\"\",\n    \".gitignore\": \"\"\".venv/\n__pycache__/\n*.pyc\n.env\ndata/private/\narchive/**/.git/\narchive/**/.codex/\narchive/**/.agents/\narchive/**/.claude/\narchive/**/.cursor/\narchive/**/.venv/\n.DS_Store\nnode_modules/\ndist/\nbuild/\n.playwright/\ntest-results/\nplaywright-report/\ncoverage/\n\"\"\",\n    \".codexignore\": \"\"\".venv/\ndata/private/\narchive/**/.git/\narchive/**/.codex/\narchive/**/.agents/\narchive/**/.claude/\narchive/**/.cursor/\narchive/**/.venv/\nnode_modules/\ndist/\nbuild/\ncoverage/\n\"\"\",\n    \"requirements.txt\": \"\"\"# Add project dependencies here.\n\"\"\",\n    \"docs/README.md\": \"\"\"# Documentation Map\n\nThe `docs/` folder contains stable project knowledge: what is true, what has been decided, and how the project is intended to work.\n\nThe `project-brain/` folder contains evolving memory: notes, session summaries, and historical context.\n\n## Authority hierarchy\n\nWhen documents conflict, use this order:\n\n1. `docs/CONSTITUTION.md`\n2. `docs/DECISIONS.md`\n3. `docs/ARCHITECTURE.md`\n4. `docs/USER-STORIES.md`\n5. `docs/FEATURES.md`\n6. `docs/ROADMAP.md`\n7. `docs/RISKS.md`\n8. `project-brain/MEMORY.md`\n9. `project-brain/AI-NOTES.md`\n\n## Ownership\n\n### Human-governed\n\n- `CONSTITUTION.md`\n\nAgents may propose changes, but must not edit this automatically without explicit approval.\n\n### Agent-maintained, human-reviewed\n\n- `DECISIONS.md`\n- `ARCHITECTURE.md`\n- `USER-STORIES.md`\n- `FEATURES.md`\n- `ROADMAP.md`\n- `RISKS.md`\n\n### Agent-maintained memory\n\n- `project-brain/MEMORY.md`\n- `project-brain/AI-NOTES.md`\n- `project-brain/session-summaries/`\n\"\"\",\n    \"docs/CONSTITUTION.md\": \"\"\"# Constitution\n\nOwner: Human  \nAgent may propose changes: Yes  \nAgent may modify automatically: No\n\nThis file contains the project laws: values, boundaries, defaults, and non-negotiables.\n\n## Project laws\n\n1. Private data is never committed.\n2. `data/private/` is for local private data only.\n3. Archived repositories are source material, not architecture to preserve.\n4. Prefer the simplest maturity level that solves the current problem.\n5. Keep app entry points thin; reusable logic belongs in `src/`.\n6. Document important decisions in `docs/DECISIONS.md`.\n7. Human approval is required before deployment, major restructuring, or large dependency additions.\n\"\"\",\n    \"docs/DECISIONS.md\": \"\"\"# Decisions\n\nOwner: Agent-maintained, human-reviewed\n\nThis file records authoritative project decisions.\n\n## Decision log\n\n| ID | Date | Decision | Rationale | Consequences |\n|---|---|---|---|---|\n| ADR-001 | YYYY-MM-DD | Use clean repo redesign instead of in-place migration | Safer and easier to review | Old repos go into `archive/` as source material |\n\"\"\",\n    \"docs/ARCHITECTURE.md\": \"\"\"# Architecture\n\nOwner: Agent-maintained, human-reviewed\n\n## Current maturity level\n\nRapid prototype / Proof of concept / MVP\n\n## App surfaces\n\n## Data flow\n\n## Important modules\n\n## Deployment target\n\n## Risks and trade-offs\n\"\"\",\n    \"docs/USER-STORIES.md\": \"\"\"# User Stories\n\nOwner: Agent-maintained, human-reviewed\n\n## Primary users\n\n## User stories\n\n- As a ..., I want ..., so that ...\n\n## Acceptance criteria\n\"\"\",\n    \"docs/FEATURES.md\": \"\"\"# Features\n\nOwner: Agent-maintained, human-reviewed\n\nThis file describes current or intended functionality.\n\n## Current features\n\n## Planned features\n\n## Out of scope\n\"\"\",\n    \"docs/ROADMAP.md\": \"\"\"# Roadmap\n\nOwner: Agent-maintained, human-reviewed\n\n## Now\n\n## Next\n\n## Later\n\n## Maybe\n\"\"\",\n    \"docs/RISKS.md\": \"\"\"# Risks\n\nOwner: Agent-maintained, human-reviewed\n\n## Product risks\n\n## Technical risks\n\n## Data and privacy risks\n\n## Operational risks\n\n## Mitigations\n\"\"\",\n    \"docs/migration-notes.md\": \"\"\"# Migration / Redesign Notes\n\nOwner: Agent-maintained, human-reviewed\n\nUse this when the project is inspired by archived material.\n\n## Source material\n\n## Useful ideas to keep\n\n## Code to avoid copying blindly\n\n## Redesign decisions\n\n## Validation checklist\n\"\"\",\n    \"project-brain/MEMORY.md\": \"\"\"# Memory\n\nOwner: Agent-maintained  \nPurpose: chronological project history\n\nMemory is not authoritative truth. If memory conflicts with `docs/DECISIONS.md`, decisions win.\n\n## Log\n\n### YYYY-MM-DD\n\n- Context:\n- What changed:\n- Why it mattered:\n- Follow-up:\n\"\"\",\n    \"project-brain/AI-NOTES.md\": \"\"\"# AI Notes\n\nOwner: Agent-maintained  \nPurpose: working notes, prompt traces, and reasoning summaries\n\nThis file may contain rough notes. Important conclusions should be promoted to:\n\n- `docs/DECISIONS.md`\n- `docs/ARCHITECTURE.md`\n- `docs/FEATURES.md`\n- `docs/RISKS.md`\n\n## Notes\n\"\"\",\n    \"prototypes/html/generate.py\": \"\"\"\\\"\\\"\\\"Generate standalone HTML prototypes.\n\nKeep this script simple. Generated files should go into prototypes/html/build/.\n\\\"\\\"\\\"\n\nfrom pathlib import Path\n\nBUILD_DIR = Path(__file__).parent / \"build\"\nBUILD_DIR.mkdir(parents=True, exist_ok=True)\n\nhtml = \\\"\\\"\\\"<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Prototype</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n  <h1>Prototype shell</h1>\n  <p>Replace this with a clickable standalone prototype.</p>\n</body>\n</html>\n\\\"\\\"\\\"\n\n(BUILD_DIR / \"index.html\").write_text(html, encoding=\"utf-8\")\nprint(f\"Wrote {BUILD_DIR / 'index.html'}\")\n\"\"\",\n    \"app/streamlit/app.py\": \"\"\"import streamlit as st\n\nst.set_page_config(page_title=\"POC App\", layout=\"wide\")\n\nst.title(\"POC App\")\nst.write(\"Replace this shell with the first useful interaction.\")\n\"\"\",\n    \"src/__init__.py\": \"\",\n    \"src/domain/__init__.py\": \"\",\n    \"src/services/__init__.py\": \"\",\n    \"src/data/__init__.py\": \"\",\n    \"src/utils/__init__.py\": \"\",\n    \"tests/unit/test_smoke.py\": \"\"\"def test_smoke():\n    assert True\n\"\"\",\n    \"skills/README.md\": \"\"\"# Skills\n\nThis folder contains repo-owned AI skills or skill drafts.\n\nUse this as the portable source of truth for specialized agent behavior.\n\nTool-specific installations may mirror these skills elsewhere, for example:\n\n```text\n.claude/skills/\n```\n\nDo not put private data or secrets in skills.\n\"\"\",\n}\n\nPROFILE_FILES = {\n    \"playwright\": {\n        \"tests/e2e/README.md\": \"\"\"# End-to-end tests\n\nRecommended setup for a Node/React app:\n\n```bash\nnpm install -D @playwright/test\nnpx playwright install\nnpx playwright test\n```\n\nFor quick browser recording:\n\n```bash\nnpx playwright codegen http://localhost:3000\n```\n\"\"\",\n    },\n    \"azure-docker\": {\n        \"infra/docker/README.md\": \"\"\"# Docker\n\nPlace Dockerfiles and compose files here when the project is ready for containerized deployment.\n\"\"\",\n        \"infra/azure/README.md\": \"\"\"# Azure\n\nPlace Azure deployment notes, Bicep/Terraform, or Azure CLI scripts here.\n\"\"\",\n        \"infra/pipelines/README.md\": \"\"\"# Pipelines\n\nPlace Azure DevOps pipeline YAML files here.\n\"\"\",\n    },\n}\n\nARCHIVE_EXCLUDED_NAMES = {\n    \".git\",\n    \".codex\",\n    \".agents\",\n    \".claude\",\n    \".cursor\",\n    \".venv\",\n    \"__pycache__\",\n    \".pytest_cache\",\n    \".mypy_cache\",\n    \"node_modules\",\n    \"dist\",\n    \"build\",\n    \".env\",\n}\n\nARCHIVE_EXCLUDED_RELATIVE_PATHS = {\n    \"data/private\",\n}\n\n\ndef write_file(path: Path, content: str, force: bool = False) -> bool:\n    if path.exists() and not force:\n        return False\n    path.parent.mkdir(parents=True, exist_ok=True)\n    path.write_text(content, encoding=\"utf-8\")\n    return True\n\n\ndef make_dirs(target: Path, dirs: Iterable[str]) -> None:\n    for directory in dirs:\n        (target / directory).mkdir(parents=True, exist_ok=True)\n\n\ndef build_archive_ignore(source: Path):\n    def _ignore(directory: str, names: list[str]) -> set[str]:\n        current_dir = Path(directory)\n        relative_dir = current_dir.relative_to(source)\n        ignored: set[str] = set()\n\n        for name in names:\n            relative_path = (\n                Path(name)\n                if relative_dir == Path(\".\")\n                else relative_dir / name\n            )\n            if name in ARCHIVE_EXCLUDED_NAMES:\n                ignored.add(name)\n                continue\n            if relative_path.as_posix() in ARCHIVE_EXCLUDED_RELATIVE_PATHS:\n                ignored.add(name)\n\n        return ignored\n\n    return _ignore\n\n\ndef copy_archive(source: Path, target: Path, force: bool = False) -> Path:\n    archive_target = target / \"archive\" / source.name\n    if archive_target.exists():\n        if not force:\n            raise FileExistsError(\n                f\"Archive target already exists: {archive_target}. \"\n                \"Use --force to overwrite it.\"\n            )\n        shutil.rmtree(archive_target)\n    shutil.copytree(source, archive_target, ignore=build_archive_ignore(source))\n    return archive_target\n\n\ndef create_bootstrap_report(\n    target: Path,\n    profile: str,\n    extra_profiles: list[str],\n    archived_from: Path | None,\n    created_files: list[str],\n    skipped_files: list[str],\n) -> None:\n    now = dt.datetime.now().isoformat(timespec=\"seconds\")\n    content = f\"\"\"# Bootstrap Report\n\nGenerated: {now}\n\n## Selected profile\n\nPrimary profile: `{profile}`\n\nExtra profiles: {\", \".join(f\"`{p}`\" for p in extra_profiles) if extra_profiles else \"None\"}\n\n## Archive source\n\n{str(archived_from) if archived_from else \"None\"}\n\n## Created files\n\n{chr(10).join(f\"- `{f}`\" for f in created_files) if created_files else \"None\"}\n\n## Skipped existing files\n\n{chr(10).join(f\"- `{f}`\" for f in skipped_files) if skipped_files else \"None\"}\n\n## Next recommended step\n\nMake a baseline commit:\n\n```bash\ngit add .\ngit commit -m \"Initialize repo standard\"\n```\n\nThen ask an AI coding agent:\n\n> Read AGENTS.md and AGENTS_INIT.md. Inspect the repository. If archive material exists, summarize what should be reused and what should be redesigned. Do not implement yet. First propose a plan.\n\"\"\"\n    write_file(target / \"BOOTSTRAP_REPORT.md\", content, force=True)\n\n\ndef main() -> None:\n    parser = argparse.ArgumentParser(description=\"Create a clean AI-lab repo shell.\")\n    parser.add_argument(\"--target\", default=\".\", help=\"Target repository directory.\")\n    parser.add_argument(\n        \"--profile\",\n        default=\"base\",\n        choices=sorted(PROFILE_DIRS.keys()),\n        help=\"Primary repo profile.\",\n    )\n    parser.add_argument(\n        \"--with\",\n        dest=\"extra_profiles\",\n        action=\"append\",\n        default=[],\n        choices=sorted(PROFILE_DIRS.keys()),\n        help=\"Optional extra profile. Can be used multiple times.\",\n    )\n    parser.add_argument(\n        \"--from-archive\",\n        default=None,\n        help=\"Path to an old repo/folder to copy into archive/ as source material.\",\n    )\n    parser.add_argument(\n        \"--force\",\n        action=\"store_true\",\n        help=\"Overwrite existing generated files and archive target if needed.\",\n    )\n    parser.add_argument(\n        \"--no-git\",\n        action=\"store_true\",\n        help=\"Do not initialize git.\",\n    )\n    args = parser.parse_args()\n\n    target = Path(args.target).resolve()\n    target.mkdir(parents=True, exist_ok=True)\n\n    all_profiles = [args.profile] + args.extra_profiles\n    dirs = set(BASE_DIRS)\n    for profile in all_profiles:\n        dirs.update(PROFILE_DIRS[profile])\n\n    make_dirs(target, sorted(dirs))\n\n    created_files: list[str] = []\n    skipped_files: list[str] = []\n\n    files = dict(BASE_FILES)\n    for profile in all_profiles:\n        files.update(PROFILE_FILES.get(profile, {}))\n\n    for rel_path, content in files.items():\n        did_create = write_file(target / rel_path, content, force=args.force)\n        if did_create:\n            created_files.append(rel_path)\n        else:\n            skipped_files.append(rel_path)\n\n    archived_path = None\n    if args.from_archive:\n        archived_path = copy_archive(Path(args.from_archive).resolve(), target, force=args.force)\n\n    if not args.no_git and not (target / \".git\").exists():\n        os.system(f'git -C \"{target}\" init')\n\n    create_bootstrap_report(\n        target=target,\n        profile=args.profile,\n        extra_profiles=args.extra_profiles,\n        archived_from=archived_path,\n        created_files=created_files,\n        skipped_files=skipped_files,\n    )\n\n    print(f\"Bootstrapped repo at: {target}\")\n    print(f\"Profile: {args.profile}\")\n    if args.extra_profiles:\n        print(f\"Extra profiles: {', '.join(args.extra_profiles)}\")\n    if archived_path:\n        print(f\"Archived source copied to: {archived_path}\")\n    print(\"See BOOTSTRAP_REPORT.md for details.\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "AGENTS.md": "# AGENTS.md\n\nThis file is the stable operating manual for AI agents working in this repository.\n\n## Core principle\n\nBuild from the current repo standard. Treat archived repositories as source material, not as architecture to preserve.\n\nOld code may contain useful ideas, data examples, UI concepts, or domain logic, but it should not be copied blindly.\n\n## Human-first structure\n\nThe folder structure exists so humans can quickly understand the project.\n\nExpected structure:\n\n```text\ndocs/                 Stable project knowledge: what is true\nproject-brain/        Evolving memory: how we got here\nprototypes/           Disposable explorations and standalone prototypes\napp/                  Application entry points and user-facing app shells\nsrc/                  Reusable domain, service, data, and utility code\ntests/                Unit, integration, and end-to-end tests\ndata/example/         Safe sample data that can be committed\ndata/private/         Local private data; must not be committed\nassets/               Images, static files, design assets\nscripts/              Developer and automation scripts\ninfra/                Docker, Azure, and pipeline files\nskills/               Repo-owned AI skills or skill drafts\narchive/              Old repositories or reference material\n```\n\n## Documentation authority\n\nWhen documents conflict, trust the higher document in this order:\n\n1. `docs/CONSTITUTION.md`\n2. `docs/DECISIONS.md`\n3. `docs/ARCHITECTURE.md`\n4. `docs/USER-STORIES.md`\n5. `docs/FEATURES.md`\n6. `docs/ROADMAP.md`\n7. `docs/RISKS.md`\n8. `project-brain/MEMORY.md`\n9. `project-brain/AI-NOTES.md`\n\nImportant rule:\n\n- `MEMORY.md` is history.\n- `DECISIONS.md` is truth.\n- `CONSTITUTION.md` overrides everything.\n\n## Document ownership\n\n### Human-governed\n\n`docs/CONSTITUTION.md`\n\nAgents may propose changes, but must not edit it automatically without explicit approval.\n\n### Agent-maintained, human-reviewed\n\n- `docs/DECISIONS.md`\n- `docs/ARCHITECTURE.md`\n- `docs/USER-STORIES.md`\n- `docs/FEATURES.md`\n- `docs/ROADMAP.md`\n- `docs/RISKS.md`\n- `docs/migration-notes.md`\n\n### Agent-maintained memory\n\n- `project-brain/MEMORY.md`\n- `project-brain/AI-NOTES.md`\n- `project-brain/session-summaries/`\n\n## Maturity levels\n\nUse the lightest structure that fits the goal.\n\n### Rapid prototype\n\nGoal: show or discuss an idea quickly.\n\nTypical folders:\n\n```text\nprototypes/html/\nassets/\ndocs/\n```\n\nRules:\n- Prefer standalone HTML when speed matters.\n- Generated files should go to `prototypes/html/build/`.\n- Do not over-engineer.\n\n### Proof of concept\n\nGoal: let users interact with real logic, data, or workflows.\n\nTypical folders:\n\n```text\napp/streamlit/\nsrc/\ndata/example/\ntests/unit/\n```\n\nRules:\n- Streamlit is the default POC app surface for Python/data work.\n- Move reusable logic out of `app/streamlit/app.py` and into `src/`.\n- Keep example data safe and small.\n\n### MVP / PRD app\n\nGoal: create a maintainable app with clearer separation and deployment potential.\n\nTypical folders:\n\n```text\napp/frontend/\napp/backend/\nsrc/\ntests/\ninfra/\n```\n\nRules:\n- Use clear frontend/backend boundaries.\n- Add automated tests.\n- Add Docker and CI/CD only when the app is ready for repeatable deployment.\n\n## Working with archived repos\n\nIf `archive/` contains an older repo:\n\n1. Inspect it.\n2. Summarize useful concepts.\n3. Identify risky or outdated patterns.\n4. Propose a redesign plan.\n5. Wait for approval before copying or rewriting major parts.\n6. Rebuild into the new standard structure.\n\nDo not mutate archived source material unless explicitly asked.\n\n## Data handling\n\n- `data/example/` may contain safe, small, fake, anonymized, or public sample data.\n- `data/private/` may contain local private data and must never be committed.\n- Never place credentials, tokens, or personal data in committed files.\n- Use `.env.example` for variable names only.\n- Use `.env` for local secrets; `.env` must remain ignored.\n\n## Skills\n\nRepo-owned skills live in:\n\n```text\nskills/\n```\n\nTool-specific installations may mirror them elsewhere, for example:\n\n```text\n.claude/skills/\n```\n\nBefore starting specialized work, inspect `skills/` for relevant repo-owned skills.\n\nDo not put private data, secrets, or environment-specific credentials in skills.\n\n## Agent workflow\n\nBefore implementing:\n\n1. Read `docs/CONSTITUTION.md`.\n2. Read `docs/DECISIONS.md`.\n3. Read `docs/ARCHITECTURE.md`.\n4. Read `docs/README.md`.\n5. Read `AGENTS_INIT.md` if present.\n6. Inspect the current file tree.\n7. If archive material exists, inspect it as reference material.\n8. Propose a short plan.\n9. Ask for approval when the task affects architecture, data handling, deployment, or public behavior.\n\nDuring implementation:\n\n1. Keep changes small and reviewable.\n2. Prefer simple code over clever code.\n3. Keep app entry points thin.\n4. Put reusable logic in `src/`.\n5. Add or update tests when behavior changes.\n6. Update docs when decisions change.\n7. Update `project-brain/MEMORY.md` when project context changes.\n\nBefore finishing:\n\n1. Run relevant tests or explain why they were not run.\n2. Summarize changed files.\n3. Note open risks or next steps.\n4. Avoid claiming success without validation.\n\n## Browser and UI validation\n\nWhen the project has a browser UI, prefer Playwright for end-to-end validation.\n\nTypical commands:\n\n```bash\nnpm install -D @playwright/test\nnpx playwright install\nnpx playwright test\n```\n\nUse browser validation for:\n- navigation\n- forms\n- visual regressions\n- key user flows\n- app startup checks\n\n## Docker and Azure\n\nOnly add Docker or Azure deployment files when there is a real deployment need.\n\nPreferred locations:\n\n```text\ninfra/docker/\ninfra/azure/\ninfra/pipelines/\n```\n\nKeep deployment assumptions documented in `docs/ARCHITECTURE.md`.\n\n## Coding style\n\n- Favor boring, readable, maintainable code.\n- Do not introduce heavy frameworks without a reason.\n- Do not create large abstractions before the project needs them.\n- Prefer explicit names and small modules.\n- Keep generated files separate from source files.\n\n## Safety rules\n\nDo not:\n- commit private data\n- expose secrets\n- overwrite existing work without explicit approval\n- restructure the repo without explaining the plan\n- copy archived code blindly\n- add unnecessary dependencies\n- edit `docs/CONSTITUTION.md` without explicit approval\n",
+      "AGENTS_INIT.md": "# AGENTS_INIT.md\n\nThis file is the startup checklist for bootstrapping or redesigning this repository.\n\nIt may be deleted or moved to `archive/` after the project has a stable direction.\n\n## Mission\n\nTurn this repository into a clean, maintainable project using the standard structure.\n\nThe target may be one of:\n\n- rapid prototype\n- proof of concept\n- MVP / PRD app\n\nWhen uncertain, start smaller.\n\n## First agent task\n\nBefore writing code, do this:\n\n1. Inspect the repository tree.\n2. Read `README.md`, `GETTING_STARTED.md`, and `AGENTS.md`.\n3. Read `docs/README.md`.\n4. Read `docs/CONSTITUTION.md`.\n5. Read `docs/DECISIONS.md`.\n6. Read `docs/ARCHITECTURE.md`.\n7. Check whether `archive/` contains old source material.\n8. Summarize what exists.\n9. Propose the project maturity level.\n10. Propose the first implementation plan.\n11. Wait for user approval.\n\n## If archive material exists\n\nTreat archived material as inspiration, not as the new structure.\n\nAnalyze:\n\n- What problem did the old repo solve?\n- What parts are still useful?\n- What should be redesigned?\n- What can be copied safely?\n- What should not be copied?\n- What data assumptions are hidden in the old code?\n- What dependencies or deployment assumptions are outdated?\n\nWrite findings to:\n\n```text\ndocs/migration-notes.md\n```\n\nThen propose a redesign plan.\n\n## Recommended first plan format\n\nUse this format:\n\n```markdown\n# Proposed Plan\n\n## Project maturity level\n\nRapid prototype / Proof of concept / MVP\n\n## What I found\n\n## What I recommend keeping from archive\n\n## What I recommend redesigning\n\n## Proposed target structure\n\n## First implementation steps\n\n## Validation plan\n\n## Questions for the user\n```\n\n## Default implementation choices\n\nUse these defaults unless the user says otherwise.\n\n### Rapid prototype\n\n- Put standalone HTML work in `prototypes/html/`.\n- Generate output into `prototypes/html/build/`.\n- Keep it simple and visual.\n- Do not add backend infrastructure.\n\n### Proof of concept\n\n- Use Streamlit for Python/data interaction.\n- Put the app entry point in `app/streamlit/app.py`.\n- Put reusable logic in `src/`.\n- Use `data/example/` for safe sample data.\n- Use `data/private/` for local private data only.\n\n### MVP / PRD app\n\n- Use `app/frontend/` for frontend code.\n- Use `app/backend/` for backend/API code.\n- Put domain and reusable services in `src/`.\n- Add tests before expanding features.\n- Add Docker and Azure files only when deployment becomes relevant.\n\n## Memory maintenance\n\nWhen meaningful context changes:\n\n1. Add a short entry to `project-brain/MEMORY.md`.\n2. Put rough working notes in `project-brain/AI-NOTES.md`.\n3. Promote actual decisions to `docs/DECISIONS.md`.\n4. Update `docs/ARCHITECTURE.md` if the design changes.\n5. Update `docs/RISKS.md` if a new risk appears.\n\nDo not treat `MEMORY.md` as authoritative truth. Decisions belong in `docs/DECISIONS.md`.\n\n## Validation checklist\n\nBefore presenting work as complete:\n\n- App starts locally, or startup limitation is documented.\n- Main user flow is tested manually or with Playwright.\n- Unit tests pass, if present.\n- No private data is committed.\n- Docs reflect important decisions.\n- Open issues are listed clearly.\n\n## User approval gates\n\nAsk before:\n\n- editing `docs/CONSTITUTION.md`\n- copying large chunks from `archive/`\n- adding major dependencies\n- introducing Docker/Azure infrastructure\n- changing app framework\n- restructuring existing project folders\n- touching private data\n- creating deployment or CI/CD files\n"
+    };
+
+    const state = {
+      shell: "powershell",
+      provider: "github",
+      cardShell: {},
+      cardProvider: {},
+      taskStatus: {},
+      taskOrigin: {},
+      chapterBulkState: {},
+    };
+
+    const fields = {
+      projectName: "projexcellent-app",
+      parentWindows: "C:\\Users\\rmeer\\CodeLibrary",
+      parentBash: "/mnt/c/Users/rmeer/CodeLibrary",
+      defaultBranch: "main",
+      repoOwner: "Rens88",
+      repoName: "projexcellent-app",
+      devOpsOrg: "YOUR-ORG",
+      devOpsProject: "YOUR-PROJECT",
+      featureBranch: "feature/initialize-repo-standard",
+      sandboxName: "projexcellent-codex",
+      oldRepoPath: "C:\\path\\to\\old-repo",
+      privacy: "private",
+    };
+
+    const sections = [
+      {
+        id: "tools",
+        title: "0. Recommended Tools",
+        summary: "Start with the smallest useful toolset. Docker Sandbox, Spec Kit, Context7, Playwright, and Azure are useful layers, but not mandatory for every repository.",
+        cards: [
+          note("Tool baseline", `
+            <p><strong>Core tools:</strong> Git, Visual Studio Code, Codex CLI, Python, Docker Desktop, Docker Sandbox, Playwright, Context7, Spec Kit / specify.</p>
+            <p><strong>Optional tools:</strong> GitHub CLI, Azure CLI, Node.js / npm.</p>
+          `),
+        ],
+      },
+      {
+        id: "checks",
+        title: "1. Tool Check Prompts",
+        summary: "Copy these prompts into an AI assistant when you want help checking or installing tools.",
+        cards: [
+          prompt("Git check prompt", "Help me check whether Git is installed on my machine. Give me the exact Windows command-line commands to check it, and if it is missing, give me the safest installation instructions. After installation, help me configure my name and email."),
+          command("Git commands", {
+            common: {
+              all: "git --version\ngit config --global user.name\ngit config --global user.email",
+            },
+          }),
+          prompt("Visual Studio Code check prompt", "Help me check whether Visual Studio Code is installed and whether the `code` command is available from my terminal. If it is not available, help me enable it safely on Windows."),
+          command("Visual Studio Code commands", { common: { all: "code --version" } }),
+          prompt("Codex CLI check prompt", "Help me check whether Codex CLI is installed and usable from my terminal. If it is missing, help me install it using the current official instructions. Also help me verify authentication."),
+          command("Codex CLI commands", { common: { all: "codex --version" } }),
+          prompt("Python check prompt", "Help me check whether Python is installed, which version is active, and whether `python -m venv` works. If Python is missing or broken, help me install a stable version for Windows."),
+          command("Python commands", { common: { all: "python --version\npython -m venv --help" } }),
+          prompt("Docker Desktop check prompt", "Help me check whether Docker Desktop is installed and running. Give me the command-line checks and explain what each result means. If Docker is missing, help me install it safely on Windows."),
+          command("Docker Desktop commands", { common: { all: "docker --version\ndocker info" } }),
+          prompt("Docker Sandbox check prompt", "Help me check whether Docker Sandbox (`sbx`) tooling is available in my environment. Inspect https://docs.docker.com/ai/sandboxes/ and use the current official Docker documentation. If it is not available, explain the installation or access requirements and whether I can continue locally without it."),
+          command("Docker Sandbox commands", { common: { all: "sbx --help\nsbx ls\ndocker --version\ndocker info" } }),
+          prompt("Playwright check prompt", "Help me check whether Playwright is installed for this project. Explain the difference between project-local Playwright and npx temporarily downloading Playwright. If missing, help me install it project-locally."),
+          command("Playwright commands", { common: { all: "npm list @playwright/test\nnpx playwright --version\nnpx playwright install --dry-run" } }),
+          prompt("Context7 check prompt", "Help me check whether Context7 is available as an MCP server for my coding agent. If it is missing, help me install or configure it using the current official instructions for my agent."),
+          prompt("Spec Kit check prompt", "Help me check whether GitHub Spec Kit / specify is available from my command line. If it is missing, help me install it using the current official instructions. Then help me initialize specification-driven docs for this repository."),
+          command("Spec Kit first check", { common: { all: "specify --help" } }),
+          prompt("Git host CLI check prompt", "Help me check whether the selected Git host CLI is installed and authenticated. If it is missing, help me install it and connect it to my account."),
+          command("Git host CLI commands", {
+            github: { all: "gh --version\ngh auth status" },
+            devops: { all: "az --version\naz extension add --name azure-devops\naz login\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"" },
+          }),
+          prompt("Azure CLI prompt", "Help me check whether Azure CLI is installed and authenticated. If it is missing, help me install it. Then help me verify the active Azure subscription."),
+          command("Azure CLI commands", { common: { all: "az --version\naz login\naz account show" } }),
+        ],
+      },
+      {
+        id: "init",
+        title: "2. Create Folder and Initialize Git",
+        summary: "Create the folder first, initialize Git, make `main` the default branch, and check the initial status.",
+        cards: [
+          command("Create folder and initialize Git", {
+            common: {
+              powershell: "Set-Location \"{parentWindows}\"\nNew-Item -ItemType Directory -Force \"{projectName}\"\nSet-Location \"{projectName}\"\ngit init",
+              cmd: "cd /d \"{parentWindows}\"\nmkdir \"{projectName}\"\ncd \"{projectName}\"\ngit init",
+              bash: "cd \"{parentBash}\"\nmkdir -p \"{projectName}\"\ncd \"{projectName}\"\ngit init",
+            },
+          }),
+          command("Create default branch and check status", {
+            common: {
+              all: "git branch -M {defaultBranch}\ngit status",
+            },
+          }),
+        ],
+      },
+      {
+        id: "remote",
+        title: "3. Connect to a Remote Repository",
+        summary: "Use GitHub or Azure DevOps. For private GitHub repositories, branch protection may be configurable but not enforced unless your account or repository has the required plan.",
+        cards: [
+          command("Add existing remote", {
+            github: {
+              all: "git remote add origin https://github.com/{repoOwner}/{repoName}.git\ngit remote -v",
+            },
+            devops: {
+              all: "git remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}\ngit remote -v",
+            },
+          }),
+          command("Create remote from current folder", {
+            github: {
+              all: "gh repo create {repoOwner}/{repoName} --{privacy} --source . --remote origin",
+            },
+            devops: {
+              powershell: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\naz repos create --name \"{repoName}\"\ngit remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}",
+              cmd: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\naz repos create --name \"{repoName}\"\ngit remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}",
+              bash: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\naz repos create --name \"{repoName}\"\ngit remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}",
+            },
+          }),
+          note("Remote visibility warning", `
+            <p>Use a public remote only when you are certain the repository contains no private material. Keep <code>.env</code>, credentials, real personal data, and <code>data/private/</code> out of committed files.</p>
+          `),
+          note("GitHub branch protection plan limitation", `
+            <p>GitHub branch protection is enforced when the repository is public or the repository/account is on GitHub Pro or a higher paid plan. On a private GitHub Free repository, the UI may let you configure rules but mark them as not enforced.</p>
+          `, "warn"),
+          command("Inspect branch protection or policies", {
+            github: {
+              powershell: "$repo = gh repo view --json nameWithOwner --jq .nameWithOwner\ngh api \"repos/$repo/branches/{defaultBranch}/protection\"\ngh api \"repos/$repo/rules/branches/{defaultBranch}\"",
+              cmd: "for /f %i in ('gh repo view --json nameWithOwner --jq .nameWithOwner') do set REPO=%i\ngh api repos/%REPO%/branches/{defaultBranch}/protection\ngh api repos/%REPO%/rules/branches/{defaultBranch}",
+              bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\ngh api \"repos/$REPO/branches/{defaultBranch}/protection\"\ngh api \"repos/$REPO/rules/branches/{defaultBranch}\"",
+            },
+            devops: {
+              powershell: "$repoId = az repos show --repository \"{repoName}\" --query id -o tsv\naz repos policy list --repository-id $repoId --branch {defaultBranch} --output table",
+              cmd: "for /f %i in ('az repos show --repository \"{repoName}\" --query id -o tsv') do set REPO_ID=%i\naz repos policy list --repository-id %REPO_ID% --branch {defaultBranch} --output table",
+              bash: "REPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy list --repository-id \"$REPO_ID\" --branch {defaultBranch} --output table",
+            },
+          }),
+          command("Require pull requests before merge", {
+            github: {
+              powershell: "$repo = gh repo view --json nameWithOwner --jq .nameWithOwner\n\n$json = @'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\n'@\n\n$json | gh api --method PUT \"repos/$repo/branches/{defaultBranch}/protection\" --input -",
+              cmd: "gh repo view --json nameWithOwner --jq .nameWithOwner > repo.txt\nset /p REPO=<repo.txt\n\n(\necho {\necho   \"required_status_checks\": null,\necho   \"enforce_admins\": true,\necho   \"required_pull_request_reviews\": {\necho     \"dismiss_stale_reviews\": true,\necho     \"require_code_owner_reviews\": false,\necho     \"required_approving_review_count\": 1,\necho     \"require_last_push_approval\": false\necho   },\necho   \"restrictions\": null,\necho   \"required_linear_history\": false,\necho   \"allow_force_pushes\": false,\necho   \"allow_deletions\": false,\necho   \"block_creations\": false,\necho   \"required_conversation_resolution\": true,\necho   \"lock_branch\": false,\necho   \"allow_fork_syncing\": false\necho }\n) > branch-protection.json\n\ngh api --method PUT \"repos/%REPO%/branches/{defaultBranch}/protection\" --input branch-protection.json\n\ndel repo.txt\ndel branch-protection.json",
+              bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\n\ngh api --method PUT \"repos/$REPO/branches/{defaultBranch}/protection\" --input - <<'EOF'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\nEOF",
+            },
+            devops: {
+              powershell: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\n$repoId = az repos show --repository \"{repoName}\" --query id -o tsv\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repoId --reset-on-source-push true --output table",
+              cmd: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nfor /f %i in ('az repos show --repository \"{repoName}\" --query id -o tsv') do set REPO_ID=%i\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id %REPO_ID% --reset-on-source-push true --output table",
+              bash: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nREPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id \"$REPO_ID\" --reset-on-source-push true --output table",
+            },
+          }),
+          note("Admin and bypass behavior", `
+            <p>GitHub classic branch rules need <strong>Do not allow bypassing the above settings</strong> to block admins too. GitHub rulesets with no bypass actors are another route, but private repositories on free plans may be blocked from rulesets. In Azure DevOps, branch policies require pull requests for changes once configured; branch security permissions decide who can bypass or push directly.</p>
+          `),
+        ],
+      },
+      {
+        id: "standard-files",
+        title: "4. Add Repo-Standard Files",
+        summary: "Copy the standard operating files into the new repo root.",
+        cards: [
+          note("Files to copy", `
+            <ul>
+              <li><code>bootstrap_repo.py</code></li>
+              <li><code>AGENTS.md</code></li>
+              <li><code>AGENTS_INIT.md</code></li>
+              <li><code>HUMAN_READABLE_STARTUP_CHECKLIST.html</code></li>
+            </ul>
+          `),
+          command("Check root files", {
+            common: {
+              powershell: "Get-ChildItem",
+              cmd: "dir",
+              bash: "ls -la",
+            },
+          }),
+        ],
+      },
+      {
+        id: "bootstrap",
+        title: "5. Run the Bootstrapper",
+        summary: "Choose the lightest profile that fits the project. The archived repo is source material only; redesign from it rather than migrating blindly.",
+        cards: [
+          command("Base shell", { common: { all: "python bootstrap_repo.py --target . --profile base" } }),
+          command("Standalone HTML prototype", { common: { all: "python bootstrap_repo.py --target . --profile html-prototype" } }),
+          command("Streamlit proof of concept", { common: { all: "python bootstrap_repo.py --target . --profile streamlit-poc" } }),
+          command("React MVP with Playwright", { common: { all: "python bootstrap_repo.py --target . --profile react-mvp --with playwright" } }),
+          command("React MVP with Azure and Docker structure", { common: { all: "python bootstrap_repo.py --target . --profile react-mvp --with playwright --with azure-docker" } }),
+          command("Clean repo inspired by an old repo", { common: { all: "python bootstrap_repo.py --target . --profile streamlit-poc --from-archive \"{oldRepoPath}\"" } }),
+        ],
+      },
+      {
+        id: "venv",
+        title: "6. Create a Python Virtual Environment",
+        summary: "Use a local virtual environment for Python and Streamlit proof-of-concept work.",
+        cards: [
+          command("Create and activate `.venv`", {
+            common: {
+              powershell: "python -m venv .venv\n.venv\\Scripts\\Activate.ps1",
+              cmd: "python -m venv .venv\n.venv\\Scripts\\activate.bat",
+              bash: "python -m venv .venv\nsource .venv/bin/activate",
+            },
+          }),
+          command("Upgrade packaging tools and install dependencies", {
+            common: {
+              all: "python -m pip install --upgrade pip\npip install -r requirements.txt",
+            },
+          }),
+          command("Install Streamlit if needed", {
+            common: {
+              all: "pip install streamlit\npip freeze > requirements.txt",
+            },
+          }),
+        ],
+      },
+      {
+        id: "private-files",
+        title: "7. Confirm Private Files Are Ignored",
+        summary: "Private data and secrets must stay local.",
+        cards: [
+          note("Expected ignored paths", `
+            <ul>
+              <li><code>.env</code></li>
+              <li><code>data/private/</code></li>
+              <li><code>archive/**/.git/</code></li>
+              <li><code>archive/**/.codex/</code></li>
+              <li><code>.venv/</code></li>
+            </ul>
+          `),
+          command("Create `.env` only if needed", {
+            common: {
+              powershell: "Copy-Item .env.example .env",
+              cmd: "copy .env.example .env",
+              bash: "cp .env.example .env",
+            },
+          }),
+          command("Check Git status", { common: { all: "git status" } }),
+        ],
+      },
+      {
+        id: "baseline",
+        title: "8. Make a Clean Baseline Commit",
+        summary: "Commit the clean shell before agents begin changing behavior.",
+        cards: [
+          command("Baseline commit", {
+            common: {
+              all: "git add .\ngit commit -m \"Initialize repo standard\"",
+            },
+          }),
+          note("Protected branch expectation", `
+            <p>If branch protection is actually enforced, a direct push to <code>{defaultBranch}</code> should be rejected for non-admin users. GitHub private repositories on free plans may show rules as not enforced.</p>
+          `, "warn"),
+          command("Test direct push to default branch", {
+            common: {
+              all: "git push -u origin {defaultBranch}",
+            },
+          }),
+          command("Push baseline through a feature branch", {
+            common: {
+              all: "git switch -c {featureBranch}\ngit push -u origin {featureBranch}",
+            },
+          }),
+          command("Open pull request", {
+            github: {
+              all: "gh pr create --base {defaultBranch} --head {featureBranch} --title \"Initialize repo standard\" --body \"Baseline repo-standard setup.\"",
+            },
+            devops: {
+              all: "az repos pr create --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --title \"Initialize repo standard\" --description \"Baseline repo-standard setup.\"",
+            },
+          }),
+          command("Merge pull request", {
+            github: {
+              all: "gh pr merge --squash --delete-branch",
+            },
+            devops: {
+              powershell: "$prId = az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv\naz repos pr update --id $prId --status completed --squash true --delete-source-branch true",
+              cmd: "for /f %i in ('az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv') do set PR_ID=%i\naz repos pr update --id %PR_ID% --status completed --squash true --delete-source-branch true",
+              bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+            },
+          }),
+          command("Sync local main after squash merge", {
+            common: {
+              all: "git switch {defaultBranch}\ngit fetch --prune origin\ngit pull --ff-only origin {defaultBranch}",
+            },
+          }),
+        ],
+      },
+      {
+        id: "sandbox",
+        title: "9. Optional: Start a Docker Sandbox",
+        summary: "Use Docker Sandbox for safer agent execution, dependency isolation, and browser/app testing in isolation.",
+        cards: [
+          note("Docker Sandbox model", `
+            <p>Docker Sandbox uses the <code>sbx</code> CLI. The modern replacement for the older dedicated-branch workflow is clone mode: the sandbox gets its own private Git clone and exposes it back to the host as a Git remote.</p>
+            <p>Official docs: <a href="https://docs.docker.com/ai/sandboxes/">https://docs.docker.com/ai/sandboxes/</a></p>
+          `),
+          command("Verify `sbx`", { common: { all: "sbx --help\nsbx ls" } }),
+          command("Install and sign in on Windows if missing", {
+            common: {
+              powershell: "winget install -h Docker.sbx\nsbx login",
+              cmd: "winget install -h Docker.sbx\nsbx login",
+              bash: "# Install Docker Sandbox for your platform, then run:\nsbx login",
+            },
+          }),
+          command("Create clone-mode Codex sandbox", {
+            common: {
+              all: "sbx create --clone --name {sandboxName} codex .",
+            },
+          }),
+          command("Activate sandbox and attach to Codex", {
+            common: {
+              all: "sbx run --name {sandboxName}",
+            },
+          }),
+          command("Fetch sandbox changes back to host", {
+            common: {
+              all: "git fetch sandbox-{sandboxName}",
+            },
+          }),
+        ],
+      },
+      {
+        id: "spec-kit",
+        title: "10. Optional: Initialize Spec Kit",
+        summary: "Use Spec Kit when the project needs clearer requirements, plans, tasks, or PRD-style discipline.",
+        cards: [
+          prompt("Spec Kit setup prompt", "I am in this repository. Help me initialize GitHub Spec Kit / specify from the command line. Use the current official instructions. I want the generated specs/plans/tasks to align with AGENTS.md, AGENTS_INIT.md, docs/, and project-brain/."),
+          prompt("First specification prompt", "Read AGENTS.md, AGENTS_INIT.md, docs/CONSTITUTION.md, docs/DECISIONS.md, docs/ARCHITECTURE.md, and any Spec Kit files. Propose the first specification. Do not implement yet."),
+        ],
+      },
+      {
+        id: "playwright",
+        title: "11. Optional: Install Playwright Project-Locally",
+        summary: "Use this when the project has a browser UI. For Streamlit apps, Playwright can still be useful, but it is optional.",
+        cards: [
+          command("Install Playwright", {
+            common: {
+              all: "npm install -D @playwright/test\nnpx playwright install",
+            },
+          }),
+          command("Run checks and record a flow", {
+            common: {
+              all: "npx playwright test\nnpx playwright codegen http://localhost:3000",
+            },
+          }),
+        ],
+      },
+      {
+        id: "context7",
+        title: "12. Optional: Configure Context7",
+        summary: "Use Context7 when the agent needs current docs for fast-moving libraries or frameworks.",
+        cards: [
+          prompt("Context7 setup prompt", "Help me configure Context7 as an MCP server for my current coding agent. After setup, show me how to verify that the agent can fetch current documentation for React, Streamlit, Playwright, Azure, or Databricks."),
+          note("Use it especially for", `
+            <ul>
+              <li>React</li>
+              <li>Next.js</li>
+              <li>Playwright</li>
+              <li>Azure SDKs</li>
+              <li>Databricks SDKs</li>
+              <li>AI frameworks</li>
+            </ul>
+          `),
+        ],
+      },
+      {
+        id: "agent",
+        title: "13. Start the Agent",
+        summary: "Start with context gathering and a plan, especially when archive material exists.",
+        cards: [
+          prompt("First agent prompt", "Read AGENTS.md and AGENTS_INIT.md.\n\nThen inspect the repository.\n\nIf archive material exists, inspect it as source material only. Do not copy code yet.\n\nSummarize:\n1. what this repo currently contains,\n2. which maturity level fits best,\n3. which docs need updates,\n4. what first plan you recommend.\n\nDo not implement yet. Wait for approval."),
+        ],
+      },
+      {
+        id: "review",
+        title: "14. Review Changes Incrementally",
+        summary: "Keep changes small, inspect diffs often, and route shared history through pull requests when protection is available.",
+        cards: [
+          command("Inspect local changes", {
+            common: {
+              all: "git status\ngit diff",
+            },
+          }),
+          command("Commit a logical step", {
+            common: {
+              all: "git add .\ngit commit -m \"Describe the completed step\"",
+            },
+          }),
+          command("Push step through feature branch", {
+            github: {
+              all: "git switch -c {featureBranch}\ngit push -u origin {featureBranch}\ngh pr create --base {defaultBranch} --head {featureBranch}",
+            },
+            devops: {
+              all: "git switch -c {featureBranch}\ngit push -u origin {featureBranch}\naz repos pr create --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --title \"Describe the completed step\"",
+            },
+          }),
+          command("Inspect history", {
+            common: {
+              all: "git log --oneline --decorate --graph --max-count=12 --all",
+            },
+          }),
+          command("Clean local Codex refs if fetch/pull fails on `refs/codex`", {
+            common: {
+              powershell: "Remove-Item -Recurse -Force .git\\refs\\codex\ngit fetch --prune origin",
+              cmd: "rmdir /s /q .git\\refs\\codex\ngit fetch --prune origin",
+              bash: "rm -rf .git/refs/codex\ngit fetch --prune origin",
+            },
+          }),
+          note("Avoid broad restore commands unless intentional", `
+            <p><code>git restore .</code> discards uncommitted work. Use it only when you have verified that the changes are disposable.</p>
+          `, "warn"),
+        ],
+      },
+      {
+        id: "scope",
+        title: "15. Necessary vs Optional",
+        summary: "Start small. Add complexity only when the project earns it.",
+        cards: [
+          note("Necessary for every repo", `
+            <ul>
+              <li>Git</li>
+              <li>clean folder structure</li>
+              <li><code>.gitignore</code></li>
+              <li><code>.env.example</code></li>
+              <li><code>data/private/</code></li>
+              <li><code>AGENTS.md</code></li>
+              <li><code>AGENTS_INIT.md</code></li>
+              <li>baseline commit</li>
+            </ul>
+          `),
+          note("Usually necessary for Python or Streamlit work", `
+            <ul>
+              <li><code>.venv</code></li>
+              <li><code>requirements.txt</code></li>
+            </ul>
+          `),
+          note("Optional at the beginning", `
+            <ul>
+              <li>Docker Sandbox</li>
+              <li>Playwright</li>
+              <li>Context7</li>
+              <li>Spec Kit / specify</li>
+              <li>Azure CLI</li>
+              <li>Docker deployment files</li>
+              <li>CI/CD pipelines</li>
+            </ul>
+          `),
+        ],
+      },
+    ];
+
+    function note(title, html, tone = "note") {
+      return { type: "note", title, html, tone };
+    }
+
+    function prompt(title, text) {
+      return {
+        type: "command",
+        title,
+        description: "Prompt text",
+        variants: { common: { all: text } },
+        prompt: true,
+      };
+    }
+
+    function command(title, variants, description = "") {
+      return { type: "command", title, description, variants };
+    }
+
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "task";
+    }
+
+    function taskId(section, card) {
+      return `${section.id}:${slugify(card.title)}`;
+    }
+
+    function getTaskState(id) {
+      const status = state.taskStatus[id];
+      return status === "finished" || status === "skipped" ? status : "unfinished";
+    }
+
+    function cycleTask(id) {
+      const current = getTaskState(id);
+      const next = current === "unfinished" ? "finished" : current === "finished" ? "skipped" : "unfinished";
+      state.taskStatus[id] = next;
+      state.taskOrigin[id] = "manual";
+      saveProgress();
+      render();
+    }
+
+    function getChapterStats(section) {
+      const stats = {
+        total: section.cards.length,
+        unfinished: 0,
+        finished: 0,
+        skipped: 0,
+      };
+
+      section.cards.forEach((card) => {
+        const status = getTaskState(taskId(section, card));
+        stats[status] += 1;
+      });
+
+      stats.complete = stats.total > 0 && stats.unfinished === 0;
+      stats.partial = !stats.complete && (stats.finished > 0 || stats.skipped > 0);
+      return stats;
+    }
+
+    function cycleChapter(section) {
+      const current = state.chapterBulkState[section.id] || "unfinished";
+      const next = current === "unfinished" ? "finished" : current === "finished" ? "skipped" : "unfinished";
+
+      section.cards.forEach((card) => {
+        const id = taskId(section, card);
+        if (state.taskOrigin[id] === "manual") return;
+
+        if (next === "finished" && getTaskState(id) === "unfinished") {
+          state.taskStatus[id] = "finished";
+          state.taskOrigin[id] = "chapter";
+        }
+
+        if (next === "skipped" && state.taskOrigin[id] === "chapter") {
+          state.taskStatus[id] = "skipped";
+        }
+
+        if (next === "unfinished" && state.taskOrigin[id] === "chapter") {
+          delete state.taskStatus[id];
+          delete state.taskOrigin[id];
+        }
+      });
+
+      state.chapterBulkState[section.id] = next;
+      saveProgress();
+      render();
+    }
+
+    function saveProgress() {
+      const payload = {
+        taskStatus: state.taskStatus,
+        taskOrigin: state.taskOrigin,
+        chapterBulkState: state.chapterBulkState,
+      };
+      try {
+        localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(payload));
+      } catch {
+        // Progress tracking remains usable for the current session if localStorage is blocked.
+      }
+    }
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
+        if (!raw) return;
+        const payload = JSON.parse(raw);
+        state.taskStatus = payload.taskStatus && typeof payload.taskStatus === "object" ? payload.taskStatus : {};
+        state.taskOrigin = payload.taskOrigin && typeof payload.taskOrigin === "object" ? payload.taskOrigin : {};
+        state.chapterBulkState = payload.chapterBulkState && typeof payload.chapterBulkState === "object" ? payload.chapterBulkState : {};
+      } catch {
+        state.taskStatus = {};
+        state.taskOrigin = {};
+        state.chapterBulkState = {};
+      }
+    }
+
+    function resetProgress() {
+      state.taskStatus = {};
+      state.taskOrigin = {};
+      state.chapterBulkState = {};
+      try {
+        localStorage.removeItem(PROGRESS_STORAGE_KEY);
+      } catch {
+        // Ignore storage failures; the in-memory state has already been reset.
+      }
+      render();
+    }
+
+    function taskSymbol(status) {
+      if (status === "finished") return "✓";
+      if (status === "skipped") return "S";
+      return "";
+    }
+
+    function taskStateLabel(status) {
+      if (status === "finished") return "Finished";
+      if (status === "skipped") return "Skipped";
+      return "Unfinished";
+    }
+
+    function chapterState(stats) {
+      if (stats.complete) return "complete";
+      if (stats.partial) return "partial";
+      return "unfinished";
+    }
+
+    function chapterSymbol(stats) {
+      if (stats.complete) return "✓";
+      if (stats.partial) return "•";
+      return "";
+    }
+
+    function getValues() {
+      const values = { ...fields };
+      document.querySelectorAll("[data-field]").forEach((input) => {
+        values[input.dataset.field] = input.value;
+      });
+      values.githubRepo = `${values.repoOwner}/${values.repoName}`;
+      values.githubUrl = `https://github.com/${values.repoOwner}/${values.repoName}.git`;
+      values.devOpsOrgUrl = `https://dev.azure.com/${values.devOpsOrg}`;
+      values.devOpsProjectUrl = encodeURIComponent(values.devOpsProject).replace(/%20/g, "%20");
+      values.devOpsRepoUrl = `https://dev.azure.com/${values.devOpsOrg}/${values.devOpsProjectUrl}/_git/${values.repoName}`;
+      return values;
+    }
+
+    function renderTemplate(template, values) {
+      return template.replace(/\{([a-zA-Z0-9_]+)\}/g, (_, key) => values[key] ?? `{${key}}`);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value);
+    }
+
+    function providerOptions(card) {
+      const keys = Object.keys(card.variants || {});
+      const providers = keys.filter((key) => key !== "common");
+      return providers.length ? providers : ["common"];
+    }
+
+    function shellOptions(variant) {
+      const keys = Object.keys(variant || {});
+      if (keys.includes("all")) return ["all"];
+      return ["powershell", "cmd", "bash"].filter((key) => keys.includes(key));
+    }
+
+    function selectedProvider(card, cardId) {
+      const providers = providerOptions(card);
+      if (providers.includes(state.cardProvider[cardId])) return state.cardProvider[cardId];
+      if (providers.includes(state.provider)) return state.provider;
+      return providers[0];
+    }
+
+    function selectedShell(variant, cardId) {
+      const shells = shellOptions(variant);
+      if (shells.includes("all")) return "all";
+      if (shells.includes(state.cardShell[cardId])) return state.cardShell[cardId];
+      if (shells.includes(state.shell)) return state.shell;
+      return shells[0];
+    }
+
+    function getCardText(card, cardId) {
+      const values = getValues();
+      const provider = selectedProvider(card, cardId);
+      const variant = card.variants[provider] || card.variants.common;
+      const shell = selectedShell(variant, cardId);
+      return renderTemplate(variant[shell] || variant.all || "", values);
+    }
+
+    function render() {
+      const content = document.getElementById("content");
+      const nav = document.getElementById("nav");
+      const filter = document.getElementById("search").value.trim().toLowerCase();
+      content.innerHTML = "";
+      nav.innerHTML = "";
+
+      sections.forEach((section) => {
+        const sectionText = `${section.title} ${section.summary} ${section.cards.map((card) => card.title).join(" ")}`.toLowerCase();
+        const visible = !filter || sectionText.includes(filter);
+        const stats = getChapterStats(section);
+        const sectionState = chapterState(stats);
+
+        const navLink = document.createElement("a");
+        navLink.href = `#${section.id}`;
+        navLink.textContent = `${section.title} (${stats.unfinished}/${stats.total})`;
+        navLink.className = stats.complete ? "chapter-complete" : stats.partial ? "chapter-partial" : "chapter-not-started";
+        navLink.setAttribute("aria-label", `${section.title}: ${stats.unfinished} unfinished, ${stats.finished} finished, ${stats.skipped} skipped`);
+        navLink.hidden = !visible;
+        nav.appendChild(navLink);
+
+        const sectionEl = document.createElement("section");
+        sectionEl.className = `section${visible ? "" : " hidden"}`;
+        sectionEl.id = section.id;
+        sectionEl.innerHTML = `
+          <div class="section-header">
+            <div class="section-title-row">
+              <div class="section-title-main">
+                <button type="button" class="status-control chapter-status" data-section-id="${escapeAttribute(section.id)}" data-chapter-state="${sectionState}" aria-pressed="${stats.complete}" aria-label="${escapeAttribute(section.title)}: ${stats.unfinished} unfinished of ${stats.total} tasks. Click to bulk update chapter tasks.">${chapterSymbol(stats)}</button>
+                <div>
+                  <h2>${escapeHtml(section.title)}</h2>
+                  <p>${escapeHtml(section.summary)}</p>
+                </div>
+              </div>
+              <div class="section-progress" aria-label="${escapeAttribute(section.title)} progress">
+                <span class="status-label">${stats.unfinished} unfinished of ${stats.total}</span>
+                <span class="status-label finished">${stats.finished} finished</span>
+                <span class="status-label skipped">${stats.skipped} skipped</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-grid"></div>
+        `;
+
+        sectionEl.querySelector(".chapter-status").addEventListener("click", () => cycleChapter(section));
+
+        const grid = sectionEl.querySelector(".card-grid");
+        section.cards.forEach((card) => {
+          const cardId = taskId(section, card);
+          grid.appendChild(renderCard(card, cardId));
+        });
+
+        content.appendChild(sectionEl);
+      });
+    }
+
+    function renderCard(card, cardId) {
+      const status = getTaskState(cardId);
+      const statusLabel = taskStateLabel(status);
+
+      if (card.type === "note") {
+        const el = document.createElement("article");
+        el.className = `card ${card.tone || "note"}`;
+        el.dataset.taskState = status;
+        el.innerHTML = `
+          <div class="card-head">
+            <div class="card-title-row">
+              <button type="button" class="status-control task-status" data-task-state="${status}" aria-pressed="${status !== "unfinished"}" aria-label="${escapeAttribute(card.title)}: ${statusLabel}. Click to change status.">${taskSymbol(status)}</button>
+              <div>
+                <h3>${escapeHtml(card.title)}</h3>
+                <span class="status-label ${status === "unfinished" ? "" : status}">${statusLabel}</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="rich-text">${renderTemplate(card.html, getValues())}</div>
+          </div>
+        `;
+        el.querySelector(".task-status").addEventListener("click", () => cycleTask(cardId));
+        return el;
+      }
+
+      const providers = providerOptions(card);
+      const provider = selectedProvider(card, cardId);
+      const variant = card.variants[provider] || card.variants.common;
+      const shells = shellOptions(variant);
+      const shell = selectedShell(variant, cardId);
+      const text = getCardText(card, cardId);
+
+      const el = document.createElement("article");
+      el.className = "card";
+      el.dataset.cardId = cardId;
+      el.dataset.taskState = status;
+      el.innerHTML = `
+        <div class="card-head">
+          <div class="card-title-row">
+            <button type="button" class="status-control task-status" data-task-state="${status}" aria-pressed="${status !== "unfinished"}" aria-label="${escapeAttribute(card.title)}: ${statusLabel}. Click to change status.">${taskSymbol(status)}</button>
+            <div>
+              <h3>${escapeHtml(card.title)}</h3>
+              ${card.description ? `<p>${escapeHtml(card.description)}</p>` : ""}
+              <span class="status-label ${status === "unfinished" ? "" : status}">${statusLabel}</span>
+            </div>
+          </div>
+          <button type="button" class="copy-button">Copy</button>
+        </div>
+        <div class="card-body">
+          <div class="command-actions"></div>
+          <pre><code></code></pre>
+        </div>
+      `;
+
+      const actions = el.querySelector(".command-actions");
+      if (providers.length > 1) {
+        actions.appendChild(makeTabs("provider", providers, provider, cardId));
+      }
+      if (shells.length > 1) {
+        actions.appendChild(makeTabs("shell", shells, shell, cardId));
+      }
+      if (providers.length <= 1 && shells.length <= 1) {
+        const spacer = document.createElement("span");
+        spacer.className = "pill";
+        spacer.textContent = card.prompt ? "prompt" : "command";
+        actions.appendChild(spacer);
+      }
+
+      el.querySelector("code").textContent = text;
+      el.querySelector(".task-status").addEventListener("click", () => cycleTask(cardId));
+      el.querySelector(".copy-button").addEventListener("click", () => copyText(text));
+      return el;
+    }
+
+    function makeTabs(kind, values, active, cardId) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "mini-tabs";
+      values.forEach((value) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = labelFor(value);
+        button.className = value === active ? "active" : "";
+        button.addEventListener("click", () => {
+          if (kind === "provider") state.cardProvider[cardId] = value;
+          if (kind === "shell") state.cardShell[cardId] = value;
+          render();
+        });
+        wrapper.appendChild(button);
+      });
+      return wrapper;
+    }
+
+    function labelFor(value) {
+      return {
+        github: "GitHub",
+        devops: "DevOps",
+        powershell: "PowerShell",
+        cmd: "cmd",
+        bash: "Bash",
+        all: "All shells",
+        common: "Common",
+      }[value] || value;
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 1400);
+    }
+
+    function downloadEmbeddedFile(filename) {
+      const content = EMBEDDED_DOWNLOADS[filename];
+      if (typeof content !== "string") return;
+
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.querySelectorAll("[data-field]").forEach((input) => {
+      input.addEventListener("input", render);
+      input.addEventListener("change", render);
+    });
+
+    document.querySelectorAll("[data-download-file]").forEach((button) => {
+      button.addEventListener("click", () => downloadEmbeddedFile(button.dataset.downloadFile));
+    });
+
+    document.querySelectorAll("[data-global-tabs]").forEach((group) => {
+      const key = group.dataset.globalTabs;
+      group.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          state[key] = button.dataset.value;
+          group.querySelectorAll("button").forEach((candidate) => {
+            candidate.classList.toggle("active", candidate === button);
+          });
+          render();
+        });
+      });
+    });
+
+    document.getElementById("resetProgress").addEventListener("click", resetProgress);
+    document.getElementById("search").addEventListener("input", render);
+    loadProgress();
+    render();
+  </script>
+</body>
+</html>
