@@ -74,6 +74,53 @@
         repeating-linear-gradient(90deg, rgba(1, 55, 138, 0.08) 0 1px, transparent 1px 56px);
     }
 
+    .hero.collapsed {
+      padding: 16px 32px;
+    }
+
+    .hero-expanded {
+      display: block;
+    }
+
+    .hero.collapsed .hero-expanded {
+      display: none;
+    }
+
+    .hero-collapsed-title {
+      display: none;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      padding: 0;
+      text-align: left;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 850;
+      line-height: 1.05;
+    }
+
+    .hero-collapsed-title .fold-symbol {
+      float: right;
+      margin-left: 16px;
+      color: var(--accent-dark);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .hero.collapsed .hero-collapsed-title {
+      display: block;
+    }
+
+    .hero-collapsed-title:focus-visible,
+    .header-toggle:focus-visible,
+    .section-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
     .hero-inner {
       max-width: 1400px;
       margin: 0 auto;
@@ -106,6 +153,34 @@
       margin: 18px 0 0;
       color: var(--muted);
       font-size: 1.03rem;
+    }
+
+    .hero-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .header-toggle,
+    .section-toggle {
+      min-height: 34px;
+      min-width: 42px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--accent-dark);
+      cursor: pointer;
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .header-toggle:hover,
+    .section-toggle:hover {
+      background: var(--accent-soft);
     }
 
     .context-panel {
@@ -306,6 +381,10 @@
       grid-template-columns: repeat(2, 1fr);
     }
 
+    .segmented button[hidden] {
+      display: none;
+    }
+
     .segmented button,
     .mini-tabs button {
       border: 0;
@@ -383,8 +462,8 @@
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95);
     }
 
-    .nav a[data-section-id="daily-workflow"] {
-      margin-top: 20px;
+    .nav a[data-section-kind="appendix"] {
+      color: var(--muted);
     }
 
     .content {
@@ -404,8 +483,12 @@
       display: none;
     }
 
-    #daily-workflow {
-      margin-top: 42px;
+    .section.collapsed .card-grid {
+      display: none;
+    }
+
+    .section.collapsed .section-header {
+      border-bottom: 0;
     }
 
     .section-header {
@@ -439,9 +522,46 @@
       font-weight: 750;
     }
 
+    .book-panel {
+      display: grid;
+      gap: 8px;
+    }
+
+    .book-panel .segmented {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .book-panel .segmented button {
+      padding-left: 5px;
+      padding-right: 5px;
+      white-space: nowrap;
+    }
+
+    .book-panel .segmented button[data-value="daily"] {
+      font-size: 0.8rem;
+    }
+
+    .book-panel .segmented button[data-value="daily"].active {
+      font-size: 0.77rem;
+    }
+
     .section-header h2 {
       margin: 0;
       font-size: 1.35rem;
+    }
+
+    .section-kind {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      padding: 2px 8px;
+      font-size: 0.74rem;
+      font-weight: 850;
+      text-transform: uppercase;
     }
 
     .section-header p {
@@ -539,6 +659,25 @@
 
     .rich-text li + li {
       margin-top: 5px;
+    }
+
+    .command-explain {
+      display: grid;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfaf6;
+      padding: 11px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .command-explain p {
+      margin: 0;
+    }
+
+    .command-explain strong {
+      color: var(--ink);
     }
 
     .choice-card {
@@ -770,25 +909,66 @@
       font-weight: 700;
     }
 
-    .download-panel {
-      margin-top: 18px;
-      display: grid;
-      gap: 9px;
-      max-width: 720px;
-    }
-
-    .download-panel p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .agent-note {
-      border-left: 4px solid var(--base-red);
-      background: rgba(225, 1, 26, 0.08);
+    .before-start {
+      margin-top: 16px;
+      max-width: 760px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.78);
       color: var(--ink);
-      padding: 9px 11px;
-      font-weight: 750;
+      padding: 11px 12px;
+      font-size: 0.93rem;
+    }
+
+    .before-start p {
+      margin: 0;
+    }
+
+    .logo-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 10px 0 0;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      padding: 4px 9px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .logo-badge svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      display: block;
+    }
+
+    .section-logo,
+    .card-logo {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section-logo svg,
+    .card-logo svg {
+      width: 24px;
+      height: 24px;
+      display: block;
     }
 
     .download-row {
@@ -1048,25 +1228,31 @@
 <body>
   <div class="app-shell">
     <header class="hero" id="top">
-      <div class="hero-inner">
-        <div>
-          <p class="eyebrow">Repo bootstrap</p>
-          <h1>Human-readable startup checklist</h1>
-          <p class="hero-copy">A copy-friendly startup guide for new repositories. Fill in the context once, then copy commands that are already shaped for your shell and Git host.</p>
-          <div class="pill-row">
-            <span class="pill">Git first</span>
-            <span class="pill">Bootstrap second</span>
-            <span class="pill">Baseline commit third</span>
-            <span class="pill">Agent work fourth</span>
-          </div>
-          <div class="download-panel">
-            <p>Download the repo-standard starter files. These downloads are embedded in this HTML file.</p>
-            <p class="agent-note">Agent note: when updating <code>bootstrap_repo.py</code>, <code>AGENTS.md</code>, or <code>AGENTS_INIT.md</code>, check whether the embedded download copies in this HTML file also need to be refreshed.</p>
-            <div class="download-row">
-              <button type="button" class="download-link" data-download-file="bootstrap_repo.py" data-purpose="Creates the clean repo folder structure and starter files. Download it into the root of the repository you are bootstrapping.">Download bootstrap_repo.py</button>
-              <button type="button" class="download-link" data-download-file="AGENTS.md" data-purpose="Defines the stable operating rules for AI agents in the repository. Download it into the new repository root.">Download AGENTS.md</button>
-              <button type="button" class="download-link" data-download-file="AGENTS_INIT.md" data-purpose="Gives agents the startup sequence for inspecting, planning, and bootstrapping the repo. Download it into the new repository root.">Download AGENTS_INIT.md</button>
+      <button type="button" class="hero-collapsed-title" id="heroExpandToggle" aria-expanded="false" aria-controls="heroExpanded" aria-label="Unfold header" title="Unfold header">
+        <span>REPO SETUP: Human-readable startup checklist</span>
+        <span class="fold-symbol" aria-hidden="true">&darr;&darr;&darr;</span>
+      </button>
+      <div class="hero-expanded" id="heroExpanded">
+        <div class="hero-inner">
+          <div>
+            <div class="hero-title-row">
+              <div>
+                <p class="eyebrow">Repo setup</p>
+                <h1>Human-readable startup checklist</h1>
+              </div>
+              <button type="button" class="header-toggle" id="heroCollapseToggle" aria-expanded="true" aria-controls="heroExpanded" aria-label="Fold header" title="Fold header">&uarr;&uarr;&uarr;</button>
             </div>
+            <p class="hero-copy">A copy-friendly startup guide for setting up new repositories with an AI-friendly, user-in-control structure. It helps users who are less familiar with the command line find the right setup commands, while still assuming they can install and configure developer tools such as Python, Docker, and Git hosting CLIs. Fill in the project context once, then copy commands shaped for your platform, shell, and Git hosting service. The checklist also includes downloadable starter files, tool checks, and “Copy to AI for help” prompts so you can set up the repo and start working with an agent such as Codex or Docker Sandbox.</p>
+            <div class="pill-row">
+              <span class="pill">Git first</span>
+              <span class="pill">Starter files second</span>
+              <span class="pill">Baseline commit third</span>
+              <span class="pill">Agent work fourth</span>
+            </div>
+            <div class="before-start">
+              <p><strong>Before you start:</strong> this guide assumes you can open a terminal, sign in to your Git hosting service, and create or connect repositories for the account or organization you plan to use.</p>
+            </div>
+            <!-- Agent note: when updating bootstrap_repo.py, AGENTS.md, or AGENTS_INIT.md, check whether the embedded download copies in this HTML file also need to be refreshed. -->
             <div class="brand-logo-panel" aria-label="TeamNL Sport Science Centre logo">
               <div class="brand-logo-wordmark" role="img" aria-label="TeamNL Sport Science Centre logo">
                 <span class="brand-logo-main">TeamNL</span>
@@ -1074,90 +1260,105 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <section class="context-panel" aria-labelledby="context-title">
-          <div class="context-heading">
-            <h2 id="context-title">Project context</h2>
-            <div class="context-actions">
-              <span>Used in copied commands</span>
-              <button type="button" class="reset-progress" id="resetProgress">Reset progress</button>
+          <section class="context-panel" aria-labelledby="context-title">
+            <div class="context-heading">
+              <h2 id="context-title">Project context</h2>
+              <div class="context-actions">
+                <span>Used in copied commands</span>
+                <button type="button" class="reset-progress" id="resetProgress">Reset progress</button>
+              </div>
             </div>
-          </div>
-          <div class="context-grid">
-            <div class="field">
-              <label for="projectName">Project folder</label>
-              <input id="projectName" data-field="projectName" value="projexcellent-app">
+            <div class="context-grid">
+              <div class="field">
+                <label for="projectName">Project folder</label>
+                <input id="projectName" data-field="projectName" value="projexcellent-app">
+              </div>
+              <div class="field">
+                <label for="parentNative">Native parent folder</label>
+                <input id="parentNative" data-field="parentNative" value="C:\Users\rmeer\CodeLibrary">
+              </div>
+              <div class="field">
+                <label for="parentPosix">POSIX shell path</label>
+                <input id="parentPosix" data-field="parentPosix" value="/mnt/c/Users/rmeer/CodeLibrary">
+              </div>
+              <div class="field">
+                <label for="defaultBranch">Default branch</label>
+                <input id="defaultBranch" data-field="defaultBranch" value="main">
+              </div>
+              <div class="field">
+                <label for="repoOwner">GitHub owner</label>
+                <input id="repoOwner" data-field="repoOwner" value="Rens88">
+              </div>
+              <div class="field">
+                <label for="repoName">Repository name</label>
+                <input id="repoName" data-field="repoName" value="projexcellent-app">
+              </div>
+              <div class="field">
+                <label for="devOpsOrg">Azure DevOps organization</label>
+                <input id="devOpsOrg" data-field="devOpsOrg" value="YOUR-ORG">
+              </div>
+              <div class="field">
+                <label for="devOpsProject">Azure DevOps project</label>
+                <input id="devOpsProject" data-field="devOpsProject" value="YOUR-PROJECT">
+              </div>
+              <div class="field">
+                <label for="featureBranch">Feature branch</label>
+                <input id="featureBranch" data-field="featureBranch" value="feature/initialize-starter-files">
+              </div>
+              <div class="field">
+                <label for="sandboxName">Docker Sandbox name</label>
+                <input id="sandboxName" data-field="sandboxName" value="projexcellent-codex">
+              </div>
+              <div class="field">
+                <label for="oldRepoPath">Old repo path</label>
+                <input id="oldRepoPath" data-field="oldRepoPath" value="C:\path\to\old-repo">
+              </div>
+              <div class="field">
+                <label for="privacy">New remote visibility</label>
+                <select id="privacy" data-field="privacy">
+                  <option value="private" selected>private</option>
+                  <option value="public">public</option>
+                </select>
+              </div>
             </div>
-            <div class="field">
-              <label for="parentWindows">Windows parent folder</label>
-              <input id="parentWindows" data-field="parentWindows" value="C:\Users\rmeer\CodeLibrary">
-            </div>
-            <div class="field">
-              <label for="parentBash">Bash parent folder</label>
-              <input id="parentBash" data-field="parentBash" value="/mnt/c/Users/rmeer/CodeLibrary">
-            </div>
-            <div class="field">
-              <label for="defaultBranch">Default branch</label>
-              <input id="defaultBranch" data-field="defaultBranch" value="main">
-            </div>
-            <div class="field">
-              <label for="repoOwner">GitHub owner</label>
-              <input id="repoOwner" data-field="repoOwner" value="Rens88">
-            </div>
-            <div class="field">
-              <label for="repoName">Repository name</label>
-              <input id="repoName" data-field="repoName" value="projexcellent-app">
-            </div>
-            <div class="field">
-              <label for="devOpsOrg">Azure DevOps organization</label>
-              <input id="devOpsOrg" data-field="devOpsOrg" value="YOUR-ORG">
-            </div>
-            <div class="field">
-              <label for="devOpsProject">Azure DevOps project</label>
-              <input id="devOpsProject" data-field="devOpsProject" value="YOUR-PROJECT">
-            </div>
-            <div class="field">
-              <label for="featureBranch">Feature branch</label>
-              <input id="featureBranch" data-field="featureBranch" value="feature/initialize-repo-standard">
-            </div>
-            <div class="field">
-              <label for="sandboxName">Docker Sandbox name</label>
-              <input id="sandboxName" data-field="sandboxName" value="projexcellent-codex">
-            </div>
-            <div class="field">
-              <label for="oldRepoPath">Old repo path</label>
-              <input id="oldRepoPath" data-field="oldRepoPath" value="C:\path\to\old-repo">
-            </div>
-            <div class="field">
-              <label for="privacy">New remote visibility</label>
-              <select id="privacy" data-field="privacy">
-                <option value="private" selected>private</option>
-                <option value="public">public</option>
-              </select>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </header>
 
     <div class="layout">
       <aside class="sidebar" aria-label="Checklist controls">
         <div class="sidebar-top">
-          <input class="search" id="search" placeholder="Filter checklist" aria-label="Filter checklist">
+          <div>
+            <div class="eyebrow">Platform</div>
+            <div class="segmented" data-global-tabs="platform">
+              <button type="button" data-value="windows" class="active">Windows</button>
+              <button type="button" data-value="macos">macOS</button>
+              <button type="button" data-value="linux">Linux</button>
+            </div>
+          </div>
           <div>
             <div class="eyebrow">Default shell</div>
             <div class="segmented" data-global-tabs="shell">
-              <button type="button" data-value="powershell" class="active">PowerShell</button>
+              <button type="button" data-value="powershell" data-platforms="windows" class="active">PowerShell</button>
               <button type="button" data-value="cmd">cmd</button>
               <button type="button" data-value="bash">Bash</button>
             </div>
           </div>
           <div>
-            <div class="eyebrow">Git host</div>
+            <div class="eyebrow">Git hosting service</div>
             <div class="segmented two" data-global-tabs="provider">
               <button type="button" data-value="github" class="active">GitHub</button>
               <button type="button" data-value="devops">DevOps</button>
+            </div>
+          </div>
+          <div class="book-panel">
+            <div class="eyebrow">Book</div>
+            <div class="segmented" data-book-tabs>
+              <button type="button" data-value="core" class="active">Start-up</button>
+              <button type="button" data-value="appendix">Extras</button>
+              <button type="button" data-value="daily">Daily Dev</button>
             </div>
           </div>
         </div>
@@ -1176,25 +1377,40 @@
   <div class="toast" id="toast">Copied</div>
 
   <script>
-    const PROGRESS_STORAGE_KEY = "startupChecklistProgress:v3";
+    const PROGRESS_STORAGE_KEY = "startupChecklistProgress:v4";
+    const OLD_PROGRESS_STORAGE_KEYS = ["startupChecklistProgress:v3"];
+    const PLATFORM_DEFAULT_PATHS = {
+      windows: {
+        parentNative: "C:\\Users\\rmeer\\CodeLibrary",
+        parentPosix: "/mnt/c/Users/rmeer/CodeLibrary",
+      },
+      macos: {
+        parentNative: "/Users/your-name/CodeLibrary",
+        parentPosix: "/Users/your-name/CodeLibrary",
+      },
+      linux: {
+        parentNative: "/home/your-name/CodeLibrary",
+        parentPosix: "/home/your-name/CodeLibrary",
+      },
+    };
     const FIELD_HELP = {
       projectName: "The local folder name that will be created for the new project.",
-      parentWindows: "The existing Windows folder where the new project folder will be created.",
-      parentBash: "The same parent folder as above, but written as a Bash or WSL path. For example, C:\\Users\\name\\CodeLibrary becomes /mnt/c/Users/name/CodeLibrary.",
-      defaultBranch: "The branch name that should become the main default branch, usually main.",
+      parentNative: "The existing parent folder as your operating system normally shows it. On Windows this usually uses backslashes. On macOS and Linux this is usually already a POSIX path.",
+      parentPosix: "The same parent folder as a POSIX-style shell path. On Windows with WSL, C:\\Users\\name\\CodeLibrary becomes /mnt/c/Users/name/CodeLibrary. On macOS and Linux it is usually the same as the native path.",
+      defaultBranch: "The branch name that should become the default branch. The usual starting value is main.",
       repoOwner: "The GitHub user or organization that will own the repository.",
       repoName: "The remote repository name, usually matching the project folder name.",
       devOpsOrg: "The Azure DevOps organization slug used in https://dev.azure.com/....",
       devOpsProject: "The Azure DevOps project name inside that organization.",
-      featureBranch: "The temporary working branch used for the baseline pull request flow.",
+      featureBranch: "The temporary working branch used for pull requests and review before changes reach the default branch.",
       sandboxName: "The name to give the optional Docker Sandbox.",
-      oldRepoPath: "The local path to an older repo that should be copied into archive/ during bootstrap.",
+      oldRepoPath: "The local path to an older repo that should be copied into archive/ while running the starter script.",
       privacy: "Whether a newly created remote should be private or public.",
     };
     const FIELD_LABELS = {
       projectName: "Project folder",
-      parentWindows: "Windows parent folder",
-      parentBash: "Bash parent folder",
+      parentNative: "Native parent folder",
+      parentPosix: "POSIX shell path",
       defaultBranch: "Default branch",
       repoOwner: "GitHub owner",
       repoName: "Repository name",
@@ -1206,11 +1422,20 @@
       privacy: "New remote visibility",
     };
     const AI_HELP_TOOLTIP = "Click to copy context to clipboard that you can paste to your favorite chatbot (like ChatGPT) and expand with precisely what is going wrong";
+    const LOGOS = {
+      teamnl: `<svg viewBox="0 0 40 24" aria-hidden="true"><rect width="40" height="24" rx="5" fill="#fff4e9"></rect><text x="4" y="15" fill="#EA6D08" font-size="10" font-weight="900" font-family="Segoe UI, Arial, sans-serif">TeamNL</text></svg>`,
+      github: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#181717"></circle><path fill="#fff" d="M12 4.5a7.6 7.6 0 0 0-2.4 14.8c.4.1.5-.2.5-.4v-1.3c-2.1.5-2.6-.9-2.6-.9-.3-.8-.8-1-.8-1-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.7-.2-3.5-.9-3.5-3.8 0-.8.3-1.5.8-2.1-.1-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.2-.2 1.9-.2.6 0 1.3.1 1.9.2 1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.1 0 2.9-1.8 3.6-3.5 3.8.3.2.5.7.5 1.4v2c0 .2.1.5.5.4A7.6 7.6 0 0 0 12 4.5z"></path></svg>`,
+      devops: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0078d4" d="M3 7.4 12.2 3v18L3 16.6l2.8-1.1 4.2 1.6V7L5.8 8.6z"></path><path fill="#50e6ff" d="M12.2 3 21 6.5v11l-8.8 3.5V17l4.9-1.9V8.9L12.2 7z"></path></svg>`,
+      docker: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#2496ed" d="M4 12h2V9h3v3h2V9h3v3h2.3c.5-.8 1.4-1.3 2.7-1.3.4 0 .8.1 1.2.2-.3.9-.9 1.5-1.8 1.9-.8 3.1-3.4 5.2-7.8 5.2H8.6C6.1 18 4.2 16.8 3 14.4c.3-.1.7-.2 1.1-.2H4z"></path><rect x="7" y="6" width="2" height="2" fill="#2496ed"></rect><rect x="10" y="6" width="2" height="2" fill="#2496ed"></rect><rect x="13" y="6" width="2" height="2" fill="#2496ed"></rect></svg>`,
+      vscode: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#007acc" d="M18.8 3 9.4 11.2 4.6 7.5 2.8 8.8v6.4l1.8 1.3 4.8-3.7 9.4 8.2 2.4-1V4z"></path><path fill="#fff" opacity=".85" d="M18.4 8.1v7.8l-5.6-3.9z"></path></svg>`,
+      python: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#3776ab" d="M12 3c4 0 4 1.7 4 3.8V9H9c-2.2 0-4 1.8-4 4v1H3v-3.2C3 6.8 5.2 5 9 5h2V3z"></path><path fill="#ffd43b" d="M12 21c-4 0-4-1.7-4-3.8V15h7c2.2 0 4-1.8 4-4v-1h2v3.2c0 4-2.2 5.8-6 5.8h-2v2z"></path><circle cx="9" cy="6.8" r="1" fill="#fff"></circle><circle cx="15" cy="17.2" r="1" fill="#fff"></circle></svg>`,
+      playwright: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="8" height="11" rx="3" fill="#2ead33"></rect><rect x="13" y="5" width="8" height="11" rx="3" fill="#d9232e"></rect><path d="M6 10c.8.7 1.7.7 2.5 0M15.5 10c.8.7 1.7.7 2.5 0M7 14c1 .7 2 .7 3 0M14 14c1 .7 2 .7 3 0" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round"></path></svg>`,
+    };
     const DOWNLOAD_BUTTONS_HTML = `
       <div class="download-row">
-        <button type="button" class="download-link" data-download-file="bootstrap_repo.py" data-purpose="Creates the clean repo folder structure and starter files. Download it into the root of the repository you are bootstrapping.">Download bootstrap_repo.py</button>
+        <button type="button" class="download-link" data-download-file="bootstrap_repo.py" data-purpose="Creates the clean repo folder structure and starter files. Download it into the root of the repository you are setting up.">Download bootstrap_repo.py</button>
         <button type="button" class="download-link" data-download-file="AGENTS.md" data-purpose="Defines the stable operating rules for AI agents in the repository. Download it into the new repository root.">Download AGENTS.md</button>
-        <button type="button" class="download-link" data-download-file="AGENTS_INIT.md" data-purpose="Gives agents the startup sequence for inspecting, planning, and bootstrapping the repo. Download it into the new repository root.">Download AGENTS_INIT.md</button>
+        <button type="button" class="download-link" data-download-file="AGENTS_INIT.md" data-purpose="Gives agents the startup sequence for inspecting, planning, and setting up the repo. Download it into the new repository root.">Download AGENTS_INIT.md</button>
       </div>
     `;
     const EMBEDDED_DOWNLOADS = {
@@ -1220,8 +1445,12 @@
     };
 
     const state = {
+      platform: "windows",
       shell: "powershell",
       provider: "github",
+      activeBook: "core",
+      headerCollapsed: false,
+      sectionCollapsed: {},
       sectionChoices: {},
       taskStatus: {},
       taskOrigin: {},
@@ -1230,14 +1459,14 @@
 
     const fields = {
       projectName: "projexcellent-app",
-      parentWindows: "C:\\Users\\rmeer\\CodeLibrary",
-      parentBash: "/mnt/c/Users/rmeer/CodeLibrary",
+      parentNative: "C:\\Users\\rmeer\\CodeLibrary",
+      parentPosix: "/mnt/c/Users/rmeer/CodeLibrary",
       defaultBranch: "main",
       repoOwner: "Rens88",
       repoName: "projexcellent-app",
       devOpsOrg: "YOUR-ORG",
       devOpsProject: "YOUR-PROJECT",
-      featureBranch: "feature/initialize-repo-standard",
+      featureBranch: "feature/initialize-starter-files",
       sandboxName: "projexcellent-codex",
       oldRepoPath: "C:\\path\\to\\old-repo",
       privacy: "private",
@@ -1246,71 +1475,91 @@
     const sections = [
       {
         id: "tools",
-        title: "0. Recommended Tools",
-        summary: "Start with the smallest useful toolset. Docker Sandbox, Spec Kit, Context7, Playwright, and Azure are useful layers, but not mandatory for every repository.",
+        kind: "core",
+        logoKey: "teamnl",
+        title: "0. Choose Your Working Stack",
+        summary: "Stack = the set of tools and services you use for this repo, such as your editor, Git hosting service, runtime, test tools, and optional AI/dev tooling.",
         cards: [
-          note("Tool baseline", `
-            <p><strong>Core tools:</strong> Git, Visual Studio Code, Codex CLI, Python, Docker Desktop, Docker Sandbox, Playwright, Context7, Spec Kit / specify.</p>
-            <p><strong>Optional tools:</strong> GitHub CLI, Azure CLI, Node.js / npm.</p>
+          note("Working stack", `
+            <p><strong>Stack</strong> means the set of tools and services you use for this repo: your editor, terminal shell, Git hosting service, runtime, test tools, and optional AI/dev tooling.</p>
+            ${logoStrip(["teamnl", "github", "devops", "docker", "vscode", "python", "playwright"])}
+          `, "note", { logoKey: "teamnl" }),
+          note("Core path vs appendix", `
+            <p>The core workflow is short: create the repo, connect the remote, add starter files, run the starter script, create a runtime environment only when the selected path needs one, commit the baseline, then start the agent.</p>
+            <p>The appendix keeps useful but optional helpers: tool checks, Docker Sandbox, Playwright, Spec Kit, Context7, and Git troubleshooting. They are not mandatory startup steps.</p>
+          `),
+          note("What is necessary", `
+            <ul>
+              <li>For every repo: Git, a clean folder, ignored private files, starter files for the new repo, a connected remote, and a baseline commit.</li>
+              <li>For Python or Streamlit work: a virtual environment and <code>requirements.txt</code>.</li>
+              <li>Optional at the beginning: Docker Sandbox, Playwright, Context7, Spec Kit, Azure CLI, Docker deployment files, and CI/CD pipelines.</li>
+            </ul>
+          `),
+          note("Small glossary", `
+            <ul>
+              <li><strong>Default branch:</strong> the primary shared branch of the repo. This guide uses <code>{defaultBranch}</code> as the current value.</li>
+              <li><strong>Feature branch:</strong> a temporary branch for one task before review or merge.</li>
+              <li><strong>Remote:</strong> the copy of the repo on a Git hosting service such as GitHub or Azure DevOps.</li>
+              <li><strong>Pull request:</strong> a request to review and merge one branch into another.</li>
+              <li><strong>Branch protection:</strong> host rules that limit direct pushes to important branches.</li>
+              <li><strong>Virtual environment:</strong> a local Python dependency folder, usually <code>.venv</code>, isolated from the rest of the machine.</li>
+              <li><strong>Docker Sandbox:</strong> an optional isolated environment for agent or tool execution.</li>
+              <li><strong>Playwright:</strong> an optional browser automation and end-to-end testing tool.</li>
+            </ul>
           `),
         ],
       },
       {
-        id: "checks",
-        title: "1. Tool Check Prompts",
-        summary: "Copy these prompts into an AI assistant when you want help checking or installing tools.",
-        cards: [
-          prompt("Git check prompt", "Help me check whether Git is installed on my machine. Give me the exact Windows command-line commands to check it, and if it is missing, give me the safest installation instructions. After installation, help me configure my name and email."),
-          command("Git commands", {
-            common: {
-              all: "git --version\ngit config --global user.name\ngit config --global user.email",
-            },
-          }),
-          prompt("Visual Studio Code check prompt", "Help me check whether Visual Studio Code is installed and whether the `code` command is available from my terminal. If it is not available, help me enable it safely on Windows."),
-          command("Visual Studio Code commands", { common: { all: "code --version" } }),
-          prompt("Codex CLI check prompt", "Help me check whether Codex CLI is installed and usable from my terminal. If it is missing, help me install it using the current official instructions. Also help me verify authentication."),
-          command("Codex CLI commands", { common: { all: "codex --version" } }),
-          prompt("Python check prompt", "Help me check whether Python is installed, which version is active, and whether `python -m venv` works. If Python is missing or broken, help me install a stable version for Windows."),
-          command("Python commands", { common: { all: "python --version\npython -m venv --help" } }),
-          prompt("Docker Desktop check prompt", "Help me check whether Docker Desktop is installed and running. Give me the command-line checks and explain what each result means. If Docker is missing, help me install it safely on Windows."),
-          command("Docker Desktop commands", { common: { all: "docker --version\ndocker info" } }),
-          prompt("Docker Sandbox check prompt", "Help me check whether Docker Sandbox (`sbx`) tooling is available in my environment. Inspect https://docs.docker.com/ai/sandboxes/ and use the current official Docker documentation. If it is not available, explain the installation or access requirements and whether I can continue locally without it."),
-          command("Docker Sandbox commands", { common: { all: "sbx --help\nsbx ls\ndocker --version\ndocker info" } }),
-          prompt("Context7 check prompt", "Help me check whether Context7 is available as an MCP server for my coding agent. If it is missing, help me install or configure it using the current official instructions for my agent."),
-          prompt("Spec Kit check prompt", "Help me check whether GitHub Spec Kit / specify is available from my command line. If it is missing, help me install it using the current official instructions. Then help me initialize specification-driven docs for this repository."),
-          command("Spec Kit first check", { common: { all: "specify --help" } }),
-          prompt("Git host CLI check prompt", "Help me check whether the selected Git host CLI is installed and authenticated. If it is missing, help me install it and connect it to my account."),
-          command("Git host CLI commands", {
-            github: { all: "gh --version\ngh auth status" },
-            devops: { all: "az --version\naz extension add --name azure-devops\naz login\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"" },
-          }),
-          prompt("Azure CLI prompt", "Help me check whether Azure CLI is installed and authenticated. If it is missing, help me install it. Then help me verify the active Azure subscription."),
-          command("Azure CLI commands", { common: { all: "az --version\naz login\naz account show" } }),
-        ],
-      },
-      {
         id: "init",
-        title: "2. Create Folder and Initialize Git",
-        summary: "Create the folder first, initialize Git, make `main` the default branch, and check the initial status.",
+        kind: "core",
+        title: "1. Create Folder And Initialize Git",
+        summary: "Create the repo folder, initialize Git, choose the default branch name, and check the empty repo state.",
         cards: [
           command("Create folder and initialize Git", {
             common: {
-              powershell: "Set-Location \"{parentWindows}\"\nNew-Item -ItemType Directory -Force \"{projectName}\"\nSet-Location \"{projectName}\"\ngit init",
-              cmd: "cd /d \"{parentWindows}\"\nmkdir \"{projectName}\"\ncd \"{projectName}\"\ngit init",
-              bash: "cd \"{parentBash}\"\nmkdir -p \"{projectName}\"\ncd \"{projectName}\"\ngit init",
+              windows: {
+                powershell: "Set-Location \"{parentNative}\"\nNew-Item -ItemType Directory -Force \"{projectName}\"\nSet-Location \"{projectName}\"\ngit init",
+                cmd: "cd /d \"{parentNative}\"\nmkdir \"{projectName}\"\ncd \"{projectName}\"\ngit init",
+                bash: "cd \"{parentPosix}\"\nmkdir -p \"{projectName}\"\ncd \"{projectName}\"\ngit init",
+              },
+              macos: {
+                bash: "cd \"{parentPosix}\"\nmkdir -p \"{projectName}\"\ncd \"{projectName}\"\ngit init",
+              },
+              linux: {
+                bash: "cd \"{parentPosix}\"\nmkdir -p \"{projectName}\"\ncd \"{projectName}\"\ngit init",
+              },
             },
+          }, "", {
+            explain: explain(
+              "Creates the project folder, moves into it, and starts a local Git repository.",
+              "Git needs a local repository before files can be committed or connected to a remote.",
+              "Normal output says Git initialized an empty repository and your terminal prompt is inside the new folder.",
+              "Be suspicious if the command says the path does not exist, the folder name is wrong, or Git is not recognized."
+            ),
           }),
-          command("Create default branch and check status", {
+          command("Set default branch and check status", {
             common: {
               all: "git branch -M {defaultBranch}\ngit status",
             },
+          }, "", {
+            explain: explain(
+              "Renames the current branch to the selected default branch and prints the current Git status.",
+              "The repo should use one clear default branch name before it is pushed to a Git hosting service.",
+              "Normal output shows you are on branch {defaultBranch} with no commits yet or with only untracked files.",
+              "Be suspicious if Git says this is not a repository or if the branch name is not the value you intended."
+            ),
           }),
+          note("Success state: repo folder exists", `
+            <p>You should now have a local folder named <code>{projectName}</code> with a <code>.git</code> directory inside it.</p>
+          `),
         ],
       },
       {
         id: "remote",
-        title: "3. Connect to a Remote Repository",
-        summary: "Use GitHub or Azure DevOps. For private GitHub repositories, branch protection may be configurable but not enforced unless your account or repository has the required plan.",
+        kind: "core",
+        logoKey: "github",
+        title: "2. Connect Remote And Choose Default-Branch Policy",
+        summary: "Connect the local repo to GitHub or Azure DevOps, then decide whether the default branch should require pull requests.",
         cards: [
           choice("Choose remote setup path", "remote-path", [
             { label: "Add existing remote", value: "existing" },
@@ -1323,17 +1572,35 @@
             devops: {
               all: "git remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}\ngit remote -v",
             },
-          }, "", { choiceGroup: "remote-path", choiceValue: "existing" }),
+          }, "", {
+            choiceGroup: "remote-path",
+            choiceValue: "existing",
+            logoKey: "github",
+            explain: explain(
+              "Adds the existing Git hosting service URL as the local remote named origin, then lists configured remotes.",
+              "The local repo needs a remote before it can push commits or open pull requests.",
+              "Normal output shows origin twice: once for fetch and once for push, both pointing at the selected hosting service.",
+              "Be suspicious if the URL has the wrong owner, organization, project, or repository name."
+            ),
+          }),
           command("Create remote from current folder", {
             github: {
               all: "gh repo create {repoOwner}/{repoName} --{privacy} --source . --remote origin",
             },
             devops: {
-              powershell: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\naz repos create --name \"{repoName}\"\ngit remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}",
-              cmd: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\naz repos create --name \"{repoName}\"\ngit remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}",
-              bash: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\naz repos create --name \"{repoName}\"\ngit remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}",
+              all: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\naz repos create --name \"{repoName}\"\ngit remote add origin https://dev.azure.com/{devOpsOrg}/{devOpsProjectUrl}/_git/{repoName}",
             },
-          }, "", { choiceGroup: "remote-path", choiceValue: "create" }),
+          }, "", {
+            choiceGroup: "remote-path",
+            choiceValue: "create",
+            logoKey: "devops",
+            explain: explain(
+              "Creates a repository on the selected Git hosting service and connects it as origin.",
+              "Use this when the remote does not exist yet but you have permission to create it.",
+              "Normal output confirms the remote repository was created and origin was configured.",
+              "Be suspicious if authentication fails, the organization/project is wrong, or the service says the repo already exists."
+            ),
+          }),
           note("Remote visibility warning", `
             <p>Use a public remote only when you are certain the repository contains no private material. Keep <code>.env</code>, credentials, real personal data, and <code>data/private/</code> out of committed files.</p>
           `),
@@ -1344,113 +1611,268 @@
           note("Why protect the default branch", `
             <p>Restricting direct pushes to <code>{defaultBranch}</code> keeps the shared branch reviewable, makes accidental history changes less likely, and forces important work through a clearer feature-branch and pull-request flow.</p>
           `, "note", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
-          note("GitHub branch protection plan limitation", `
-            <p>GitHub branch protection is enforced when the repository is public or the repository/account is on GitHub Pro or a higher paid plan. On a private GitHub Free repository, the UI may let you configure rules but mark them as not enforced.</p>
+          note("Plan and permission limitations", `
+            <p>GitHub branch protection is enforced when the repository is public or the repository/account has a plan that supports enforcement for private repositories. Some roles and bypass permissions can still allow direct pushes. In Azure DevOps, branch policies require pull requests once configured, while branch security controls who can bypass or push directly.</p>
           `, "warn", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
           command("Inspect branch protection or policies", {
             github: {
-              powershell: "$repo = gh repo view --json nameWithOwner --jq .nameWithOwner\ngh api \"repos/$repo/branches/{defaultBranch}/protection\"\ngh api \"repos/$repo/rules/branches/{defaultBranch}\"",
-              cmd: "for /f %i in ('gh repo view --json nameWithOwner --jq .nameWithOwner') do set REPO=%i\ngh api repos/%REPO%/branches/{defaultBranch}/protection\ngh api repos/%REPO%/rules/branches/{defaultBranch}",
-              bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\ngh api \"repos/$REPO/branches/{defaultBranch}/protection\"\ngh api \"repos/$REPO/rules/branches/{defaultBranch}\"",
+              windows: {
+                powershell: "$repo = gh repo view --json nameWithOwner --jq .nameWithOwner\ngh api \"repos/$repo/branches/{defaultBranch}/protection\"\ngh api \"repos/$repo/rules/branches/{defaultBranch}\"",
+                cmd: "for /f %i in ('gh repo view --json nameWithOwner --jq .nameWithOwner') do set REPO=%i\ngh api repos/%REPO%/branches/{defaultBranch}/protection\ngh api repos/%REPO%/rules/branches/{defaultBranch}",
+                bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\ngh api \"repos/$REPO/branches/{defaultBranch}/protection\"\ngh api \"repos/$REPO/rules/branches/{defaultBranch}\"",
+              },
+              macos: {
+                bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\ngh api \"repos/$REPO/branches/{defaultBranch}/protection\"\ngh api \"repos/$REPO/rules/branches/{defaultBranch}\"",
+              },
+              linux: {
+                bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\ngh api \"repos/$REPO/branches/{defaultBranch}/protection\"\ngh api \"repos/$REPO/rules/branches/{defaultBranch}\"",
+              },
             },
             devops: {
-              powershell: "$repoId = az repos show --repository \"{repoName}\" --query id -o tsv\naz repos policy list --repository-id $repoId --branch {defaultBranch} --output table",
-              cmd: "for /f %i in ('az repos show --repository \"{repoName}\" --query id -o tsv') do set REPO_ID=%i\naz repos policy list --repository-id %REPO_ID% --branch {defaultBranch} --output table",
-              bash: "REPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy list --repository-id \"$REPO_ID\" --branch {defaultBranch} --output table",
+              windows: {
+                powershell: "$repoId = az repos show --repository \"{repoName}\" --query id -o tsv\naz repos policy list --repository-id $repoId --branch {defaultBranch} --output table",
+                cmd: "for /f %i in ('az repos show --repository \"{repoName}\" --query id -o tsv') do set REPO_ID=%i\naz repos policy list --repository-id %REPO_ID% --branch {defaultBranch} --output table",
+                bash: "REPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy list --repository-id \"$REPO_ID\" --branch {defaultBranch} --output table",
+              },
+              macos: {
+                bash: "REPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy list --repository-id \"$REPO_ID\" --branch {defaultBranch} --output table",
+              },
+              linux: {
+                bash: "REPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy list --repository-id \"$REPO_ID\" --branch {defaultBranch} --output table",
+              },
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "restrict",
+            explain: explain(
+              "Asks the selected Git hosting service what protection or policy rules currently apply to the default branch.",
+              "Inspection tells you whether the host already has rules before you create or change them.",
+              "Normal output is a JSON response from GitHub or a table from Azure DevOps. A not-found result can be normal before rules are created.",
+              "Be suspicious if the command is querying a different repository or if authentication is not connected to the account you expect."
+            ),
+          }),
           command("Require pull requests before merge", {
             github: {
-              powershell: "$repo = gh repo view --json nameWithOwner --jq .nameWithOwner\n\n$json = @'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\n'@\n\n$json | gh api --method PUT \"repos/$repo/branches/{defaultBranch}/protection\" --input -",
-              cmd: "gh repo view --json nameWithOwner --jq .nameWithOwner > repo.txt\nset /p REPO=<repo.txt\n\n(\necho {\necho   \"required_status_checks\": null,\necho   \"enforce_admins\": true,\necho   \"required_pull_request_reviews\": {\necho     \"dismiss_stale_reviews\": true,\necho     \"require_code_owner_reviews\": false,\necho     \"required_approving_review_count\": 1,\necho     \"require_last_push_approval\": false\necho   },\necho   \"restrictions\": null,\necho   \"required_linear_history\": false,\necho   \"allow_force_pushes\": false,\necho   \"allow_deletions\": false,\necho   \"block_creations\": false,\necho   \"required_conversation_resolution\": true,\necho   \"lock_branch\": false,\necho   \"allow_fork_syncing\": false\necho }\n) > branch-protection.json\n\ngh api --method PUT \"repos/%REPO%/branches/{defaultBranch}/protection\" --input branch-protection.json\n\ndel repo.txt\ndel branch-protection.json",
-              bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\n\ngh api --method PUT \"repos/$REPO/branches/{defaultBranch}/protection\" --input - <<'EOF'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\nEOF",
+              windows: {
+                powershell: "$repo = gh repo view --json nameWithOwner --jq .nameWithOwner\n\n$json = @'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\n'@\n\n$json | gh api --method PUT \"repos/$repo/branches/{defaultBranch}/protection\" --input -",
+                cmd: "gh repo view --json nameWithOwner --jq .nameWithOwner > repo.txt\nset /p REPO=<repo.txt\n\n(\necho {\necho   \"required_status_checks\": null,\necho   \"enforce_admins\": true,\necho   \"required_pull_request_reviews\": {\necho     \"dismiss_stale_reviews\": true,\necho     \"require_code_owner_reviews\": false,\necho     \"required_approving_review_count\": 1,\necho     \"require_last_push_approval\": false\necho   },\necho   \"restrictions\": null,\necho   \"required_linear_history\": false,\necho   \"allow_force_pushes\": false,\necho   \"allow_deletions\": false,\necho   \"block_creations\": false,\necho   \"required_conversation_resolution\": true,\necho   \"lock_branch\": false,\necho   \"allow_fork_syncing\": false\necho }\n) > branch-protection.json\n\ngh api --method PUT \"repos/%REPO%/branches/{defaultBranch}/protection\" --input branch-protection.json\n\ndel repo.txt\ndel branch-protection.json",
+                bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\n\ngh api --method PUT \"repos/$REPO/branches/{defaultBranch}/protection\" --input - <<'EOF'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\nEOF",
+              },
+              macos: {
+                bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\n\ngh api --method PUT \"repos/$REPO/branches/{defaultBranch}/protection\" --input - <<'EOF'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\nEOF",
+              },
+              linux: {
+                bash: "REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)\n\ngh api --method PUT \"repos/$REPO/branches/{defaultBranch}/protection\" --input - <<'EOF'\n{\n  \"required_status_checks\": null,\n  \"enforce_admins\": true,\n  \"required_pull_request_reviews\": {\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"required_linear_history\": false,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": false\n}\nEOF",
+              },
             },
             devops: {
-              powershell: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\n$repoId = az repos show --repository \"{repoName}\" --query id -o tsv\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repoId --reset-on-source-push true --output table",
-              cmd: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nfor /f %i in ('az repos show --repository \"{repoName}\" --query id -o tsv') do set REPO_ID=%i\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id %REPO_ID% --reset-on-source-push true --output table",
-              bash: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nREPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id \"$REPO_ID\" --reset-on-source-push true --output table",
+              windows: {
+                powershell: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\n$repoId = az repos show --repository \"{repoName}\" --query id -o tsv\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repoId --reset-on-source-push true --output table",
+                cmd: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nfor /f %i in ('az repos show --repository \"{repoName}\" --query id -o tsv') do set REPO_ID=%i\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id %REPO_ID% --reset-on-source-push true --output table",
+                bash: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nREPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id \"$REPO_ID\" --reset-on-source-push true --output table",
+              },
+              macos: {
+                bash: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nREPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id \"$REPO_ID\" --reset-on-source-push true --output table",
+              },
+              linux: {
+                bash: "az extension add --name azure-devops\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"\nREPO_ID=$(az repos show --repository \"{repoName}\" --query id -o tsv)\naz repos policy approver-count create --allow-downvotes false --blocking true --branch {defaultBranch} --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id \"$REPO_ID\" --reset-on-source-push true --output table",
+              },
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
-          note("Admin and bypass behavior", `
-            <p>GitHub classic branch rules need <strong>Do not allow bypassing the above settings</strong> to block admins too. GitHub rulesets with no bypass actors are another route, but private repositories on free plans may be blocked from rulesets. In Azure DevOps, branch policies require pull requests for changes once configured; branch security permissions decide who can bypass or push directly.</p>
-          `, "note", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "restrict",
+            explain: explain(
+              "Creates a rule or policy that requires changes to reach the default branch through a pull request.",
+              "This protects the shared branch from accidental direct pushes and creates a review point.",
+              "Normal output confirms the protection or policy was created or updated for {defaultBranch}.",
+              "Be suspicious if the rule is created for the wrong branch, the API refuses permissions, or the host says your plan cannot enforce it."
+            ),
+          }),
           note("Direct pushes are allowed for now", `
             <p>You chose not to restrict direct pushes to <code>{defaultBranch}</code> right now. That is simpler at the start, but feature branches and pull requests are still the safer default once the repository starts to matter.</p>
           `, "warn", { choiceGroup: "branch-policy", choiceValue: "allow" }),
+          note("Success state: remote is connected", `
+            <p><code>git remote -v</code> should show <code>origin</code> pointing at the selected Git hosting service.</p>
+          `),
         ],
       },
       {
-        id: "standard-files",
-        title: "4. Add Repo-Standard Files",
-        summary: "Copy the standard operating files into the new repo root.",
+        id: "starter-files",
+        kind: "core",
+        title: "3. Add Starter Files",
+        summary: "Copy the starter files for the new repo into the repo root before running the starter script.",
         cards: [
           note("Files to copy", `
             <ul>
-              <li><code>bootstrap_repo.py</code></li>
-              <li><code>AGENTS.md</code></li>
-              <li><code>AGENTS_INIT.md</code></li>
-              <li><code>HUMAN_READABLE_STARTUP_CHECKLIST.html</code></li>
+              <li><code>bootstrap_repo.py</code>, the repo starter script</li>
+              <li><code>AGENTS.md</code>, the stable agent operating rules</li>
+              <li><code>AGENTS_INIT.md</code>, the first-session agent startup guide</li>
+              <li><code>HUMAN_READABLE_STARTUP_CHECKLIST.html</code>, this standalone checklist if you want it in the repo</li>
             </ul>
             ${DOWNLOAD_BUTTONS_HTML}
           `),
           command("Check root files", {
             common: {
-              powershell: "Get-ChildItem",
-              cmd: "dir",
-              bash: "ls -la",
+              windows: {
+                powershell: "Get-ChildItem",
+                cmd: "dir",
+                bash: "ls -la",
+              },
+              macos: {
+                bash: "ls -la",
+              },
+              linux: {
+                bash: "ls -la",
+              },
             },
-          }, "Expected output: a root-level directory listing that shows bootstrap_repo.py, AGENTS.md, AGENTS_INIT.md, and HUMAN_READABLE_STARTUP_CHECKLIST.html before you continue."),
+          }, "", {
+            explain: explain(
+              "Lists the files currently in the repository root.",
+              "You are checking that the starter files are in the right folder before running the starter script.",
+              "Normal output includes bootstrap_repo.py, AGENTS.md, AGENTS_INIT.md, and optionally this HTML checklist.",
+              "Be suspicious if the files are inside Downloads, Desktop, or a nested folder instead of the repo root."
+            ),
+          }),
+          note("Success state: starter files are present", `
+            <p>The repo root should now contain the starter script and agent guidance files.</p>
+          `),
         ],
       },
       {
-        id: "bootstrap",
-        title: "5. Run the Bootstrapper",
-        summary: "Choose the lightest profile that fits the project. The archived repo is source material only; redesign from it rather than migrating blindly.",
+        id: "starter-script",
+        kind: "core",
+        logoKey: "python",
+        title: "4. Run The Starter Script",
+        summary: "Choose the lightest profile that fits the project. If you use old work, treat it as source material and redesign from it.",
         cards: [
-          choice("Choose bootstrap path", "bootstrap-path", [
+          choice("Choose starter path", "bootstrap-path", [
             { label: "Base shell", value: "base" },
             { label: "Standalone HTML prototype", value: "html-prototype" },
             { label: "Streamlit proof of concept", value: "streamlit-poc" },
             { label: "React MVP with Playwright", value: "react-playwright" },
             { label: "React MVP with Azure and Docker structure", value: "react-azure-docker" },
             { label: "Clean repo inspired by an old repo", value: "from-archive" },
-          ], "Choose one bootstrap path. Only the selected command is shown below, and every alternative path is marked skipped."),
-          command("Base shell", { common: { all: "python bootstrap_repo.py --target . --profile base" } }, "", { choiceGroup: "bootstrap-path", choiceValue: "base" }),
-          command("Standalone HTML prototype", { common: { all: "python bootstrap_repo.py --target . --profile html-prototype" } }, "", { choiceGroup: "bootstrap-path", choiceValue: "html-prototype" }),
-          command("Streamlit proof of concept", { common: { all: "python bootstrap_repo.py --target . --profile streamlit-poc" } }, "", { choiceGroup: "bootstrap-path", choiceValue: "streamlit-poc" }),
-          command("React MVP with Playwright", { common: { all: "python bootstrap_repo.py --target . --profile react-mvp --with playwright" } }, "", { choiceGroup: "bootstrap-path", choiceValue: "react-playwright" }),
-          command("React MVP with Azure and Docker structure", { common: { all: "python bootstrap_repo.py --target . --profile react-mvp --with playwright --with azure-docker" } }, "", { choiceGroup: "bootstrap-path", choiceValue: "react-azure-docker" }),
-          command("Clean repo inspired by an old repo", { common: { all: "python bootstrap_repo.py --target . --profile streamlit-poc --from-archive \"{oldRepoPath}\"" } }, "", { choiceGroup: "bootstrap-path", choiceValue: "from-archive" }),
+          ], "Choose one starter path. Only the selected command is shown below, and every alternative path is marked skipped."),
+          command("Base shell", starterScriptVariants("--target . --profile base"), "", {
+            choiceGroup: "bootstrap-path",
+            choiceValue: "base",
+            explain: starterScriptExplain("Creates a minimal clean repo shell with docs, ignored private paths, and agent guidance."),
+          }),
+          command("Standalone HTML prototype", starterScriptVariants("--target . --profile html-prototype"), "", {
+            choiceGroup: "bootstrap-path",
+            choiceValue: "html-prototype",
+            explain: starterScriptExplain("Creates a lightweight structure for standalone HTML prototype work."),
+          }),
+          command("Streamlit proof of concept", starterScriptVariants("--target . --profile streamlit-poc"), "", {
+            choiceGroup: "bootstrap-path",
+            choiceValue: "streamlit-poc",
+            explain: starterScriptExplain("Creates a Python and Streamlit-oriented proof-of-concept structure."),
+          }),
+          command("React MVP with Playwright", starterScriptVariants("--target . --profile react-mvp --with playwright"), "", {
+            choiceGroup: "bootstrap-path",
+            choiceValue: "react-playwright",
+            explain: starterScriptExplain("Creates frontend/backend/test folders and Playwright-oriented test space."),
+          }),
+          command("React MVP with Azure and Docker structure", starterScriptVariants("--target . --profile react-mvp --with playwright --with azure-docker"), "", {
+            choiceGroup: "bootstrap-path",
+            choiceValue: "react-azure-docker",
+            explain: starterScriptExplain("Creates frontend/backend/test folders plus Azure and Docker structure for later deployment work."),
+          }),
+          command("Clean repo inspired by an old repo", starterScriptVariants("--target . --profile streamlit-poc --from-archive \"{oldRepoPath}\""), "", {
+            choiceGroup: "bootstrap-path",
+            choiceValue: "from-archive",
+            explain: starterScriptExplain("Creates a clean Streamlit-oriented repo and copies the old repo into archive/ as reference material only."),
+          }),
+          note("Success state: starter structure exists", `
+            <p>The starter script should create folders such as <code>docs/</code>, <code>project-brain/</code>, <code>src/</code>, <code>tests/</code>, <code>data/private/</code>, and <code>archive/</code>, depending on the selected path.</p>
+          `),
         ],
       },
       {
-        id: "venv",
-        title: "6. Create a Python Virtual Environment",
-        summary: "Use a local virtual environment for Python and Streamlit proof-of-concept work.",
+        id: "runtime",
+        kind: "core",
+        logoKey: "python",
+        title: "5. Create Runtime Environment Only When Relevant",
+        summary: "Create a Python virtual environment for Python or Streamlit paths. Skip this for repo types that do not need Python dependencies yet.",
         cards: [
-          command("Create and activate `.venv`", {
+          note("Runtime rule", `
+            <p>A runtime environment is not universal. Create one only when the selected starter path has code that needs dependencies installed locally.</p>
+          `),
+          note("No runtime environment needed yet", `
+            <p>The selected starter path does not need a dependency environment during initial setup. Continue to the ignored/private-file check.</p>
+          `, "note", { choiceGroup: "bootstrap-path", choiceValues: ["base", "html-prototype"] }),
+          note("Wait for the app scaffold", `
+            <p>For React-oriented paths, choose the actual frontend package manager and app scaffold before installing Node dependencies. Playwright setup stays in the appendix until the browser UI exists.</p>
+          `, "note", { choiceGroup: "bootstrap-path", choiceValues: ["react-playwright", "react-azure-docker"] }),
+          command("Create and activate Python `.venv`", {
             common: {
-              powershell: "python -m venv .venv\n.venv\\Scripts\\Activate.ps1",
-              cmd: "python -m venv .venv\n.venv\\Scripts\\activate.bat",
-              bash: "python -m venv .venv\nsource .venv/bin/activate",
+              windows: {
+                powershell: "python -m venv .venv\n.venv\\Scripts\\Activate.ps1",
+                cmd: "python -m venv .venv\n.venv\\Scripts\\activate.bat",
+                bash: "python3 -m venv .venv\nsource .venv/bin/activate",
+              },
+              macos: {
+                bash: "python3 -m venv .venv\nsource .venv/bin/activate",
+              },
+              linux: {
+                bash: "python3 -m venv .venv\nsource .venv/bin/activate",
+              },
             },
+          }, "", {
+            choiceGroup: "bootstrap-path",
+            choiceValues: ["streamlit-poc", "from-archive"],
+            explain: explain(
+              "Creates a local Python virtual environment and activates it in the current shell.",
+              "Python dependencies should be isolated per repo so they do not affect other projects on the machine.",
+              "Normal output is often quiet, then your terminal prompt changes to show .venv is active.",
+              "Be suspicious if Python is not found, activation is blocked by shell policy, or the .venv folder is created outside the repo."
+            ),
           }),
           command("Upgrade packaging tools and install dependencies", {
             common: {
-              all: "python -m pip install --upgrade pip\npip install -r requirements.txt",
+              windows: {
+                powershell: "python -m pip install --upgrade pip\npip install -r requirements.txt",
+                cmd: "python -m pip install --upgrade pip\npip install -r requirements.txt",
+                bash: "python3 -m pip install --upgrade pip\npip install -r requirements.txt",
+              },
+              macos: {
+                bash: "python3 -m pip install --upgrade pip\npip install -r requirements.txt",
+              },
+              linux: {
+                bash: "python3 -m pip install --upgrade pip\npip install -r requirements.txt",
+              },
             },
+          }, "", {
+            choiceGroup: "bootstrap-path",
+            choiceValues: ["streamlit-poc", "from-archive"],
+            explain: explain(
+              "Updates pip in the virtual environment and installs dependencies listed in requirements.txt.",
+              "This prepares the local Python environment for the starter app and tests.",
+              "Normal output shows packages being installed or reports that requirements are already satisfied.",
+              "Be suspicious if pip installs globally instead of inside .venv or if requirements.txt is missing."
+            ),
           }),
           command("Install Streamlit if needed", {
             common: {
               all: "pip install streamlit\npip freeze > requirements.txt",
             },
+          }, "", {
+            choiceGroup: "bootstrap-path",
+            choiceValues: ["streamlit-poc", "from-archive"],
+            explain: explain(
+              "Installs Streamlit into the active virtual environment and records the dependency set.",
+              "Use this only if Streamlit is not already listed or installed for the proof-of-concept path.",
+              "Normal output shows Streamlit installation, and requirements.txt is updated.",
+              "Be suspicious if .venv is not active or if private package tokens appear in requirements.txt."
+            ),
           }),
         ],
       },
       {
         id: "private-files",
-        title: "7. Confirm Private Files Are Ignored",
-        summary: "Private data and secrets must stay local.",
+        kind: "core",
+        title: "6. Confirm Ignored And Private Files",
+        summary: "Private data and secrets must stay local before the baseline commit.",
         cards: [
           note("Expected ignored paths", `
             <ul>
@@ -1459,226 +1881,300 @@
               <li><code>archive/**/.git/</code></li>
               <li><code>archive/**/.codex/</code></li>
               <li><code>.venv/</code></li>
+              <li><code>node_modules/</code>, <code>coverage/</code>, and browser-test output folders when relevant</li>
             </ul>
           `),
           command("Create `.env` only if needed", {
             common: {
-              powershell: "Copy-Item .env.example .env",
-              cmd: "copy .env.example .env",
-              bash: "cp .env.example .env",
+              windows: {
+                powershell: "Copy-Item .env.example .env",
+                cmd: "copy .env.example .env",
+                bash: "cp .env.example .env",
+              },
+              macos: {
+                bash: "cp .env.example .env",
+              },
+              linux: {
+                bash: "cp .env.example .env",
+              },
             },
+          }, "", {
+            explain: explain(
+              "Copies the example environment-variable file to a local .env file.",
+              ".env is where local secrets or machine-specific settings go, and it should remain uncommitted.",
+              "Normal output is quiet or confirms one file was copied. Git status should not list .env if .gitignore is correct.",
+              "Be suspicious if .env.example is missing or if git status shows .env as a file to commit."
+            ),
           }),
-          command("Check Git status", { common: { all: "git status" } }),
+          command("Check Git status before committing", { common: { all: "git status" } }, "", {
+            explain: explain(
+              "Shows which files Git sees as new, modified, ignored, or staged.",
+              "This is the final privacy check before creating the baseline commit.",
+              "Normal output lists starter files and safe project files, but not .env, data/private contents, .venv, or old nested .git folders.",
+              "Be suspicious if credentials, private data, archive Git internals, or virtual-environment files appear as files to commit."
+            ),
+          }),
+          note("Success state: private files stay local", `
+            <p><code>git status</code> should show only safe starter files and project structure for the baseline commit.</p>
+          `),
         ],
       },
       {
         id: "baseline",
-        title: "8. Make a Clean Baseline Commit",
-        summary: "Commit the clean shell before agents begin changing behavior.",
+        kind: "core",
+        title: "7. Make The Baseline Commit",
+        summary: "Commit the clean starter structure before agents begin changing behavior.",
         cards: [
           command("Baseline commit", {
             common: {
-              all: "git add .\ngit commit -m \"Initialize repo standard\"",
+              all: "git add .\ngit commit -m \"Initialize starter files\"",
             },
+          }, "", {
+            explain: explain(
+              "Stages the safe starter files and records them as the first meaningful commit.",
+              "A clean baseline makes future agent changes easy to inspect and undo.",
+              "Normal output shows a new commit hash and counts of files changed.",
+              "Be suspicious if Git says there is nothing to commit, if private files are staged, or if the commit includes old archive internals."
+            ),
           }),
-          note("Branch protection is controlled in section 3", `
-            <p>Choose whether <code>{defaultBranch}</code> should stay protected only once in section 3. The baseline flow below follows that earlier choice.</p>
+          note("Branch protection is controlled in section 2", `
+            <p>Choose whether <code>{defaultBranch}</code> should stay protected only once in section 2. The baseline flow below follows that earlier choice.</p>
             <p>If you want to review or change that choice, use this button:</p>
-            <p><button type="button" class="choice-button jump-button" data-jump-section="remote">Go back to section 3 to protect the main branch</button></p>
+            <p><button type="button" class="choice-button jump-button" data-jump-section="remote">Go back to section 2 to choose branch policy</button></p>
           `),
           note("Why test direct push to the default branch", `
             <p>This test confirms whether the host actually blocks direct pushes to <code>{defaultBranch}</code>. Some platforms let you configure protection rules that are not truly enforced for your plan, your role, or users with bypass rights.</p>
           `, "note", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
           note("Protected branch expectation", `
-            <p>If branch protection is actually enforced, a direct push to <code>{defaultBranch}</code> should be rejected for non-admin users. GitHub private repositories on free plans may show rules as not enforced.</p>
+            <p>If branch protection is actually enforced, a direct push to <code>{defaultBranch}</code> should be rejected for non-admin users. If it succeeds, continue with care and review whether plan or bypass permissions explain the result.</p>
           `, "warn", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
           command("Test direct push to default branch", {
             common: {
               all: "git push -u origin {defaultBranch}",
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "restrict",
+            explain: explain(
+              "Attempts to push the local default branch directly to origin.",
+              "You are intentionally testing whether default-branch protection is enforced.",
+              "Normal output for a protected branch is a rejection from the remote host. A successful push means protection is not blocking this user right now.",
+              "Be suspicious if the failure is about authentication, wrong remote URL, unrelated history, or network access instead of branch protection."
+            ),
+          }),
           command("Push baseline through a feature branch", {
             common: {
               all: "git switch -c {featureBranch}\ngit push -u origin {featureBranch}",
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "restrict",
+            explain: explain(
+              "Creates a feature branch from the baseline commit and pushes that branch to origin.",
+              "A pull-request-only workflow needs work to happen on a branch other than the protected default branch.",
+              "Normal output confirms the branch was created, pushed, and set to track origin/{featureBranch}.",
+              "Be suspicious if you are not starting from the intended baseline commit or if the remote branch name is misspelled."
+            ),
+          }),
           command("Open pull request", {
             github: {
-              all: "gh pr create --base {defaultBranch} --head {featureBranch} --title \"Initialize repo standard\" --body \"Baseline repo-standard setup.\"",
+              all: "gh pr create --base {defaultBranch} --head {featureBranch} --title \"Initialize starter files\" --body \"Baseline starter-file setup.\"",
             },
             devops: {
-              all: "az repos pr create --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --title \"Initialize repo standard\" --description \"Baseline repo-standard setup.\"",
+              all: "az repos pr create --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --title \"Initialize starter files\" --description \"Baseline starter-file setup.\"",
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "restrict",
+            explain: explain(
+              "Creates a pull request from the feature branch into the default branch.",
+              "This is the reviewable route for getting the baseline onto a protected default branch.",
+              "Normal output shows pull request metadata and usually a URL or ID.",
+              "Be suspicious if the PR targets the wrong branch or if the CLI is authenticated to the wrong account."
+            ),
+          }),
           command("Merge pull request", {
             github: {
               all: "gh pr merge --squash --delete-branch",
             },
             devops: {
-              powershell: "$prId = az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv\naz repos pr update --id $prId --status completed --squash true --delete-source-branch true",
-              cmd: "for /f %i in ('az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv') do set PR_ID=%i\naz repos pr update --id %PR_ID% --status completed --squash true --delete-source-branch true",
-              bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+              windows: {
+                powershell: "$prId = az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv\naz repos pr update --id $prId --status completed --squash true --delete-source-branch true",
+                cmd: "for /f %i in ('az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv') do set PR_ID=%i\naz repos pr update --id %PR_ID% --status completed --squash true --delete-source-branch true",
+                bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+              },
+              macos: {
+                bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+              },
+              linux: {
+                bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+              },
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
-          command("Sync local main after squash merge", {
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "restrict",
+            explain: explain(
+              "Completes the pull request, squashes the feature-branch work into one commit, and deletes the source branch.",
+              "The baseline becomes part of the default branch while keeping history compact.",
+              "Normal output confirms the PR was merged or completed and the source branch was deleted.",
+              "Be suspicious if required reviews, checks, or branch policies block the merge."
+            ),
+          }),
+          command("Sync local default branch after squash merge", {
             common: {
               all: "git switch {defaultBranch}\ngit fetch --prune origin\ngit pull --ff-only origin {defaultBranch}",
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "restrict" }),
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "restrict",
+            explain: explain(
+              "Returns to the default branch, refreshes remote refs, and fast-forwards the local branch to match origin.",
+              "After a squash merge, your local default branch should match the remote before new work starts.",
+              "Normal output says you switched branches and then either Already up to date or shows a fast-forward.",
+              "Be suspicious if Git reports divergent branches or local uncommitted changes."
+            ),
+          }),
           note("Direct push baseline path", `
-            <p>You chose not to restrict direct pushes to <code>{defaultBranch}</code> right now. For this initial baseline commit, pushing directly is acceptable. The next chapter still shows the safer feature-branch workflow for everyday development.</p>
+            <p>You chose not to restrict direct pushes to <code>{defaultBranch}</code> right now. For this initial baseline commit, pushing directly is acceptable. The daily guide still shows the safer feature-branch workflow for everyday development.</p>
           `, "warn", { choiceGroup: "branch-policy", choiceValue: "allow" }),
           command("Push baseline directly to default branch", {
             common: {
               all: "git push -u origin {defaultBranch}",
             },
-          }, "", { choiceGroup: "branch-policy", choiceValue: "allow" }),
+          }, "", {
+            choiceGroup: "branch-policy",
+            choiceValue: "allow",
+            explain: explain(
+              "Pushes the local baseline commit directly to the default branch on origin.",
+              "This publishes the clean starter state when you have chosen not to enforce pull requests yet.",
+              "Normal output shows upload progress and an upstream-tracking confirmation.",
+              "Be suspicious if the remote URL is wrong, authentication fails, or the push includes unexpected files."
+            ),
+          }),
+          note("Success state: baseline commit exists", `
+            <p>The Git hosting service should now contain the starter-file baseline on <code>{defaultBranch}</code>.</p>
+          `),
         ],
       },
       {
-        id: "daily-workflow",
-        title: "i. Start a New Day of Development",
-        summary: "Open the workspace first, then sync the default branch, use a feature branch, commit small logical steps, and merge cleanly.",
+        id: "agent",
+        kind: "core",
+        title: "8. Start The Agent",
+        summary: "Start with context gathering and a plan, especially when archive material exists.",
         cards: [
-          note("Open the workspace first", `
-            <p>Before starting a new development session, open the repository in the workspace you want to use today. Use either Docker Sandbox or Visual Studio Code from the command line.</p>
+          prompt("First agent prompt", "Read AGENTS.md and AGENTS_INIT.md.\n\nI am working on {platformLabel} with {shellLabel}. The Git hosting service is {providerLabel}.\n\nThen inspect the repository.\n\nIf archive material exists, inspect it as source material only. Do not copy code yet.\n\nSummarize:\n1. what this repo currently contains,\n2. which maturity level fits best,\n3. which docs need updates,\n4. what first plan you recommend.\n\nDo not implement yet. Wait for approval."),
+          note("Success state: agent can inspect the repo", `
+            <p>The agent should now be able to read the baseline files, understand the selected project shape, and propose a first implementation plan.</p>
           `),
-          command("List available Docker Sandboxes", {
+        ],
+      },
+      {
+        id: "checks",
+        kind: "appendix",
+        title: "A. Tool And Account Setup Helpers",
+        summary: "Use these prompts and commands only when a tool or account check is needed.",
+        cards: [
+          prompt("Git check prompt", "Help me check whether Git is installed on {platformLabel}. Give me exact {shellLabel} commands to check it, and if it is missing, give me safe installation instructions for {platformLabel}. After installation, help me configure my name and email."),
+          command("Git commands", { common: { all: "git --version\ngit config --global user.name\ngit config --global user.email" } }),
+          prompt("Visual Studio Code check prompt", "Help me check whether Visual Studio Code is installed on {platformLabel} and whether the `code` command is available from {shellLabel}. If it is not available, help me enable it safely for this platform."),
+          command("Visual Studio Code commands", { common: { all: "code --version" } }, "", { logoKey: "vscode" }),
+          prompt("Codex CLI check prompt", "Help me check whether Codex CLI is installed and usable from {shellLabel} on {platformLabel}. If it is missing, help me install it using the current official instructions. Also help me verify authentication."),
+          command("Codex CLI commands", { common: { all: "codex --version" } }),
+          prompt("Python check prompt", "Help me check whether Python is installed on {platformLabel}, which version is active in {shellLabel}, and whether `python -m venv` or `python3 -m venv` works. If Python is missing or broken, help me install a stable version for this platform."),
+          command("Python commands", {
             common: {
-              all: "sbx ls",
+              windows: {
+                powershell: "python --version\npython -m venv --help",
+                cmd: "python --version\npython -m venv --help",
+                bash: "python3 --version\npython3 -m venv --help",
+              },
+              macos: {
+                bash: "python3 --version\npython3 -m venv --help",
+              },
+              linux: {
+                bash: "python3 --version\npython3 -m venv --help",
+              },
             },
-          }, "Lists the sandboxes Docker Sandbox already knows about. Expected output: a list or table with sandbox names and states so you can choose which one to open."),
-          command("Open the chosen Docker Sandbox and start coding", {
-            common: {
-              all: "sbx run --name {sandboxName}",
-            },
-          }, "Starts or re-enters the chosen sandbox so you can work inside it. Expected output: sandbox startup or attach messages, then a shell or coding session inside that sandbox."),
-          command("Open the repo in Visual Studio Code and start coding", {
-            common: {
-              powershell: "Set-Location \"{parentWindows}\\{projectName}\"\ncode .",
-              cmd: "cd /d \"{parentWindows}\\{projectName}\"\ncode .",
-              bash: "cd \"{parentBash}/{projectName}\"\ncode .",
-            },
-          }, "Moves into the repository folder and opens that folder in Visual Studio Code. Expected output: the terminal changes into the repo folder, then a VS Code window opens for that workspace."),
-          note("Default daily flow", `
-            <p>Start each day by syncing <code>{defaultBranch}</code>, then create or switch to a feature branch for the next task. Even when direct pushes are allowed, a feature branch still keeps work easier to review, discuss, and undo.</p>
-          `),
-          command("Sync local default branch before new work", {
-            common: {
-              all: "git switch {defaultBranch}\ngit fetch --prune origin\ngit pull --ff-only origin {defaultBranch}",
-            },
-          }, "Switches you back to the default branch, refreshes remote references, and fast-forwards your local branch to match origin. Expected output: confirmation that you switched branches, fetch updates for remote refs if anything changed, and then either 'Already up to date.' or a fast-forward pull summary."),
-          command("Create a feature branch for today's task", {
-            common: {
-              all: "git switch -c {featureBranch}",
-            },
-          }, "Creates a new branch starting from your current default branch state and switches you onto it. Expected output: a line confirming a new branch was created and checked out."),
-          command("Inspect and commit a logical step", {
-            common: {
-              all: "git status\ngit diff\ngit add .\ngit commit -m \"Describe the completed step\"",
-            },
-          }, "Status shows which files changed, diff shows the exact edits, add stages those edits, and commit records them as one logical snapshot. Expected output: file lists from status, patch text from diff, then a commit summary with the branch name, short commit hash, and counts of changed files."),
-          command("Push feature branch", {
-            common: {
-              all: "git push -u origin {featureBranch}",
-            },
-          }, "Publishes the feature branch to the remote and links your local branch to that remote branch for future pushes and pulls. Expected output: upload progress, a new remote branch reference, and an upstream-tracking confirmation."),
-          command("Open pull request for the current step", {
-            github: {
-              all: "gh pr create --base {defaultBranch} --head {featureBranch} --title \"Describe the completed step\" --body \"Summarize what changed and why.\"",
-            },
-            devops: {
-              all: "az repos pr create --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --title \"Describe the completed step\" --description \"Summarize what changed and why.\"",
-            },
-          }, "Creates the review request that proposes merging your feature branch into the default branch. Expected output: PR metadata and usually a URL or ID you can open to review the change."),
-          command("Merge the pull request", {
-            github: {
-              all: "gh pr merge --squash --delete-branch",
-            },
-            devops: {
-              powershell: "$prId = az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv\naz repos pr update --id $prId --status completed --squash true --delete-source-branch true",
-              cmd: "for /f %i in ('az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv') do set PR_ID=%i\naz repos pr update --id %PR_ID% --status completed --squash true --delete-source-branch true",
-              bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
-            },
-          }, "Completes the PR, folds the feature-branch commits into one clean commit on the default branch, and removes the remote source branch. Expected output: a merge-completed confirmation, the merge method used, and confirmation that the source branch was deleted."),
-          command("Sync local default branch after merge", {
-            common: {
-              all: "git switch {defaultBranch}\ngit fetch --prune origin\ngit pull --ff-only origin {defaultBranch}",
-            },
-          }, "Returns your local repository to a clean post-merge state on the default branch so the next task starts from current remote history. Expected output: branch-switch confirmation, possible remote cleanup messages, and then either 'Already up to date.' or a fast-forward summary that includes the merged work."),
+          }, "", { logoKey: "python" }),
+          prompt("Docker Desktop check prompt", "Help me check whether Docker Desktop or Docker Engine is installed and running on {platformLabel}. Give me {shellLabel} command-line checks and explain what each result means. If Docker is missing, help me install it safely for this platform."),
+          command("Docker commands", { common: { all: "docker --version\ndocker info" } }, "", { logoKey: "docker" }),
+          prompt("Docker Sandbox check prompt", "Help me check whether Docker Sandbox (`sbx`) tooling is available in my environment on {platformLabel}. Use the current official Docker documentation. If it is not available, explain installation or access requirements and whether I can continue locally without it."),
+          command("Docker Sandbox commands", { common: { all: "sbx --help\nsbx ls\ndocker --version\ndocker info" } }, "", { logoKey: "docker" }),
+          prompt("Context7 check prompt", "Help me check whether Context7 is available as an MCP server for my coding agent on {platformLabel}. If it is missing, help me install or configure it using the current official instructions for my agent."),
+          prompt("Spec Kit check prompt", "Help me check whether GitHub Spec Kit / specify is available from {shellLabel} on {platformLabel}. If it is missing, help me install it using the current official instructions. Then help me initialize specification-driven docs for this repository."),
+          command("Spec Kit first check", { common: { all: "specify --help" } }),
+          prompt("Git hosting service CLI check prompt", "Help me check whether the selected Git hosting service CLI is installed and authenticated on {platformLabel}. If it is missing, help me install it and connect it to my account."),
+          command("Git hosting service CLI commands", {
+            github: { all: "gh --version\ngh auth status" },
+            devops: { all: "az --version\naz extension add --name azure-devops\naz login\naz devops configure --defaults organization=https://dev.azure.com/{devOpsOrg} project=\"{devOpsProject}\"" },
+          }),
         ],
       },
       {
         id: "sandbox",
-        title: "10. Optional: Start a Docker Sandbox",
+        kind: "appendix",
+        logoKey: "docker",
+        title: "B. Optional: Docker Sandbox",
         summary: "Use Docker Sandbox for safer agent execution, dependency isolation, and browser/app testing in isolation.",
         cards: [
           note("Docker Sandbox model", `
             <p>Docker Sandbox uses the <code>sbx</code> CLI. The modern replacement for the older dedicated-branch workflow is clone mode: the sandbox gets its own private Git clone and exposes it back to the host as a Git remote.</p>
             <p>Official docs: <a href="https://docs.docker.com/ai/sandboxes/">https://docs.docker.com/ai/sandboxes/</a></p>
-          `),
+          `, "note", { logoKey: "docker" }),
           command("Verify `sbx`", { common: { all: "sbx --help\nsbx ls" } }),
-          command("Install and sign in on Windows if missing", {
+          command("Install and sign in if missing", {
             common: {
-              powershell: "winget install -h Docker.sbx\nsbx login",
-              cmd: "winget install -h Docker.sbx\nsbx login",
-              bash: "# Install Docker Sandbox for your platform, then run:\nsbx login",
+              windows: {
+                powershell: "winget install -h Docker.sbx\nsbx login",
+                cmd: "winget install -h Docker.sbx\nsbx login",
+                bash: "# Install Docker Sandbox from Windows PowerShell or cmd, then run:\nsbx login",
+              },
+              macos: {
+                bash: "# Install Docker Sandbox for macOS, then run:\nsbx login",
+              },
+              linux: {
+                bash: "# Install Docker Sandbox for Linux, then run:\nsbx login",
+              },
             },
           }),
-          command("Create clone-mode Codex sandbox", {
-            common: {
-              all: "sbx create --clone --name {sandboxName} codex .",
-            },
-          }),
-          command("Activate sandbox and attach to Codex", {
-            common: {
-              all: "sbx run --name {sandboxName}",
-            },
-          }),
-          command("Fetch sandbox changes back to host", {
-            common: {
-              all: "git fetch sandbox-{sandboxName}",
-            },
-          }),
-        ],
-      },
-      {
-        id: "spec-kit",
-        title: "11. Optional: Initialize Spec Kit",
-        summary: "Use Spec Kit when the project needs clearer requirements, plans, tasks, or PRD-style discipline.",
-        cards: [
-          prompt("Spec Kit setup prompt", "I am in this repository. Help me initialize GitHub Spec Kit / specify from the command line. Use the current official instructions. I want the generated specs/plans/tasks to align with AGENTS.md, AGENTS_INIT.md, docs/, and project-brain/."),
-          prompt("First specification prompt", "Read AGENTS.md, AGENTS_INIT.md, docs/CONSTITUTION.md, docs/DECISIONS.md, docs/ARCHITECTURE.md, and any Spec Kit files. Propose the first specification. Do not implement yet."),
+          command("Create clone-mode Codex sandbox", { common: { all: "sbx create --clone --name {sandboxName} codex ." } }),
+          command("Activate sandbox and attach to Codex", { common: { all: "sbx run --name {sandboxName}" } }),
+          command("Fetch sandbox changes back to host", { common: { all: "git fetch sandbox-{sandboxName}" } }),
         ],
       },
       {
         id: "playwright",
-        title: "12. Optional: Install Playwright Project-Locally",
+        kind: "appendix",
+        logoKey: "playwright",
+        title: "C. Optional: Playwright Installed In This Repository",
         summary: "Use this when the project has a browser UI. For Streamlit apps, Playwright can still be useful, but it is optional.",
         cards: [
           note("When to check Playwright", `
-            <p>Check project-local Playwright only after the repository and its root files already exist. This step is relevant when the project has a browser UI, and optional for Streamlit work.</p>
-          `),
-          prompt("Playwright check prompt", "Help me check whether Playwright is installed for this project. Explain the difference between project-local Playwright and npx temporarily downloading Playwright. If missing, help me install it project-locally."),
-          command("Playwright commands", { common: { all: "npm list @playwright/test\nnpx playwright --version\nnpx playwright install --dry-run" } }),
-          command("Install Playwright", {
-            common: {
-              all: "npm install -D @playwright/test\nnpx playwright install",
-            },
-          }),
-          command("Run checks and record a flow", {
-            common: {
-              all: "npx playwright test\nnpx playwright codegen http://localhost:3000",
-            },
-          }),
+            <p>Check Playwright installed in this repository only after the repository and its root files already exist. This step is relevant when the project has a browser UI, and optional for Streamlit work.</p>
+          `, "note", { logoKey: "playwright" }),
+          prompt("Playwright check prompt", "Help me check whether Playwright is installed in this repository. Explain the difference between Playwright installed in this repository and npx temporarily downloading Playwright. If missing, help me install it in this repository."),
+          command("Playwright commands", { common: { all: "npm list @playwright/test\nnpx playwright --version\nnpx playwright install --dry-run" } }, "", { logoKey: "playwright" }),
+          command("Install Playwright", { common: { all: "npm install -D @playwright/test\nnpx playwright install" } }, "", { logoKey: "playwright" }),
+          command("Run checks and record a flow", { common: { all: "npx playwright test\nnpx playwright codegen http://localhost:3000" } }, "", { logoKey: "playwright" }),
+        ],
+      },
+      {
+        id: "spec-kit",
+        kind: "appendix",
+        title: "D. Optional: Spec Kit",
+        summary: "Use Spec Kit when the project needs clearer requirements, plans, tasks, or PRD-style discipline.",
+        cards: [
+          prompt("Spec Kit setup prompt", "I am in this repository. Help me initialize GitHub Spec Kit / specify from {shellLabel} on {platformLabel}. Use the current official instructions. I want the generated specs/plans/tasks to align with AGENTS.md, AGENTS_INIT.md, docs/, and project-brain/."),
+          prompt("First specification prompt", "Read AGENTS.md, AGENTS_INIT.md, docs/CONSTITUTION.md, docs/DECISIONS.md, docs/ARCHITECTURE.md, and any Spec Kit files. Propose the first specification. Do not implement yet."),
         ],
       },
       {
         id: "context7",
-        title: "13. Optional: Configure Context7",
+        kind: "appendix",
+        title: "E. Optional: Context7",
         summary: "Use Context7 when the agent needs current docs for fast-moving libraries or frameworks.",
         cards: [
-          prompt("Context7 setup prompt", "Help me configure Context7 as an MCP server for my current coding agent. After setup, show me how to verify that the agent can fetch current documentation for React, Streamlit, Playwright, Azure, or Databricks."),
+          prompt("Context7 setup prompt", "Help me configure Context7 as an MCP server for my current coding agent on {platformLabel}. After setup, show me how to verify that the agent can fetch current documentation for React, Streamlit, Playwright, Azure, or Databricks."),
           note("Use it especially for", `
             <ul>
               <li>React</li>
@@ -1692,33 +2188,26 @@
         ],
       },
       {
-        id: "agent",
-        title: "14. Start the Agent",
-        summary: "Start with context gathering and a plan, especially when archive material exists.",
+        id: "troubleshooting",
+        kind: "appendix",
+        title: "F. Troubleshooting And Git Hygiene",
+        summary: "Use this when something looks wrong. Keep cleanup commands out of the main flow unless the symptom appears.",
         cards: [
-          prompt("First agent prompt", "Read AGENTS.md and AGENTS_INIT.md.\n\nThen inspect the repository.\n\nIf archive material exists, inspect it as source material only. Do not copy code yet.\n\nSummarize:\n1. what this repo currently contains,\n2. which maturity level fits best,\n3. which docs need updates,\n4. what first plan you recommend.\n\nDo not implement yet. Wait for approval."),
-        ],
-      },
-      {
-        id: "review",
-        title: "15. Review Changes Incrementally",
-        summary: "Keep changes small, inspect diffs often, inspect history, and clean up local Git issues before they turn into bigger problems.",
-        cards: [
-          command("Inspect local changes", {
+          command("Inspect local changes", { common: { all: "git status\ngit diff" } }),
+          command("Inspect history", { common: { all: "git log --oneline --decorate --graph --max-count=12 --all" } }),
+          command("Clean local Codex refs if fetch or pull fails on `refs/codex`", {
             common: {
-              all: "git status\ngit diff",
-            },
-          }),
-          command("Inspect history", {
-            common: {
-              all: "git log --oneline --decorate --graph --max-count=12 --all",
-            },
-          }),
-          command("Clean local Codex refs if fetch/pull fails on `refs/codex`", {
-            common: {
-              powershell: "Remove-Item -Recurse -Force .git\\refs\\codex\ngit fetch --prune origin",
-              cmd: "rmdir /s /q .git\\refs\\codex\ngit fetch --prune origin",
-              bash: "rm -rf .git/refs/codex\ngit fetch --prune origin",
+              windows: {
+                powershell: "Remove-Item -Recurse -Force .git\\refs\\codex\ngit fetch --prune origin",
+                cmd: "rmdir /s /q .git\\refs\\codex\ngit fetch --prune origin",
+                bash: "rm -rf .git/refs/codex\ngit fetch --prune origin",
+              },
+              macos: {
+                bash: "rm -rf .git/refs/codex\ngit fetch --prune origin",
+              },
+              linux: {
+                bash: "rm -rf .git/refs/codex\ngit fetch --prune origin",
+              },
             },
           }),
           note("Avoid broad restore commands unless intentional", `
@@ -1727,48 +2216,230 @@
         ],
       },
       {
-        id: "scope",
-        title: "16. Necessary vs Optional",
-        summary: "Start small. Add complexity only when the project earns it.",
+        id: "daily-start",
+        kind: "daily",
+        title: "I. Get Started",
+        summary: "Open the workspace, update from the remote, then start a new feature branch or continue unfinished work.",
         cards: [
-          note("Necessary for every repo", `
-            <ul>
-              <li>Git</li>
-              <li>clean folder structure</li>
-              <li><code>.gitignore</code></li>
-              <li><code>.env.example</code></li>
-              <li><code>data/private/</code></li>
-              <li><code>AGENTS.md</code></li>
-              <li><code>AGENTS_INIT.md</code></li>
-              <li>baseline commit</li>
-            </ul>
-          `),
-          note("Usually necessary for Python or Streamlit work", `
-            <ul>
-              <li><code>.venv</code></li>
-              <li><code>requirements.txt</code></li>
-            </ul>
-          `),
-          note("Optional at the beginning", `
-            <ul>
-              <li>Docker Sandbox</li>
-              <li>Playwright</li>
-              <li>Context7</li>
-              <li>Spec Kit / specify</li>
-              <li>Azure CLI</li>
-              <li>Docker deployment files</li>
-              <li>CI/CD pipelines</li>
-            </ul>
-          `),
+          choice("Choose workspace for today", "daily-workspace", [
+            { label: "Use VS Code", value: "vscode" },
+            { label: "Use Docker Sandbox", value: "docker-sandbox" },
+          ], "Choose where you want to work today. Only the selected opening command is shown below."),
+          command("Open the repo in Visual Studio Code", {
+            common: {
+              windows: {
+                powershell: "Set-Location \"{parentNative}\\{projectName}\"\ncode .",
+                cmd: "cd /d \"{parentNative}\\{projectName}\"\ncode .",
+                bash: "cd \"{parentPosix}/{projectName}\"\ncode .",
+              },
+              macos: {
+                bash: "cd \"{parentPosix}/{projectName}\"\ncode .",
+              },
+              linux: {
+                bash: "cd \"{parentPosix}/{projectName}\"\ncode .",
+              },
+            },
+          }, "", {
+            choiceGroup: "daily-workspace",
+            choiceValue: "vscode",
+            logoKey: "vscode",
+            explain: gitExplain(
+              "Tool wording: change into the repository folder and open that folder as the active VS Code workspace.",
+              "Plain wording: go to the project folder and open it in your editor so files, terminal, and agent context all point at the same project.",
+              "Normal output is usually quiet; a VS Code window opens for the repository.",
+              "Be suspicious if VS Code opens the wrong folder or the terminal says the path does not exist."
+            ),
+          }),
+          command("Open the Docker Sandbox", {
+            common: {
+              all: "sbx run --name {sandboxName}",
+            },
+          }, "", {
+            choiceGroup: "daily-workspace",
+            choiceValue: "docker-sandbox",
+            logoKey: "docker",
+            explain: gitExplain(
+              "Tool wording: start or attach to the named Docker Sandbox so the agent works inside the sandboxed clone or workspace.",
+              "Plain wording: open the protected work area where tools and agents can run without using your normal machine environment directly.",
+              "Normal output shows the sandbox starting or attaching, then gives you a shell or coding session.",
+              "Be suspicious if the sandbox name is unknown, Docker is not running, or the sandbox opens a different repository."
+            ),
+          }),
+          command("Update local default branch from remote", {
+            common: {
+              all: "git switch {defaultBranch}\ngit fetch --prune origin\ngit pull --ff-only origin {defaultBranch}",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: switch to the default branch, fetch remote refs, prune deleted refs, and fast-forward the local default branch from origin.",
+              "Plain wording: go back to the shared starting line, check the online copy for updates, remove old references, and bring your local folder up to date without creating a messy merge.",
+              "Normal output says you switched branches and then either 'Already up to date.' or shows a fast-forward update.",
+              "Be suspicious if Git reports local uncommitted changes, divergent branches, or a remote/authentication error."
+            ),
+          }),
+          choice("Choose today's work branch path", "daily-branch-path", [
+            { label: "Start new feature branch", value: "new-branch" },
+            { label: "Continue unfinished feature branch", value: "continue-branch" },
+          ], "Choose whether today's work starts fresh from the updated default branch or continues an existing feature branch."),
+          command("Create a new feature branch for today's task", {
+            common: {
+              all: "git switch -c {featureBranch}",
+            },
+          }, "", {
+            choiceGroup: "daily-branch-path",
+            choiceValue: "new-branch",
+            explain: gitExplain(
+              "Git wording: create and switch to a new feature branch from the current default-branch commit.",
+              "Plain wording: make a separate working lane for today's task so your changes do not go straight onto the shared version.",
+              "Normal output confirms a new branch was created and checked out.",
+              "Be suspicious if the branch already exists or if you forgot to update the default branch first."
+            ),
+          }),
+          command("Continue an unfinished feature branch", {
+            common: {
+              all: "git fetch --prune origin\ngit switch {featureBranch}\ngit pull --ff-only origin {featureBranch}",
+            },
+          }, "", {
+            choiceGroup: "daily-branch-path",
+            choiceValue: "continue-branch",
+            explain: gitExplain(
+              "Git wording: fetch remote refs, switch to the existing feature branch, and fast-forward it from the matching remote branch.",
+              "Plain wording: check the online copy for updates, return to the earlier work lane, and bring that lane up to date before editing again.",
+              "Normal output confirms the branch switch and then either says it is up to date or shows a fast-forward update.",
+              "Be suspicious if Git says the branch does not exist; you may need to create it locally from the remote branch first."
+            ),
+          }),
+        ],
+      },
+      {
+        id: "daily-commit",
+        kind: "daily",
+        title: "II. Keep Committing",
+        summary: "Inspect changes, include the files that belong together, and save logical checkpoints with clear messages.",
+        cards: [
+          command("See what changed", {
+            common: {
+              all: "git status --short\ngit diff",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: show the working tree status, then print the unstaged diff for tracked files.",
+              "Plain wording: list which files changed and show the exact text edits before deciding what to save.",
+              "Normal output shows short file-status lines and a patch-style view of edits. No output from diff can mean no tracked-file text changes.",
+              "Be suspicious if private files, generated folders, or unrelated edits appear."
+            ),
+          }),
+          command("Add changed and unversioned files to the next commit", {
+            common: {
+              all: "git add .\ngit status --short",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: stage all changes under the current repository, including untracked files, then show staged and unstaged status.",
+              "Plain wording: put the files you want to save into the next package of work, including new files that were not tracked before, then check the list again.",
+              "Normal output marks included files as staged, usually with status letters like A, M, or D.",
+              "Be suspicious if .env, data/private, build output, node_modules, or other private/generated files are staged."
+            ),
+          }),
+          command("Commit the selected changes", {
+            common: {
+              all: "git commit -m \"Describe the completed step\"",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: create a commit from the staged changes with a short commit message.",
+              "Plain wording: save the selected files as one named checkpoint that you can review, share, or undo later.",
+              "Normal output shows a commit hash and a summary of changed files.",
+              "Be suspicious if Git says there is nothing to commit; that usually means no files were staged."
+            ),
+          }),
+        ],
+      },
+      {
+        id: "daily-finish",
+        kind: "daily",
+        title: "III. Finish Clean",
+        summary: "Save outstanding work, publish the feature branch, create and merge a pull request when the feature is done, then update the local default branch.",
+        cards: [
+          command("Commit outstanding changes before finishing", {
+            common: {
+              all: "git status --short\ngit add .\ngit commit -m \"Describe the finished feature\"",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: inspect the working tree, stage remaining changes, and commit them before publishing or opening a PR.",
+              "Plain wording: check for leftover edits, include the files that belong to this finished piece of work, and save them as a final named checkpoint.",
+              "Normal output shows either a new commit summary or, if nothing is left, a message that there is nothing to commit.",
+              "Be suspicious if unexpected private, generated, or unrelated files are included."
+            ),
+          }),
+          command("Push feature branch to remote", {
+            common: {
+              all: "git push -u origin {featureBranch}",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: push the local feature branch to origin and set the upstream tracking branch.",
+              "Plain wording: upload your work lane to the online repository so it can be backed up, reviewed, and merged.",
+              "Normal output shows upload progress and confirms the branch now tracks origin/{featureBranch}.",
+              "Be suspicious if authentication fails, the branch name is wrong, or the remote URL points at the wrong repository."
+            ),
+          }),
+          command("Create pull request into default branch", {
+            github: {
+              all: "gh pr create --base {defaultBranch} --head {featureBranch} --title \"Describe the finished feature\" --body \"Summarize what changed and why.\"",
+            },
+            devops: {
+              all: "az repos pr create --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --title \"Describe the finished feature\" --description \"Summarize what changed and why.\"",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: create a PR (Pull Request) from the feature branch into the default branch.",
+              "Plain wording: ask the Git hosting service to review and combine your work lane into the shared version.",
+              "Normal output shows pull request metadata and usually a URL or ID.",
+              "Be suspicious if the PR targets the wrong branch or includes unrelated commits."
+            ),
+          }),
+          command("Merge the pull request", {
+            github: {
+              all: "gh pr merge --squash --delete-branch",
+            },
+            devops: {
+              windows: {
+                powershell: "$prId = az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv\naz repos pr update --id $prId --status completed --squash true --delete-source-branch true",
+                cmd: "for /f %i in ('az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query \"[0].pullRequestId\" -o tsv') do set PR_ID=%i\naz repos pr update --id %PR_ID% --status completed --squash true --delete-source-branch true",
+                bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+              },
+              macos: {
+                bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+              },
+              linux: {
+                bash: "PR_ID=$(az repos pr list --repository \"{repoName}\" --source-branch {featureBranch} --target-branch {defaultBranch} --status active --query '[0].pullRequestId' -o tsv)\naz repos pr update --id \"$PR_ID\" --status completed --squash true --delete-source-branch true",
+              },
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: merge the PR with squash mode and delete the remote source branch.",
+              "Plain wording: combine the reviewed work into the shared version as one clean change, then remove the finished work lane from the online repo.",
+              "Normal output confirms the PR was merged/completed and the source branch was deleted.",
+              "Be suspicious if required reviews, checks, conflicts, or branch policies block the merge."
+            ),
+          }),
+          command("Update local default branch after merge", {
+            common: {
+              all: "git switch {defaultBranch}\ngit fetch --prune origin\ngit pull --ff-only origin {defaultBranch}",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: switch back to the default branch, fetch remote refs, prune deleted refs, and fast-forward from origin.",
+              "Plain wording: return your local folder to the shared version, refresh what the online repo knows, remove old branch references, and download the merged result.",
+              "Normal output confirms the branch switch and then either says Already up to date or shows the merged work arriving locally.",
+              "Be suspicious if Git reports divergent branches or local uncommitted changes."
+            ),
+          }),
         ],
       },
     ];
-
-    const dailyWorkflowIndex = sections.findIndex((section) => section.id === "daily-workflow");
-    if (dailyWorkflowIndex !== -1) {
-      const [dailyWorkflowSection] = sections.splice(dailyWorkflowIndex, 1);
-      sections.push(dailyWorkflowSection);
-    }
 
     function note(title, html, tone = "note", meta = {}) {
       return { type: "note", title, html, tone, ...meta };
@@ -1792,6 +2463,105 @@
       return { type: "command", title, description, variants, ...meta };
     }
 
+    function explain(does, why, normal, suspicious = "") {
+      return { does, why, normal, suspicious };
+    }
+
+    function gitExplain(lingo, plain, normal, suspicious = "") {
+      return { lingo, plain, normal, suspicious };
+    }
+
+    function starterScriptVariants(args) {
+      return {
+        common: {
+          windows: {
+            powershell: `python bootstrap_repo.py ${args}`,
+            cmd: `python bootstrap_repo.py ${args}`,
+            bash: `python3 bootstrap_repo.py ${args}`,
+          },
+          macos: {
+            bash: `python3 bootstrap_repo.py ${args}`,
+          },
+          linux: {
+            bash: `python3 bootstrap_repo.py ${args}`,
+          },
+        },
+      };
+    }
+
+    function starterScriptExplain(result) {
+      return explain(
+        "Runs bootstrap_repo.py with the selected starter profile.",
+        "The starter script creates the initial folders and files so the repo begins from a known clean structure.",
+        `Normal output confirms setup completed, shows the selected profile, and points you to BOOTSTRAP_REPORT.md. ${result}`,
+        "Be suspicious if Python cannot find bootstrap_repo.py, if you are not in the repo root, or if old archive material is copied from the wrong path."
+      );
+    }
+
+    function logoSvg(key) {
+      return LOGOS[key] || "";
+    }
+
+    function logoBadge(key) {
+      const svg = logoSvg(key);
+      if (!svg) return "";
+      return `<span class="logo-badge">${svg}<span>${escapeHtml(labelFor(key))}</span></span>`;
+    }
+
+    function logoStrip(keys) {
+      return `<div class="logo-strip">${keys.map((key) => logoBadge(key)).join("")}</div>`;
+    }
+
+    function logoIconHtml(key, className) {
+      const svg = logoSvg(key);
+      if (!svg) return "";
+      return `<span class="${className}" aria-hidden="true">${svg}</span>`;
+    }
+
+    function sectionKindLabel(kind) {
+      return {
+        core: "Start-up",
+        appendix: "Extras",
+        daily: "Daily Dev",
+      }[kind] || "Section";
+    }
+
+    function isSectionInActiveBook(section) {
+      return (section.kind || "core") === state.activeBook;
+    }
+
+    function syncBookButtons() {
+      document.querySelectorAll("[data-book-tabs] button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.value === state.activeBook);
+      });
+    }
+
+    function setActiveBook(book, sourceEl = null) {
+      if (state.activeBook === book) return;
+      const scrollAnchor = captureScrollPosition();
+      state.activeBook = book;
+      syncBookButtons();
+      render(scrollAnchor);
+    }
+
+    function setHeaderCollapsed(collapsed) {
+      state.headerCollapsed = collapsed;
+      const hero = document.getElementById("top");
+      const expandToggle = document.getElementById("heroExpandToggle");
+      const collapseToggle = document.getElementById("heroCollapseToggle");
+      if (!hero || !expandToggle || !collapseToggle) return;
+
+      hero.classList.toggle("collapsed", collapsed);
+      expandToggle.setAttribute("aria-expanded", String(!collapsed));
+      collapseToggle.setAttribute("aria-expanded", String(!collapsed));
+    }
+
+    function toggleSectionCollapsed(sectionId, sourceEl = null) {
+      const scrollAnchor = captureScrollPosition();
+      state.sectionCollapsed[sectionId] = !state.sectionCollapsed[sectionId];
+      render(scrollAnchor);
+    }
+
     function slugify(text) {
       return text
         .toLowerCase()
@@ -1808,11 +2578,11 @@
     }
 
     function isSessionOnlySectionId(sectionId) {
-      return sectionId === "daily-workflow";
+      return sectionId === "daily-workflow" || (typeof sectionId === "string" && sectionId.startsWith("daily-"));
     }
 
     function isSessionOnlyTaskId(id) {
-      return typeof id === "string" && id.startsWith("daily-workflow:");
+      return typeof id === "string" && (id.startsWith("daily-workflow:") || id.startsWith("daily-"));
     }
 
     function stripSessionOnlyTaskEntries(record) {
@@ -1835,20 +2605,26 @@
     }
 
     function isChoiceOptionCard(card) {
-      return Boolean(card.choiceGroup && card.choiceValue);
+      return Boolean(card.choiceGroup && (card.choiceValue || card.choiceValues));
+    }
+
+    function cardMatchesChoice(card, value) {
+      if (!isChoiceOptionCard(card)) return false;
+      if (Array.isArray(card.choiceValues)) return card.choiceValues.includes(value);
+      return card.choiceValue === value;
     }
 
     function isCardVisible(card) {
       if (!isChoiceOptionCard(card)) return true;
       const selectedChoice = state.sectionChoices[card.choiceGroup];
-      return Boolean(selectedChoice && selectedChoice === card.choiceValue);
+      return Boolean(selectedChoice && cardMatchesChoice(card, selectedChoice));
     }
 
     function getChoiceOptionCards(group) {
       const matches = [];
       sections.forEach((section) => {
         section.cards.forEach((card) => {
-          if (card.choiceGroup === group && card.choiceValue) {
+          if (card.choiceGroup === group && (card.choiceValue || card.choiceValues)) {
             matches.push({ section, card, id: taskId(section, card) });
           }
         });
@@ -1958,7 +2734,7 @@
       });
 
       getChoiceOptionCards(group).forEach(({ id, card }) => {
-        if (card.choiceValue === value) {
+        if (cardMatchesChoice(card, value)) {
           if (state.taskOrigin[id] === "choice-group") {
             delete state.taskStatus[id];
             delete state.taskOrigin[id];
@@ -1993,7 +2769,7 @@
       };
 
       section.cards.forEach((card) => {
-        if (isChoiceOptionCard(card) && !state.sectionChoices[card.choiceGroup]) return;
+        if (!isCardVisible(card)) return;
         const status = getTaskState(taskId(section, card));
         stats.total += 1;
         stats[status] += 1;
@@ -2035,6 +2811,9 @@
 
     function saveProgress() {
       const payload = {
+        platform: state.platform,
+        shell: state.shell,
+        provider: state.provider,
         sectionChoices: state.sectionChoices,
         taskStatus: stripSessionOnlyTaskEntries(state.taskStatus),
         taskOrigin: stripSessionOnlyTaskEntries(state.taskOrigin),
@@ -2052,6 +2831,10 @@
         const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
         if (!raw) return;
         const payload = JSON.parse(raw);
+        state.platform = ["windows", "macos", "linux"].includes(payload.platform) ? payload.platform : state.platform;
+        state.shell = ["powershell", "cmd", "bash"].includes(payload.shell) ? payload.shell : state.shell;
+        state.provider = ["github", "devops"].includes(payload.provider) ? payload.provider : state.provider;
+        ensureValidShell();
         state.sectionChoices = payload.sectionChoices && typeof payload.sectionChoices === "object" ? payload.sectionChoices : {};
         state.taskStatus = stripSessionOnlyTaskEntries(payload.taskStatus);
         state.taskOrigin = stripSessionOnlyTaskEntries(payload.taskOrigin);
@@ -2066,15 +2849,24 @@
 
     function resetProgress(sourceEl = null) {
       const scrollAnchor = captureScrollPosition();
+      state.platform = "windows";
+      state.shell = "powershell";
+      state.provider = "github";
+      state.activeBook = "core";
+      state.headerCollapsed = false;
+      state.sectionCollapsed = {};
       state.sectionChoices = {};
       state.taskStatus = {};
       state.taskOrigin = {};
       state.chapterBulkState = {};
       try {
         localStorage.removeItem(PROGRESS_STORAGE_KEY);
+        OLD_PROGRESS_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
       } catch {
         // Ignore storage failures; the in-memory state has already been reset.
       }
+      applyPlatformPathDefaults(state.platform, true);
+      syncGlobalTabButtons();
       render(scrollAnchor);
     }
 
@@ -2107,6 +2899,12 @@
       document.querySelectorAll("[data-field]").forEach((input) => {
         values[input.dataset.field] = input.value;
       });
+      values.platform = state.platform;
+      values.platformLabel = labelFor(state.platform);
+      values.shell = selectedShell();
+      values.shellLabel = labelFor(selectedShell());
+      values.provider = state.provider;
+      values.providerLabel = labelFor(state.provider);
       values.githubRepo = `${values.repoOwner}/${values.repoName}`;
       values.githubUrl = `https://github.com/${values.repoOwner}/${values.repoName}.git`;
       values.devOpsOrgUrl = `https://dev.azure.com/${values.devOpsOrg}`;
@@ -2133,7 +2931,8 @@
     }
 
     function detectCodeFenceLanguage() {
-      return state.shell === "powershell" ? "powershell" : state.shell === "bash" ? "bash" : "bat";
+      const shell = selectedShell();
+      return shell === "powershell" ? "powershell" : shell === "bash" ? "bash" : "bat";
     }
 
     function formatCodeBlock(text, language = detectCodeFenceLanguage()) {
@@ -2150,11 +2949,7 @@
     }
 
     function preferredContextKeys(cardId) {
-      const keys = ["projectName", "parentWindows", "defaultBranch", "featureBranch", "repoName"];
-
-      if (state.shell === "bash") {
-        keys.splice(2, 0, "parentBash");
-      }
+      const keys = ["projectName", "parentNative", "parentPosix", "defaultBranch", "featureBranch", "repoName"];
 
       if (state.provider === "github") {
         keys.push("repoOwner", "privacy");
@@ -2286,7 +3081,7 @@
       if (card.prompt) {
         return [
           `- The user wants help with the checklist step "${card.title}" in chapter "${section.title}".`,
-          "- They need an AI answer that is specific to their selected shell, Git host, and current repo setup state.",
+          "- They need an AI answer that is specific to their selected platform, shell, Git hosting service, and current repo setup state.",
         ];
       }
 
@@ -2335,13 +3130,13 @@
         return [
           "- First identify whether the refusal looks like expected branch-protection behavior or a different problem.",
           `- Then explain whether the user should continue with the feature-branch and pull-request flow or fix something before proceeding.`,
-          `- Give exact next \`${labelFor(state.shell)}\` commands to confirm the diagnosis and continue safely on ${labelFor(state.provider)}.`,
+          `- Give exact next \`${labelFor(selectedShell())}\` commands to confirm the diagnosis and continue safely on ${labelFor(state.provider)}.`,
         ];
       }
 
       return [
         `- Explain what the user is trying to do in this step and what the current command or prompt is supposed to achieve.`,
-        `- Diagnose the most likely causes of failure in a Windows environment using ${labelFor(state.shell)} and ${labelFor(state.provider)}.`,
+        `- Diagnose the most likely causes of failure on ${labelFor(state.platform)} using ${labelFor(selectedShell())} and ${labelFor(state.provider)}.`,
         `- Give exact next commands or actions the user should take, and keep the advice aligned with the current checklist stage.`,
       ];
     }
@@ -2361,13 +3156,14 @@
         : currentStepText || "(No extra step details.)";
 
       return [
-        "You are helping a Windows user who is following a standalone startup checklist to create and configure a brand-new repository.",
+        `You are helping a ${labelFor(state.platform)} user who is following a standalone startup checklist to create and configure a brand-new repository.`,
         "Focus on the current checklist step. Use the earlier steps as setup context, not as a reason to restart the whole workflow unless the evidence clearly points there.",
         "",
         "## Situation",
-        "- This is a checklist-driven repo bootstrap flow, not a general software architecture question.",
-        `- Current shell: ${labelFor(state.shell)}`,
-        `- Current Git host: ${labelFor(state.provider)}`,
+        "- This is a checklist-driven repo setup flow, not a general software architecture question.",
+        `- Current platform: ${labelFor(state.platform)}`,
+        `- Current shell: ${labelFor(selectedShell())}`,
+        `- Current Git hosting service: ${labelFor(state.provider)}`,
         "",
         "## Project context",
         contextLines.length ? contextLines.join("\n") : "- No extra project-context values are relevant here.",
@@ -2408,8 +3204,52 @@
       return providers.length ? providers : ["common"];
     }
 
-    function shellOptions() {
-      return ["powershell", "cmd", "bash"];
+    function allowedShellsForPlatform(platform = state.platform) {
+      return platform === "windows" ? ["powershell", "cmd", "bash"] : ["bash"];
+    }
+
+    function ensureValidShell() {
+      const allowed = allowedShellsForPlatform();
+      if (!allowed.includes(state.shell)) {
+        state.shell = allowed[0];
+      }
+    }
+
+    function isKnownDefaultPath(value, field) {
+      return Object.values(PLATFORM_DEFAULT_PATHS).some((defaults) => defaults[field] === value);
+    }
+
+    function applyPlatformPathDefaults(platform, force = false) {
+      const defaults = PLATFORM_DEFAULT_PATHS[platform];
+      if (!defaults) return;
+
+      ["parentNative", "parentPosix"].forEach((field) => {
+        const input = document.querySelector(`[data-field="${field}"]`);
+        if (!input) return;
+        if (force || isKnownDefaultPath(input.value, field)) {
+          input.value = defaults[field];
+        }
+      });
+    }
+
+    function shellOptions(variant) {
+      const allowed = allowedShellsForPlatform();
+      if (!variant || typeof variant !== "object") return allowed;
+
+      const platformVariant = variant[state.platform];
+      const available = new Set();
+
+      if (platformVariant && typeof platformVariant === "object") {
+        allowed.forEach((shell) => {
+          if (platformVariant[shell] || platformVariant.all) available.add(shell);
+        });
+      }
+
+      allowed.forEach((shell) => {
+        if (variant[shell] || variant.all) available.add(shell);
+      });
+
+      return allowed.filter((shell) => available.has(shell));
     }
 
     function selectedProvider(card) {
@@ -2419,21 +3259,48 @@
     }
 
     function selectedShell() {
-      return state.shell;
+      const allowed = allowedShellsForPlatform();
+      return allowed.includes(state.shell) ? state.shell : allowed[0];
+    }
+
+    function selectVariantText(variant) {
+      if (!variant || typeof variant !== "object") return "";
+      const shell = selectedShell();
+      const platformVariant = variant[state.platform];
+
+      if (typeof platformVariant === "string") {
+        return platformVariant;
+      }
+
+      if (platformVariant && typeof platformVariant === "object") {
+        return platformVariant[shell] || platformVariant.all || variant[shell] || variant.all || "";
+      }
+
+      return variant[shell] || variant.all || "";
     }
 
     function getCardText(card) {
       const values = getValues();
       const provider = selectedProvider(card);
       const variant = card.variants[provider] || card.variants.common;
-      const shell = selectedShell();
-      return renderTemplate(variant[shell] || variant.all || "", values);
+      const commonVariant = card.variants.common;
+      const text = selectVariantText(variant) || (variant !== commonVariant ? selectVariantText(commonVariant) : "");
+      return renderTemplate(text || "", values);
     }
 
     function syncGlobalTabButtons() {
+      ensureValidShell();
       document.querySelectorAll("[data-global-tabs]").forEach((group) => {
         const key = group.dataset.globalTabs;
+        if (key === "shell") {
+          group.style.gridTemplateColumns = `repeat(${allowedShellsForPlatform().length}, 1fr)`;
+        }
         group.querySelectorAll("button").forEach((button) => {
+          if (key === "shell") {
+            const allowed = allowedShellsForPlatform();
+            button.hidden = !allowed.includes(button.dataset.value);
+            button.textContent = labelFor(button.dataset.value);
+          }
           button.classList.toggle("active", button.dataset.value === state[key]);
         });
       });
@@ -2443,6 +3310,11 @@
       if (state[key] === value) return;
       const scrollAnchor = captureScrollPosition();
       state[key] = value;
+      if (key === "platform") {
+        ensureValidShell();
+        applyPlatformPathDefaults(value);
+      }
+      saveProgress();
       syncGlobalTabButtons();
       render(scrollAnchor);
     }
@@ -2450,49 +3322,54 @@
     function render(scrollAnchor = null) {
       const content = document.getElementById("content");
       const nav = document.getElementById("nav");
-      const filter = document.getElementById("search").value.trim().toLowerCase();
       content.innerHTML = "";
       nav.innerHTML = "";
 
       sections.forEach((section) => {
-        const sectionText = `${section.title} ${section.summary} ${section.cards.map((card) => card.title).join(" ")}`.toLowerCase();
-        const visible = !filter || sectionText.includes(filter);
+        const visible = isSectionInActiveBook(section);
         const stats = getChapterStats(section);
         const sectionState = chapterState(stats);
+        const collapsed = Boolean(state.sectionCollapsed[section.id]);
 
-        const navLink = document.createElement("a");
-        navLink.href = `#${section.id}`;
-        navLink.textContent = `${section.title} (${stats.unfinished}/${stats.total})`;
-        navLink.dataset.sectionId = section.id;
-        navLink.className = stats.complete ? "chapter-complete" : stats.partial ? "chapter-partial" : "chapter-not-started";
-        navLink.setAttribute("aria-label", `${section.title}: ${stats.unfinished} unfinished, ${stats.finished} finished, ${stats.skipped} skipped`);
-        navLink.hidden = !visible;
-        nav.appendChild(navLink);
+        if (visible) {
+          const navLink = document.createElement("a");
+          navLink.href = `#${section.id}`;
+          navLink.textContent = `${section.title} (${stats.unfinished}/${stats.total})`;
+          navLink.dataset.sectionId = section.id;
+          navLink.dataset.sectionKind = section.kind || "core";
+          navLink.className = stats.complete ? "chapter-complete" : stats.partial ? "chapter-partial" : "chapter-not-started";
+          navLink.setAttribute("aria-label", `${section.title}: ${stats.unfinished} unfinished, ${stats.finished} finished, ${stats.skipped} skipped`);
+          nav.appendChild(navLink);
+        }
 
         const sectionEl = document.createElement("section");
-        sectionEl.className = `section${visible ? "" : " hidden"}`;
+        sectionEl.className = `section${visible ? "" : " hidden"}${collapsed ? " collapsed" : ""}`;
         sectionEl.id = section.id;
         sectionEl.innerHTML = `
           <div class="section-header">
             <div class="section-title-row">
               <div class="section-title-main">
                 <button type="button" class="status-control chapter-status" data-section-id="${escapeAttribute(section.id)}" data-chapter-state="${sectionState}" aria-pressed="${stats.complete}" aria-label="${escapeAttribute(section.title)}: ${stats.unfinished} unfinished of ${stats.total} tasks. Click to bulk update chapter tasks.">${chapterSymbol(stats)}</button>
+                ${logoIconHtml(section.logoKey, "section-logo")}
                 <div>
+                  <span class="section-kind">${escapeHtml(sectionKindLabel(section.kind || "core"))}</span>
                   <h2>${escapeHtml(section.title)}</h2>
                   <p>${escapeHtml(section.summary)}</p>
                 </div>
               </div>
               <div class="section-progress" aria-label="${escapeAttribute(section.title)} progress">
+                <button type="button" class="section-toggle" data-section-toggle="${escapeAttribute(section.id)}" aria-expanded="${!collapsed}" aria-controls="${escapeAttribute(section.id)}-cards" aria-label="${collapsed ? "Unfold chapter" : "Fold chapter"}" title="${collapsed ? "Unfold chapter" : "Fold chapter"}">${collapsed ? "&gt;&gt;&gt;" : "&lt;&lt;&lt;"}</button>
                 <span class="status-label">${stats.unfinished} unfinished of ${stats.total}</span>
                 <span class="status-label finished">${stats.finished} finished</span>
                 <span class="status-label skipped">${stats.skipped} skipped</span>
               </div>
             </div>
           </div>
-          <div class="card-grid"></div>
+          <div class="card-grid" id="${escapeAttribute(section.id)}-cards"></div>
         `;
 
         sectionEl.querySelector(".chapter-status").addEventListener("click", (event) => cycleChapter(section, event.currentTarget));
+        sectionEl.querySelector(".section-toggle").addEventListener("click", (event) => toggleSectionCollapsed(section.id, event.currentTarget));
 
         const grid = sectionEl.querySelector(".card-grid");
         section.cards.forEach((card) => {
@@ -2504,7 +3381,9 @@
         content.appendChild(sectionEl);
       });
 
+      syncBookButtons();
       syncGlobalTabButtons();
+      setHeaderCollapsed(state.headerCollapsed);
       restoreScrollAnchor(scrollAnchor);
       refreshTaskNavButtons();
       refreshCurrentChapter();
@@ -2513,6 +3392,30 @@
         refreshTaskNavButtons();
         refreshCurrentChapter();
       });
+    }
+
+    function renderCommandExplain(card) {
+      if (!card.explain) return "";
+      const values = getValues();
+      const rows = card.explain.lingo || card.explain.plain
+        ? [
+          ["Git/tool wording", card.explain.lingo],
+          ["Plain wording", card.explain.plain],
+          ["Normal result", card.explain.normal],
+          ["Watch out", card.explain.suspicious],
+        ]
+        : [
+          ["What it does", card.explain.does],
+          ["Why you do it", card.explain.why],
+          ["Normal result", card.explain.normal],
+          ["Suspicious result", card.explain.suspicious],
+        ];
+
+      return `
+        <div class="command-explain">
+          ${rows.filter(([, text]) => text).map(([label, text]) => `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(renderTemplate(text, values))}</p>`).join("")}
+        </div>
+      `;
     }
 
     function renderCard(section, card, cardId) {
@@ -2529,6 +3432,7 @@
         el.innerHTML = `
           <div class="card-head">
             <div class="card-title-row">
+              ${logoIconHtml(card.logoKey, "card-logo")}
               <div>
                 <h3>${escapeHtml(card.title)}</h3>
                 ${card.description ? `<p>${escapeHtml(card.description)}</p>` : ""}
@@ -2567,6 +3471,7 @@
           <div class="card-head">
             <div class="card-title-row">
               <button type="button" class="status-control task-status" data-task-state="${status}" aria-pressed="${status !== "unfinished"}" aria-label="${escapeAttribute(card.title)}: ${statusLabel}. Click to change status.">${taskSymbol(status)}</button>
+              ${logoIconHtml(card.logoKey, "card-logo")}
               <div>
                 <h3>${escapeHtml(card.title)}</h3>
                 <span class="status-label ${status === "unfinished" ? "" : status}">${statusLabel}</span>
@@ -2587,6 +3492,7 @@
       const provider = selectedProvider(card);
       const variant = card.variants[provider] || card.variants.common;
       const shells = shellOptions(variant);
+      const availableShells = shells.length ? shells : [selectedShell()];
       const text = getCardText(card);
       const showBlockCopy = true;
 
@@ -2599,6 +3505,7 @@
         <div class="card-head">
           <div class="card-title-row">
             <button type="button" class="status-control task-status" data-task-state="${status}" aria-pressed="${status !== "unfinished"}" aria-label="${escapeAttribute(card.title)}: ${statusLabel}. Click to change status.">${taskSymbol(status)}</button>
+            ${logoIconHtml(card.logoKey, "card-logo")}
             <div>
               <h3>${escapeHtml(card.title)}</h3>
               ${card.description ? `<p>${escapeHtml(card.description)}</p>` : ""}
@@ -2609,6 +3516,7 @@
         </div>
         <div class="card-body">
           <div class="command-actions"></div>
+          ${renderCommandExplain(card)}
           <pre><code></code></pre>
         </div>
       `;
@@ -2625,7 +3533,7 @@
       appendAiHelpButton(headerActions, section, card, cardId);
 
       const actions = el.querySelector(".command-actions");
-      actions.appendChild(makeTabs("shell", shells, state.shell));
+      actions.appendChild(makeTabs("shell", availableShells, selectedShell()));
       if (providers.length > 1) {
         actions.appendChild(makeTabs("provider", providers, provider));
       }
@@ -2669,14 +3577,22 @@
     }
 
     function labelFor(value) {
+      if (value === "bash") return state.platform === "windows" ? "Bash/WSL" : "Bash/Zsh";
       return {
+        windows: "Windows",
+        macos: "macOS",
+        linux: "Linux",
         github: "GitHub",
-        devops: "DevOps",
+        devops: "Azure DevOps",
         powershell: "PowerShell",
         cmd: "cmd",
-        bash: "Bash",
         all: "All shells",
         common: "Common",
+        teamnl: "TeamNL",
+        docker: "Docker",
+        vscode: "VS Code",
+        python: "Python",
+        playwright: "Playwright",
       }[value] || value;
     }
 
@@ -2827,19 +3743,26 @@
       });
     });
 
+    document.querySelectorAll("[data-book-tabs] button").forEach((button) => {
+      button.addEventListener("click", () => setActiveBook(button.dataset.value, button));
+    });
+
     function refreshViewportIndicators() {
       refreshTaskNavButtons();
       refreshCurrentChapter();
     }
 
+    document.getElementById("heroExpandToggle").addEventListener("click", () => setHeaderCollapsed(false));
+    document.getElementById("heroCollapseToggle").addEventListener("click", () => setHeaderCollapsed(true));
     document.getElementById("resetProgress").addEventListener("click", (event) => resetProgress(event.currentTarget));
-    document.getElementById("search").addEventListener("input", () => render(captureScrollAnchor(document.getElementById("search"))));
     document.getElementById("prevUnfinished").addEventListener("click", () => scrollToUnfinished("previous"));
     document.getElementById("nextUnfinished").addEventListener("click", () => scrollToUnfinished("next"));
     window.addEventListener("scroll", refreshViewportIndicators, { passive: true });
     window.addEventListener("resize", refreshViewportIndicators);
     hydrateFieldHelp();
     loadProgress();
+    applyPlatformPathDefaults(state.platform);
+    syncGlobalTabButtons();
     render();
   </script>
 </body>
