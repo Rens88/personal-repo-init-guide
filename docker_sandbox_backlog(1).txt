@@ -1,0 +1,55 @@
+Backlog: Expand Docker Sandbox chapter with direct shell workflow
+
+Motivation
+
+Users often ask Codex to execute simple terminal commands (git status,
+git diff, ls, pwd, pytest, etc.). Those commands do not require AI
+reasoning and unnecessarily consume tokens.
+
+Proposal
+
+Expand the Docker Sandbox documentation with a section called Use the
+Sandbox Yourself.
+
+Explain that a Docker Sandbox can be used as an interactive shell in
+addition to being used by Codex.
+
+Teach users to run ordinary shell commands themselves and reserve Codex
+for reasoning-intensive work.
+
+Commands to run yourself
+
+-   git status
+-   git diff
+-   git log
+-   git branch
+-   ls
+-   pwd
+-   python
+-   pytest
+-   npm test
+
+Ask Codex for
+
+-   Implementing features
+-   Refactoring
+-   Debugging
+-   Explaining code
+-   Architecture advice
+-   Test generation
+-   Root-cause analysis
+
+Key message
+
+Think of Codex as a software engineer, not as your terminal.
+
+If a normal shell command answers the question, run it yourself. If
+reasoning is required, ask Codex.
+
+Optional UX
+
+Add a decision tree:
+
+Can a shell command answer this?
+
+Yes -> Run it yourself inside the sandbox. No -> Ask Codex.

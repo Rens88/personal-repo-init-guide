@@ -1,0 +1,202 @@
+# Backlog: extend Daily Dev Keep Committing with local-vs-sandbox toggle
+
+## Goal
+
+Extend the Daily Dev book in `dist/HUMAN_READABLE_STARTUP_CHECKLIST.html` so chapter `II. Keep Committing` supports two paths:
+
+1. Local files / normal local repo workflow
+2. Inside Docker Sandbox / cloned sandbox workflow
+
+The user should choose the path with a checklist toggle/choice, using the existing choice/choiceGroup/choiceValue pattern in the HTML.
+
+## Repo context
+
+Read root `AGENTS.md` first. For checklist UX, copy, and interaction behavior, edit:
+
+```text
+dist/HUMAN_READABLE_STARTUP_CHECKLIST.html
+```
+
+The HTML already has a Book selector with `Start-up`, `Extras`, and `Daily Dev`. The relevant Daily Dev chapter is:
+
+```text
+id: "daily-commit"
+title: "II. Keep Committing"
+```
+
+It currently contains the normal local Git flow:
+
+```text
+git status --short
+git diff
+
+git add .
+git status --short
+
+git commit -m "Describe the completed step"
+```
+
+## Requested UX change
+
+Add a choice at the top of `daily-commit`:
+
+```text
+Choose where today’s changes live
+```
+
+Suggested choice group:
+
+```text
+daily-commit-location
+```
+
+Suggested options:
+
+```text
+Local files -> local-files
+Inside Docker Sandbox -> docker-sandbox
+```
+
+Attach the current local Git commands to `local-files` so they only show for that option.
+
+## Local files option
+
+Keep the existing simple Git flow:
+
+```text
+git status --short
+git diff
+
+git add .
+git status --short
+
+git commit -m "Describe the completed step"
+```
+
+Explain that this is for edits already present in the normal host repository folder. Warn the user to check that private/generated files are not staged, especially `.env`, `data/private/`, `node_modules/`, `.venv/`, `dist/`, `build/`, and unrelated edits.
+
+## Docker Sandbox option
+
+Assume the sandbox was created like this:
+
+```text
+sbx create --clone --name {sandboxName} codex .
+```
+
+Explain the key concept clearly:
+
+- With `--clone`, the sandbox works in its own private clone of the repository.
+- Changes made by Codex inside the sandbox may not directly appear in the normal Windows/local folder.
+- The host repository should fetch and merge the sandbox work, then push the feature branch to GitHub.
+
+Add a warning/note:
+
+```text
+Use this path when the agent changed files inside a Docker Sandbox created with `sbx create --clone`. First inspect the sandbox remote/branch, then merge the sandbox work onto your local feature branch, then push that feature branch to origin.
+```
+
+### Docker Sandbox command sequence
+
+1. Inspect host repo state and remotes:
+
+```text
+git status
+git remote -v
+git branch --show-current
+```
+
+2. Fetch the sandbox remote:
+
+```text
+git fetch {sandboxName}
+```
+
+Explain that `{sandboxName}` may need to be replaced by the actual remote name shown by `git remote -v`.
+
+3. Inspect sandbox branches/commits:
+
+```text
+git branch -a
+git log --oneline --all --decorate --graph -20
+```
+
+Explain that common candidates are `{sandboxName}/main` or `{sandboxName}/{featureBranch}`.
+
+4. Switch to the intended local feature branch:
+
+```text
+git switch {featureBranch}
+```
+
+Explain that sandbox changes should be merged into the feature branch, not directly into `{defaultBranch}`.
+
+5. Merge sandbox work onto the feature branch:
+
+Primary command:
+
+```text
+git merge {sandboxName}/main
+```
+
+Alternative if the sandbox work is on the feature branch:
+
+```text
+git merge {sandboxName}/{featureBranch}
+```
+
+Explain that the user should choose the remote branch visible in `git branch -a` / `git log`. If conflicts occur, stop and resolve them before continuing.
+
+6. Inspect the merge result:
+
+```text
+git status
+git diff --stat
+```
+
+7. Commit if the merge left local changes uncommitted:
+
+```text
+git add .
+git commit -m "Integrate Docker Sandbox changes"
+```
+
+Explain that this step is skipped if Git already made a merge commit or says there is nothing to commit.
+
+8. Push the feature branch to GitHub:
+
+```text
+git push -u origin {featureBranch}
+```
+
+End with a note:
+
+```text
+After this, continue with `III. Finish Clean`: create the pull request, merge it, and update the local default branch.
+```
+
+## Integration with `III. Finish Clean`
+
+Do not duplicate the whole PR/merge section unless necessary. The existing `daily-finish` chapter already handles:
+
+```text
+git push -u origin {featureBranch}
+gh pr create --base {defaultBranch} --head {featureBranch} ...
+gh pr merge --squash --delete-branch
+git switch {defaultBranch}
+git fetch --prune origin
+git pull --ff-only origin {defaultBranch}
+```
+
+If needed, adjust the `daily-finish` copy so Docker Sandbox users understand they must first bring sandbox changes into the local feature branch.
+
+## Acceptance criteria
+
+- The Daily Dev book remains part of the standalone HTML checklist.
+- `II. Keep Committing` has a clear local-files vs Docker-Sandbox toggle.
+- The local-files option preserves the existing simple commit flow.
+- The Docker Sandbox option explains the `--clone` distinction.
+- The Docker Sandbox option includes commands to inspect remotes, fetch the sandbox remote, identify the branch, merge into `{featureBranch}`, commit if needed, and push to `origin`.
+- Wording remains plain-language and suitable for semi-technical Windows users.
+- Commands use existing placeholders such as `{sandboxName}`, `{featureBranch}`, and `{defaultBranch}`.
+- No new framework or build tooling is introduced.
+- Do not edit `src/` unless the change affects embedded downloadable starter files.

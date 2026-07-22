@@ -1,0 +1,513 @@
+# Backlog: Expand Extras chapter about Spec Kit into a step-by-step skill workflow
+
+## Repo
+
+Rens88/personal-repo-init-guide
+
+## Goal
+
+Update the chapter in the `Extras` book about Spec Kit so it becomes a much more elaborate, step-by-step guide.
+
+The goal is not just to say "use Spec Kit", but to explain when and how to use the Spec Kit skills in sequence:
+
+- `$speckit-specify`
+- `$speckit-clarify`
+- `$speckit-plan`
+- `$speckit-tasks`
+- `$speckit-implement`
+- `$speckit-analyze`
+- `$speckit.check`
+- `$speckit.constitution`
+
+The chapter should help a semi-technical user understand what each skill is for, when to use it, what input to give the coding agent, what output to expect, and when to move to the next skill.
+
+## Files to inspect first
+
+Read the root instructions:
+
+```text
+AGENTS.md
+```
+
+Then inspect and edit the standalone checklist:
+
+```text
+dist/HUMAN_READABLE_STARTUP_CHECKLIST.html
+```
+
+The README says this file is the distributable standalone checklist. Keep the HTML standalone.
+
+Do not introduce a build system, framework, or external assets.
+
+## Current context
+
+The checklist has a `Book` selector with:
+
+- Start-up
+- Extras
+- Daily Dev
+
+The Spec Kit content belongs in the `Extras` book.
+
+Search in the HTML for the existing Spec Kit chapter. It may use wording such as:
+
+- Spec Kit
+- speckit
+- specify
+- constitution
+
+If the current chapter is short, replace or expand it. If there are already useful commands, preserve them and add clearer structure around them.
+
+## Desired chapter title
+
+Use something like:
+
+```text
+Spec Kit: From Idea To Implementable Plan
+```
+
+or:
+
+```text
+Spec Kit Workflow
+```
+
+Keep the tone consistent with the rest of the guide: plain-language, practical, and checklist-driven.
+
+## Core explanation to add
+
+Explain Spec Kit as a structured workflow for moving from a rough idea to a well-scoped implementation.
+
+Suggested plain-language explanation:
+
+```text
+Spec Kit helps you avoid asking an agent to "just build something" too early. It turns a rough idea into a clear specification, checks unclear assumptions, creates an implementation plan, breaks the plan into tasks, and only then starts implementation.
+```
+
+Also explain the main principle:
+
+```text
+Use Spec Kit before coding when the feature is not yet obvious, when requirements are ambiguous, or when you want the agent to produce a more reviewable plan before touching files.
+```
+
+## Add a decision note: when to use Spec Kit
+
+Add a note/card explaining that Spec Kit is useful when:
+
+- the feature is larger than a tiny edit
+- the user cannot clearly describe all edge cases yet
+- the project has architectural constraints
+- the agent should not start coding immediately
+- the work needs a written spec, plan, and task list
+- the user wants better checkpoints before implementation
+
+And that Spec Kit may be overkill when:
+
+- the change is a one-line copy edit
+- the task is a simple command
+- the user already has exact implementation instructions
+- the work is just fixing a typo or formatting issue
+
+## Step-by-step workflow to add
+
+Add separate cards/steps for each of the following.
+
+---
+
+## 1. `$speckit.constitution` - define or check project rules
+
+Purpose:
+
+Use this before feature planning when the repository does not yet have clear project principles, constraints, or non-negotiables.
+
+Explain:
+
+The constitution describes the project rules the agent should respect. It can include things like:
+
+- target users
+- preferred stack
+- privacy rules
+- what counts as acceptable complexity
+- testing expectations
+- forbidden dependencies
+- folder conventions
+- deployment assumptions
+- documentation expectations
+
+Suggested prompt:
+
+```text
+$speckit.constitution
+
+Inspect this repository and help me define or update the project constitution. Focus on principles that should guide future agent work: user control, simple architecture, privacy, portability, testing expectations, and when to ask before making large changes.
+```
+
+Expected output:
+
+- a proposed constitution or constitution update
+- explicit principles
+- constraints the agent should follow later
+- open questions if the rules are unclear
+
+User checkpoint:
+
+Do not continue until the user agrees with the constitution or edits it.
+
+---
+
+## 2. `$speckit-specify` - turn rough idea into a feature specification
+
+Purpose:
+
+Use this when the user has an idea but not yet a precise feature definition.
+
+Explain:
+
+This skill should create the feature specification. It should describe the user problem, intended behavior, scope, non-goals, examples, and acceptance criteria.
+
+Suggested prompt:
+
+```text
+$speckit-specify
+
+I want to add the following feature:
+
+<describe the rough feature idea>
+
+Create a feature specification. Include the user goal, scope, non-goals, expected behavior, edge cases, acceptance criteria, and any assumptions that need to be checked before planning.
+```
+
+Expected output:
+
+- feature name
+- user story or goal
+- functional requirements
+- non-goals
+- acceptance criteria
+- edge cases
+- assumptions
+- questions for the user
+
+User checkpoint:
+
+Review the specification before moving on. Correct the agent if the feature goal, scope, or non-goals are wrong.
+
+---
+
+## 3. `$speckit-clarify` - resolve ambiguity before planning
+
+Purpose:
+
+Use this after `$speckit-specify` when the spec still contains assumptions, unclear choices, or missing decisions.
+
+Explain:
+
+This skill should not implement anything. It should ask targeted questions or propose decision options so the user can remove ambiguity.
+
+Suggested prompt:
+
+```text
+$speckit-clarify
+
+Review the current feature specification. Identify unclear requirements, hidden assumptions, missing edge cases, and decisions that must be made before implementation planning. Ask only the questions that materially affect the implementation.
+```
+
+Expected output:
+
+- a short list of important clarifying questions
+- suggested options when useful
+- explanation of why each decision matters
+- updated assumptions after the user answers
+
+User checkpoint:
+
+Answer the clarifying questions. Do not proceed to planning until the feature is specific enough to implement.
+
+Important UX instruction:
+
+Add a note that this is the moment where the user should slow down. A few good clarification questions here can prevent wasted implementation work later.
+
+---
+
+## 4. `$speckit-plan` - create the technical implementation plan
+
+Purpose:
+
+Use this once the feature specification is clear.
+
+Explain:
+
+This skill should translate the approved spec into a practical implementation plan. It should inspect the repository and propose which files to change, what design to use, what risks exist, and how to validate the result.
+
+Suggested prompt:
+
+```text
+$speckit-plan
+
+Using the approved feature specification and clarifications, inspect the repository and create an implementation plan. Include relevant existing files, proposed file changes, data flow, UI behavior if relevant, tests or manual checks, risks, and any decisions that still need approval.
+```
+
+Expected output:
+
+- summary of relevant existing code/files
+- proposed implementation approach
+- files likely to change
+- data/model/UI flow if relevant
+- validation plan
+- risks
+- open decisions
+
+User checkpoint:
+
+Approve or edit the plan before task breakdown.
+
+Plain-language warning:
+
+If the plan does not mention actual files in the repository, ask the agent to inspect the repo more carefully before continuing.
+
+---
+
+## 5. `$speckit-tasks` - break the plan into implementation tasks
+
+Purpose:
+
+Use this after the plan is approved.
+
+Explain:
+
+This skill should convert the plan into a checklist of small, ordered tasks. Tasks should be small enough to commit and review.
+
+Suggested prompt:
+
+```text
+$speckit-tasks
+
+Convert the approved implementation plan into a small ordered task list. Group tasks into logical commits where possible. Include validation steps and mark any task that should require user approval before continuing.
+```
+
+Expected output:
+
+- ordered task list
+- dependencies between tasks
+- suggested commit boundaries
+- validation steps
+- user approval gates
+
+User checkpoint:
+
+Confirm that the tasks are small and ordered. If they are too broad, ask the agent to split them further.
+
+---
+
+## 6. `$speckit-implement` - implement the approved tasks
+
+Purpose:
+
+Use this only after the spec, clarifications, plan, and task list are acceptable.
+
+Explain:
+
+This is the first step where the agent should start changing project files.
+
+Suggested prompt:
+
+```text
+$speckit-implement
+
+Implement the approved tasks one logical group at a time. After each group, summarize what changed, what files were touched, and which validation was run. Stop before making large architectural changes not already approved in the plan.
+```
+
+Expected output:
+
+- code/file changes
+- short progress summaries
+- validation results
+- clear stop points if assumptions fail
+
+User checkpoint:
+
+Review diffs regularly. Do not let the agent continue blindly through a long task list if the early implementation reveals a wrong assumption.
+
+---
+
+## 7. `$speckit-analyze` - review or diagnose after implementation
+
+Purpose:
+
+Use this after implementation, or when something feels wrong.
+
+Explain:
+
+This skill should inspect the result, compare it with the specification, and identify gaps, risks, or cleanup work.
+
+Suggested prompt:
+
+```text
+$speckit-analyze
+
+Analyze the current implementation against the approved specification and task list. Identify missing requirements, unexpected changes, risky code, test gaps, documentation gaps, and cleanup tasks before this is merged.
+```
+
+Expected output:
+
+- spec compliance check
+- missing requirements
+- risks
+- cleanup tasks
+- recommended tests/manual checks
+- merge readiness assessment
+
+User checkpoint:
+
+Use this before creating a pull request for larger features.
+
+---
+
+## 8. `$speckit.check` - final consistency check
+
+Purpose:
+
+Use this as a final quality gate before commit, PR, or merge.
+
+Explain:
+
+This should check whether the work is internally consistent: spec, plan, tasks, implementation, tests, and docs.
+
+Suggested prompt:
+
+```text
+$speckit.check
+
+Run a final consistency check across the specification, clarifications, plan, task list, implementation, tests, and documentation. Tell me whether this is ready to commit or merge, and list any blockers.
+```
+
+Expected output:
+
+- ready/not ready judgment
+- blockers
+- non-blocking improvements
+- suggested commit message or PR summary
+
+User checkpoint:
+
+Only commit or merge once blockers are resolved or explicitly accepted.
+
+## Suggested visual/checklist structure in the HTML
+
+Add a sequence of cards in the Spec Kit chapter:
+
+1. What Spec Kit is for
+2. When to use it
+3. `$speckit.constitution`
+4. `$speckit-specify`
+5. `$speckit-clarify`
+6. `$speckit-plan`
+7. `$speckit-tasks`
+8. `$speckit-implement`
+9. `$speckit-analyze`
+10. `$speckit.check`
+11. Example full workflow
+12. Quick decision tree
+
+Use `note(...)`, `command(...)`, and possibly `choice(...)` cards consistently with the existing HTML.
+
+## Example full workflow to include
+
+Add one complete copy-ready example:
+
+```text
+$speckit-specify
+
+Feature idea: Add a Daily Dev toggle that lets the user choose whether changed files are local or inside a Docker Sandbox clone. The guide should then show the correct commit/push/merge instructions for that path.
+```
+
+Then:
+
+```text
+$speckit-clarify
+
+Review the feature spec and ask only the questions that materially affect implementation.
+```
+
+Then:
+
+```text
+$speckit-plan
+
+Create an implementation plan for the approved spec. Inspect the standalone HTML checklist and identify the exact section/cards to update.
+```
+
+Then:
+
+```text
+$speckit-tasks
+
+Break the approved plan into small ordered tasks with suggested commit boundaries.
+```
+
+Then:
+
+```text
+$speckit-implement
+
+Implement the approved tasks. Keep the standalone HTML working and avoid adding dependencies.
+```
+
+Then:
+
+```text
+$speckit-analyze
+
+Check the implementation against the approved spec and identify gaps before commit.
+```
+
+Then:
+
+```text
+$speckit.check
+
+Run the final consistency check and suggest a PR summary.
+```
+
+## Add a decision tree
+
+Add a short decision tree:
+
+```text
+Is this a tiny edit?
+-> Yes: do not use full Spec Kit. Just edit and commit.
+
+Is the feature idea still vague?
+-> Use $speckit-specify.
+
+Are there important unknowns?
+-> Use $speckit-clarify.
+
+Is the spec clear but implementation unclear?
+-> Use $speckit-plan.
+
+Is the plan approved?
+-> Use $speckit-tasks.
+
+Are the tasks approved?
+-> Use $speckit-implement.
+
+Is the implementation done but needs review?
+-> Use $speckit-analyze or $speckit.check.
+```
+
+## Acceptance criteria
+
+- The Extras book contains a richer Spec Kit chapter.
+- The chapter explains the purpose of Spec Kit in plain language.
+- Each `$speckit-*` skill has:
+  - when to use it
+  - what it does
+  - a copy-ready prompt
+  - expected output
+  - user checkpoint
+- The workflow clearly separates specification, clarification, planning, tasking, implementation, analysis, and final checking.
+- The guide warns users not to jump to implementation too early.
+- The chapter remains useful for semi-technical Windows users using Codex.
+- The standalone HTML still works without external files.
+- No new build tooling or external dependencies are introduced.
