@@ -1270,15 +1270,15 @@
             <div class="context-grid">
               <div class="field">
                 <label for="projectName">Project folder</label>
-                <input id="projectName" data-field="projectName" value="projexcellent-app">
+                <input id="projectName" data-field="projectName" value="my-project">
               </div>
               <div class="field">
                 <label for="parentNative">Native parent folder</label>
-                <input id="parentNative" data-field="parentNative" value="C:\Users\rmeer\CodeLibrary">
+                <input id="parentNative" data-field="parentNative" value="C:\Users\your-name\CodeLibrary">
               </div>
               <div class="field">
                 <label for="parentPosix">POSIX shell path</label>
-                <input id="parentPosix" data-field="parentPosix" value="/mnt/c/Users/rmeer/CodeLibrary">
+                <input id="parentPosix" data-field="parentPosix" value="/mnt/c/Users/your-name/CodeLibrary">
               </div>
               <div class="field">
                 <label for="defaultBranch">Default branch</label>
@@ -1286,11 +1286,11 @@
               </div>
               <div class="field">
                 <label for="repoOwner">GitHub owner</label>
-                <input id="repoOwner" data-field="repoOwner" value="Rens88">
+                <input id="repoOwner" data-field="repoOwner" value="YOUR-GITHUB-OWNER">
               </div>
               <div class="field">
                 <label for="repoName">Repository name</label>
-                <input id="repoName" data-field="repoName" value="projexcellent-app">
+                <input id="repoName" data-field="repoName" value="my-project">
               </div>
               <div class="field">
                 <label for="devOpsOrg">Azure DevOps organization</label>
@@ -1306,7 +1306,7 @@
               </div>
               <div class="field">
                 <label for="sandboxName">Docker Sandbox name</label>
-                <input id="sandboxName" data-field="sandboxName" value="projexcellent-codex">
+                <input id="sandboxName" data-field="sandboxName" value="my-project-codex">
               </div>
               <div class="field">
                 <label for="oldRepoPath">Old repo path</label>
@@ -1379,8 +1379,8 @@
     const OLD_PROGRESS_STORAGE_KEYS = ["startupChecklistProgress:v3"];
     const PLATFORM_DEFAULT_PATHS = {
       windows: {
-        parentNative: "C:\\Users\\rmeer\\CodeLibrary",
-        parentPosix: "/mnt/c/Users/rmeer/CodeLibrary",
+        parentNative: "C:\\Users\\your-name\\CodeLibrary",
+        parentPosix: "/mnt/c/Users/your-name/CodeLibrary",
       },
       macos: {
         parentNative: "/Users/your-name/CodeLibrary",
@@ -1394,7 +1394,7 @@
     const FIELD_HELP = {
       projectName: "The local folder name that will be created for the new project.",
       parentNative: "The existing parent folder as your operating system normally shows it. On Windows this usually uses backslashes. On macOS and Linux this is usually already a POSIX path.",
-      parentPosix: "The same parent folder as a POSIX-style shell path. On Windows with WSL, C:\\Users\\name\\CodeLibrary becomes /mnt/c/Users/name/CodeLibrary. On macOS and Linux it is usually the same as the native path.",
+      parentPosix: "The same parent folder as a POSIX-style shell path. On Windows with WSL, C:\\Users\\your-name\\CodeLibrary becomes /mnt/c/Users/your-name/CodeLibrary. On macOS and Linux it is usually the same as the native path.",
       defaultBranch: "The branch name that should become the default branch. The usual starting value is main.",
       repoOwner: "The GitHub user or organization that will own the repository.",
       repoName: "The remote repository name, usually matching the project folder name.",
@@ -1458,16 +1458,16 @@
     let activeDownloadTooltipButton = null;
 
     const fields = {
-      projectName: "projexcellent-app",
-      parentNative: "C:\\Users\\rmeer\\CodeLibrary",
-      parentPosix: "/mnt/c/Users/rmeer/CodeLibrary",
+      projectName: "my-project",
+      parentNative: "C:\\Users\\your-name\\CodeLibrary",
+      parentPosix: "/mnt/c/Users/your-name/CodeLibrary",
       defaultBranch: "main",
-      repoOwner: "Rens88",
-      repoName: "projexcellent-app",
+      repoOwner: "YOUR-GITHUB-OWNER",
+      repoName: "my-project",
       devOpsOrg: "YOUR-ORG",
       devOpsProject: "YOUR-PROJECT",
       featureBranch: "feature/initialize-starter-files",
-      sandboxName: "projexcellent-codex",
+      sandboxName: "my-project-codex",
       oldRepoPath: "C:\\path\\to\\old-repo",
       privacy: "private",
     };
@@ -1484,6 +1484,34 @@
             <p><strong>Stack</strong> means the set of tools and services you use for this repo: your editor, terminal shell, Git hosting service, runtime, test tools, and optional AI/dev tooling.</p>
             ${logoStrip(["teamnl", "github", "devops", "docker", "vscode", "python", "playwright"])}
           `, "note", { logoKey: "teamnl" }),
+          note("Four choices that solve different problems", `
+            <ul>
+              <li><strong>Platform and shell</strong> change the command syntax you copy. They do not decide whether the app should use Python, HTML, or React.</li>
+              <li><strong>Git hosting</strong> decides where the shared remote, policies, reviews, and pull requests live. It is usually an organization or collaboration choice, not a programming-language choice.</li>
+              <li><strong>App and runtime stack</strong> trades speed and simplicity against UI flexibility, testing needs, and deployment structure.</li>
+              <li><strong>Local or sandboxed work</strong> trades the simplest file workflow against stronger isolation and reproducibility.</li>
+            </ul>
+            <p>These decisions are related, but they are not the same decision. Choose each for the problem it solves.</p>
+          `),
+          note("Choose the lightest path that answers the current question", `
+            <ul>
+              <li><strong>Base shell:</strong> use when the app surface is not decided yet, or the repo mainly needs documentation and scripts.</li>
+              <li><strong>Standalone HTML prototype:</strong> use to make a visual interaction quickly and share it as one file without a backend runtime.</li>
+              <li><strong>Streamlit proof of concept:</strong> use when Python or data logic needs a quick interactive UI and a custom frontend is not yet worth the cost.</li>
+              <li><strong>React MVP:</strong> use when product-like browser behavior, richer UI control, and repeatable browser tests justify extra tooling.</li>
+              <li><strong>React with Azure/Docker structure:</strong> use only when real deployment or operations requirements should already shape the repo.</li>
+              <li><strong>Redesign from archive:</strong> use when old work contains useful ideas or data, but should not dictate the new architecture.</li>
+            </ul>
+            <p>More tooling is not automatically more professional. Extra layers are useful only when they solve a real current problem.</p>
+          `),
+          note("Prototype, proof of concept, and MVP answer different questions", `
+            <ul>
+              <li><strong>Prototype:</strong> can people understand and react to the interaction?</li>
+              <li><strong>Proof of concept:</strong> can the important logic or data flow work?</li>
+              <li><strong>MVP:</strong> can a small real product be operated, tested, and extended responsibly?</li>
+            </ul>
+            <p>Start with the smallest question you actually need to answer. Moving to a heavier path later is normal.</p>
+          `),
           note("Core path vs appendix", `
             <p>The core workflow is short: create the repo, connect the remote, add starter files, run the starter script, create a runtime environment only when the selected path needs one, commit the baseline, then start the agent.</p>
             <p>The appendix keeps useful but optional helpers: tool checks, Docker Sandbox, Playwright, Spec Kit, Context7, and Git troubleshooting. They are not mandatory startup steps.</p>
@@ -1515,6 +1543,10 @@
         title: "1. Create Folder And Initialize Git",
         summary: "Create the repo folder, initialize Git, choose the default branch name, and check the empty repo state.",
         cards: [
+          note("Why start with a clean Git boundary", `
+            <p>A dedicated project folder prevents files from unrelated work being included by accident. Initializing Git before adding app code gives every later change a visible history and a clear rollback point.</p>
+            <p>This chapter is for a new repository. If you are maintaining an existing repository, inspect its current Git state instead of initializing it again.</p>
+          `),
           command("Create folder and initialize Git", {
             common: {
               windows: {
@@ -1561,6 +1593,10 @@
         title: "2. Connect Remote And Choose Default-Branch Policy",
         summary: "Connect the local repo to GitHub or Azure DevOps, then decide whether the default branch should require pull requests.",
         cards: [
+          note("Why local Git also needs a hosted remote", `
+            <p>Local Git records history on this machine. A hosted remote such as GitHub or Azure DevOps provides an off-machine shared copy, collaboration, pull requests, and branch policies.</p>
+            <p>Choose the hosting service your team or organization uses. Branch protection adds a review and safety checkpoint, but it also adds friction; a tiny private experiment may deliberately allow direct pushes while a shared repo usually benefits from pull requests.</p>
+          `),
           choice("Choose remote setup path", "remote-path", [
             { label: "Add existing remote", value: "existing" },
             { label: "Create remote from current folder", value: "create" },
@@ -1702,6 +1738,10 @@
         title: "3. Add Starter Files",
         summary: "Copy the starter files for the new repo into the repo root before running the starter script.",
         cards: [
+          note("Why these files come before generated structure", `
+            <p><code>bootstrap_repo.py</code> creates a consistent starting structure. <code>AGENTS.md</code> gives coding agents durable project rules, while <code>AGENTS_INIT.md</code> guides the first inspection and planning session.</p>
+            <p>Putting them in the repo root first means both the script and future agents start from the intended rules. The standalone HTML is optional because it is a human guide, not an app dependency.</p>
+          `),
           note("Files to copy", `
             <ul>
               <li><code>bootstrap_repo.py</code>, the repo starter script</li>
@@ -1745,6 +1785,17 @@
         title: "4. Run The Starter Script",
         summary: "Choose the lightest profile that fits the project. If you use old work, treat it as source material and redesign from it.",
         cards: [
+          note("Why choose a starter profile deliberately", `
+            <p>The profile creates folders and starter files for the kind of question the project must answer now. It does not make one technology universally better and it does not lock the repo forever.</p>
+            <ul>
+              <li>Choose <strong>Base</strong> when the product shape is undecided.</li>
+              <li>Choose <strong>HTML prototype</strong> for a fast visual concept without a runtime.</li>
+              <li>Choose <strong>Streamlit POC</strong> for interactive Python or data work.</li>
+              <li>Choose <strong>React MVP</strong> when custom browser behavior and stronger UI testing justify more moving parts.</li>
+              <li>Add <strong>Azure/Docker structure</strong> only for a real deployment direction.</li>
+              <li>Choose <strong>archive</strong> to learn from old work without copying its architecture blindly.</li>
+            </ul>
+          `),
           choice("Choose starter path", "bootstrap-path", [
             { label: "Base shell", value: "base" },
             { label: "Standalone HTML prototype", value: "html-prototype" },
@@ -1796,7 +1847,8 @@
         summary: "Use the shell instructions for the selected starter path: skip base or HTML paths, create a Python virtual environment for Python paths, or wait for the React scaffold before installing Node dependencies.",
         cards: [
           note("Runtime rule", `
-            <p>A runtime environment is not universal. Create one only when the selected starter path has code that needs dependencies installed locally.</p>
+            <p>A runtime environment is not universal. It manages the tools and dependencies needed to execute code; it is separate from the source files and Git history.</p>
+            <p>Standalone HTML can open directly without a dependency environment. Python paths use a per-project virtual environment so packages do not affect other projects. Node dependencies should follow the actual app scaffold and its <code>package.json</code>, not be installed before that choice exists.</p>
           `),
           note("No runtime environment needed yet", `
             <p>The selected starter path does not need a dependency environment during initial setup. Continue to the ignored/private-file check.</p>
@@ -1922,6 +1974,10 @@
         title: "6. Confirm Ignored And Private Files",
         summary: "Private data and secrets must stay local before the baseline commit.",
         cards: [
+          note("Why this check happens before the first commit", `
+            <p>Git remembers committed content even if the file is deleted later. Check privacy boundaries before creating history or pushing a remote copy.</p>
+            <p><code>.gitignore</code> helps prevent accidental versioning; it is not encryption or access control. Keep secrets and sensitive data in approved local locations and still inspect <code>git status</code> before every important commit.</p>
+          `, "warn"),
           note("Expected ignored paths", `
             <ul>
               <li><code>.env</code></li>
@@ -1973,6 +2029,10 @@
         title: "7. Make The Baseline Commit",
         summary: "Commit the clean starter structure before agents begin changing behavior.",
         cards: [
+          note("Why create a baseline now", `
+            <p>The baseline is a known-good comparison and rollback point: structure, privacy rules, and agent guidance exist, but feature behavior has not started changing yet.</p>
+            <p>After this commit, a diff can show exactly what a person or agent added to the clean starting point.</p>
+          `),
           command("Baseline commit", {
             common: {
               all: "git add .\ngit commit -m \"Initialize starter files\"",
@@ -2110,6 +2170,10 @@
         title: "8. Start The Agent",
         summary: "Start with context gathering and a plan, especially when archive material exists.",
         cards: [
+          note("Why the agent starts after the baseline", `
+            <p>The repository now has boundaries, privacy rules, durable guidance, and a clean history. Starting the agent earlier would ask it to invent those choices while also implementing the project.</p>
+            <p>Begin with inspection and planning so you can correct scope or architecture before files change. Use ordinary terminal commands yourself when no reasoning is needed.</p>
+          `),
           prompt("First agent prompt", "Read AGENTS.md and AGENTS_INIT.md.\n\nI am working on {platformLabel} with {shellLabel}. The Git hosting service is {providerLabel}.\n\nThen inspect the repository.\n\nIf archive material exists, inspect it as source material only. Do not copy code yet.\n\nSummarize:\n1. what this repo currently contains,\n2. which maturity level fits best,\n3. which docs need updates,\n4. what first plan you recommend.\n\nDo not implement yet. Wait for approval."),
           note("Success state: agent can inspect the repo", `
             <p>The agent should now be able to read the baseline files, understand the selected project shape, and propose a first implementation plan.</p>
@@ -2122,6 +2186,10 @@
         title: "A. Tool And Account Setup Helpers",
         summary: "Use these prompts and commands only when a tool or account check is needed.",
         cards: [
+          note("Why these checks are optional", `
+            <p>Install and configure only tools required by the path you chose. Every optional tool adds updates, authentication, and another possible failure point.</p>
+            <p>A tool can be installed on the machine but unavailable in the current shell, or available but not authenticated. These helpers separate those checks. Skip tools the project does not need yet.</p>
+          `),
           prompt("Git check prompt", "Help me check whether Git is installed on {platformLabel}. Give me exact {shellLabel} commands to check it, and if it is missing, give me safe installation instructions for {platformLabel}. After installation, help me configure my name and email."),
           command("Git commands", { common: { all: "git --version\ngit config --global user.name\ngit config --global user.email" } }),
           prompt("Visual Studio Code check prompt", "Help me check whether Visual Studio Code is installed on {platformLabel} and whether the `code` command is available from {shellLabel}. If it is not available, help me enable it safely for this platform."),
@@ -2165,12 +2233,20 @@
         title: "B. Optional: Docker Sandbox",
         summary: "Use Docker Sandbox for safer agent execution, dependency isolation, and browser/app testing in isolation.",
         cards: [
-          note("Docker Sandbox model", `
-            <p>Docker Sandbox uses the <code>sbx</code> CLI. The modern replacement for the older dedicated-branch workflow is clone mode: the sandbox gets its own private Git clone and exposes it back to the host as a Git remote.</p>
-            <p>With <code>--clone</code>, Codex works in that private clone. File changes made inside the sandbox may not appear directly in your normal Windows/local folder until the host repository fetches and merges the sandbox remote.</p>
-            <p>Official docs: <a href="https://docs.docker.com/ai/sandboxes/">https://docs.docker.com/ai/sandboxes/</a></p>
+          note("Why choose a sandbox instead of working locally", `
+            <p>Local work is the simplest path: edits appear immediately in the normal project folder and ordinary Git commands are enough. Choose it for focused work when you trust the tools and do not need extra isolation.</p>
+            <p>A Docker Sandbox is worth the extra clone, port, process, and transfer steps when an agent should install dependencies, run browsers or services, or experiment without changing the host environment directly.</p>
           `, "note", { logoKey: "docker" }),
-          command("Verify `sbx`", { common: { all: "sbx --help\nsbx ls" } }),
+          note("Docker Sandbox model", `
+            <p><strong>Direct mode</strong> mounts the normal host working tree read-write. Changes appear on the host immediately, so use the ordinary local Git path.</p>
+            <p><strong>Clone mode</strong> uses <code>--clone</code>. The agent edits a private Git clone and the host receives committed work through the <code>sandbox-{sandboxName}</code> Git remote or through an explicitly authorized push.</p>
+            <p>Clone mode starts from whichever host ref was checked out when the sandbox was created; it does not create a feature branch automatically. The host repository is also visible at <code>/run/sandbox/source</code>, but that path is read-only and is not the private writable clone.</p>
+            <p>Official docs: <a href="https://docs.docker.com/ai/sandboxes/usage/">usage</a>, <a href="https://docs.docker.com/ai/sandboxes/workflows/">Git workflows</a>, and <a href="https://docs.docker.com/ai/sandboxes/security/isolation/">workspace isolation</a>.</p>
+          `, "note", { logoKey: "docker" }),
+          note("Clone mode protects writes, not every readable host file", `
+            <p>The read-only host mount can still expose untracked and ignored files under the repository root, including a local <code>.env</code>. Keep real secrets outside the project tree or use approved credential isolation; do not treat <code>.gitignore</code> as a sandbox privacy boundary.</p>
+          `, "warn", { logoKey: "docker" }),
+          command("Verify `sbx`", { common: { all: "sbx version\nsbx --help\nsbx ls" } }),
           command("Install and sign in if missing", {
             common: {
               windows: {
@@ -2188,16 +2264,35 @@
           }),
           command("Create clone-mode Codex sandbox", { common: { all: "sbx create --clone --name {sandboxName} codex ." } }),
           command("Activate sandbox and attach to Codex", { common: { all: "sbx run --name {sandboxName}" } }),
+          note("Agent attach, interactive shell, and one-off command", `
+            <ul>
+              <li><code>sbx run --name {sandboxName}</code> attaches to the coding agent.</li>
+              <li><code>sbx exec -it {sandboxName} bash</code> opens an interactive Linux shell for you.</li>
+              <li><code>sbx exec {sandboxName} bash -lc "..."</code> runs one known Linux command from the host terminal.</li>
+            </ul>
+            <p>Choose the form that matches the job instead of asking the agent to act as a terminal.</p>
+          `, "note", { logoKey: "docker" }),
+          command("Open an interactive Bash shell in the sandbox", {
+            common: {
+              all: "sbx exec -it {sandboxName} bash",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: explain(
+              "Opens an interactive Bash terminal inside the named sandbox.",
+              "Use this for a sequence of ordinary Linux commands such as Git inspection, file viewing, or known test commands.",
+              "Normal output shows a Bash prompt in the sandbox project folder. Type exit when finished.",
+              "Be suspicious if the prompt opens outside the expected project or the sandbox name is not recognized."
+            ),
+          }),
           note("Use the sandbox yourself", `
             <p>A Docker Sandbox is also an interactive shell. Use it yourself for ordinary terminal checks so Codex can spend time on reasoning-heavy work instead of acting as a terminal.</p>
             <p>From Windows, run Linux commands inside the sandbox with <code>sbx exec {sandboxName} bash -lc "..."</code>. This matters because Windows commands such as <code>find</code> are different from Linux commands with the same name.</p>
+            <p><strong>Can an ordinary shell command answer the question?</strong> Yes: run it yourself. No, reasoning or code changes are needed: ask Codex.</p>
           `, "note", { logoKey: "docker" }),
           command("Print the sandbox working folder", {
             common: {
-              windows: {
-                powershell: "sbx exec {sandboxName} bash -lc \"pwd\"",
-                cmd: "sbx exec {sandboxName} bash -lc \"pwd\"",
-              },
+              all: "sbx exec {sandboxName} bash -lc \"pwd\"",
             },
           }, "", {
             logoKey: "docker",
@@ -2210,10 +2305,7 @@
           }),
           command("List files in the sandbox folder", {
             common: {
-              windows: {
-                powershell: "sbx exec {sandboxName} bash -lc \"ls -la\"",
-                cmd: "sbx exec {sandboxName} bash -lc \"ls -la\"",
-              },
+              all: "sbx exec {sandboxName} bash -lc \"ls -la\"",
             },
           }, "", {
             logoKey: "docker",
@@ -2226,10 +2318,7 @@
           }),
           command("Check sandbox Git status", {
             common: {
-              windows: {
-                powershell: "sbx exec {sandboxName} bash -lc \"git status --short\"",
-                cmd: "sbx exec {sandboxName} bash -lc \"git status --short\"",
-              },
+              all: "sbx exec {sandboxName} bash -lc \"git status --short\"",
             },
           }, "", {
             logoKey: "docker",
@@ -2242,10 +2331,7 @@
           }),
           command("Inspect sandbox Git diff", {
             common: {
-              windows: {
-                powershell: "sbx exec {sandboxName} bash -lc \"git diff\"",
-                cmd: "sbx exec {sandboxName} bash -lc \"git diff\"",
-              },
+              all: "sbx exec {sandboxName} bash -lc \"git diff\"",
             },
           }, "", {
             logoKey: "docker",
@@ -2258,10 +2344,7 @@
           }),
           command("Inspect recent sandbox commits", {
             common: {
-              windows: {
-                powershell: "sbx exec {sandboxName} bash -lc \"git log --oneline --decorate --max-count=8\"",
-                cmd: "sbx exec {sandboxName} bash -lc \"git log --oneline --decorate --max-count=8\"",
-              },
+              all: "sbx exec {sandboxName} bash -lc \"git log --oneline --decorate --max-count=8\"",
             },
           }, "", {
             logoKey: "docker",
@@ -2274,10 +2357,7 @@
           }),
           command("Inspect sandbox branches", {
             common: {
-              windows: {
-                powershell: "sbx exec {sandboxName} bash -lc \"git branch --show-current && git branch -a\"",
-                cmd: "sbx exec {sandboxName} bash -lc \"git branch --show-current && git branch -a\"",
-              },
+              all: "sbx exec {sandboxName} bash -lc \"git branch --show-current && git branch -a\"",
             },
           }, "", {
             logoKey: "docker",
@@ -2290,10 +2370,7 @@
           }),
           command("Run sandbox tests yourself", {
             common: {
-              windows: {
-                powershell: "sbx exec {sandboxName} bash -lc \"pytest\"\nsbx exec {sandboxName} bash -lc \"npm test\"",
-                cmd: "sbx exec {sandboxName} bash -lc \"pytest\"\nsbx exec {sandboxName} bash -lc \"npm test\"",
-              },
+              all: "sbx exec {sandboxName} bash -lc \"python3 -m pytest\"\nsbx exec {sandboxName} bash -lc \"npm test\"",
             },
           }, "", {
             logoKey: "docker",
@@ -2304,21 +2381,357 @@
               "Be suspicious if dependencies are missing or the project does not use one of these test commands."
             ),
           }),
+          command("Check the sandbox Python version", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"python3 --version\"",
+            },
+          }, "", {
+            logoKey: "python",
+            explain: explain(
+              "Prints the Python version available inside the sandbox.",
+              "Use this simple check yourself before asking an agent to diagnose a known environment question.",
+              "Normal output shows a Python 3 version.",
+              "Be suspicious if python3 is missing or the version does not meet the project's documented requirements."
+            ),
+          }),
           note("When to ask Codex", `
             <p>Think of Codex as a software engineer, not as your terminal.</p>
             <p>Run shell-answerable checks yourself. Ask Codex for implementing features, refactoring, debugging, explaining code, architecture advice, test generation, and root-cause analysis.</p>
           `, "note", { logoKey: "docker" }),
-          note("How sandbox work returns to the host", `
-            <p>Manual path: inspect and commit inside the sandbox clone, then return to the host repo and fetch the sandbox remote. Agent path: ask Codex to make a clean commit or summarize the changed files, then fetch and merge that sandbox work from the host repo.</p>
-            <p>The important handoff is the same in both paths: the host feature branch fetches the sandbox remote, merges the right sandbox branch, then pushes the feature branch to <code>origin</code>.</p>
+          note("Keep an existing sandbox clone current", `
+            <p>When reconnecting, inspect the clone before pulling. A clean branch with the expected upstream can be fast-forwarded safely. If the working tree is dirty, the branch has diverged, or no upstream exists, stop and inspect instead of resetting work away.</p>
+            <p>Inside the private clone, <code>origin</code> is the Git hosting remote. On the host, <code>sandbox-{sandboxName}</code> is the route back into this running sandbox clone.</p>
           `, "note", { logoKey: "docker" }),
-          command("Fetch sandbox changes back to host", { common: { all: "git remote -v\ngit fetch sandbox-{sandboxName}" } }, "", {
+          command("Inspect the existing clone before updating it", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"git status && git branch --show-current && git branch -vv && git remote -v\"",
+            },
+          }, "", {
             logoKey: "docker",
             explain: gitExplain(
-              "Git wording: inspect configured remotes, then fetch the remote that Docker Sandbox exposed for the clone.",
-              "Plain wording: from your normal repository folder, check the sandbox remote name and download the sandbox branch information without merging it yet.",
-              "Normal output lists remotes and then fetches refs from sandbox-{sandboxName}.",
-              "Be suspicious if the sandbox remote has a different name; use the exact remote shown by git remote -v."
+              "Git wording: inspect the sandbox clone's working tree, current branch, upstream tracking, and remotes.",
+              "Plain wording: confirm which work lane is active, whether it has unsaved changes, and which online branch it follows before downloading updates.",
+              "Normal output shows a clean or understood status, the intended branch, an origin upstream, and the expected remote URLs.",
+              "Be suspicious if changes are uncommitted, the active branch is wrong, the branch is ahead and behind, or origin is missing."
+            ),
+          }),
+          command("Fast-forward the active sandbox branch from origin", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"git fetch --prune origin && git pull --ff-only\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: fetch origin, prune deleted remote refs, then fast-forward the active branch through its configured upstream.",
+              "Plain wording: update the current sandbox work lane only when Git can move it forward without inventing a merge commit.",
+              "Normal output says Already up to date or shows a fast-forward.",
+              "Be suspicious if the branch has no upstream, has diverged, or has local changes; inspect and choose a deliberate recovery instead."
+            ),
+          }),
+          note("Create the feature branch inside clone mode", `
+            <p>Clone mode does not create a task branch automatically. Create <code>{featureBranch}</code> before editing. If it already exists, switch to it instead of running the create command again.</p>
+          `, "note", { logoKey: "docker" }),
+          command("Create a new feature branch inside the sandbox clone", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"git status && git branch --show-current && git switch -c {featureBranch}\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: inspect the clone, show its starting branch, then create and switch to the task feature branch.",
+              "Plain wording: make a separate work lane inside the private clone before the agent or user changes files.",
+              "Normal output confirms a new branch named {featureBranch}.",
+              "Be suspicious if the working tree is not clean, the starting branch is wrong, or the branch already exists."
+            ),
+          }),
+          command("Continue an existing feature branch inside the sandbox clone", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"git switch {featureBranch} && git pull --ff-only origin {featureBranch}\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: switch to the existing sandbox feature branch and fast-forward it from the matching origin branch.",
+              "Plain wording: return to the earlier sandbox work lane and download only straightforward newer commits.",
+              "Normal output confirms the branch switch and then reports an update or that it is current.",
+              "Be suspicious if the branch does not exist on origin, has diverged, or contains uncommitted work."
+            ),
+          }),
+          note("Manual clone-mode handoff", `
+            <ol>
+              <li>Inside the sandbox clone, review, test, and commit the work on <code>{featureBranch}</code>.</li>
+              <li>Keep the sandbox running.</li>
+              <li>From the normal host repository, fetch <code>sandbox-{sandboxName}</code> and inspect the feature branch before integrating it.</li>
+              <li>Create the host feature branch from that remote branch, or merge it into an existing host feature branch.</li>
+              <li>Push the reviewed host feature branch to <code>origin</code>, then create the pull request.</li>
+            </ol>
+          `, "note", { logoKey: "docker" }),
+          command("Inspect and selectively stage sandbox work", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"git status --short && git diff\"\nsbx exec {sandboxName} bash -lc \"git add -- {FILES_TO_INCLUDE} && git status --short\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: inspect the private clone, then stage only the named files and show the resulting status.",
+              "Plain wording: review the exact sandbox edits and choose which files belong in this checkpoint.",
+              "Replace {FILES_TO_INCLUDE} with one or more reviewed relative paths. Normal output marks only those paths as staged.",
+              "Be suspicious if private data, generated artifacts, unrelated edits, or an unresolved placeholder would be included."
+            ),
+          }),
+          command("Run the repository's validation inside the sandbox", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"{TEST_COMMAND}\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: explain(
+              "Runs the project's documented validation command in the private clone.",
+              "Validate the staged behavior before making the handoff commit; common examples are python3 -m pytest or npm test.",
+              "Replace {TEST_COMMAND} with the command this repository actually uses. Normal output reports passing checks.",
+              "Do not copy the placeholder literally, and stop to diagnose failures before committing."
+            ),
+          }),
+          command("Commit the reviewed sandbox work", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"git commit -m 'Describe the completed step' && git log -1 --oneline\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: commit the staged sandbox changes on the active feature branch, then print the new commit.",
+              "Plain wording: turn the reviewed sandbox files into a checkpoint the host remote can fetch.",
+              "Normal output shows a new commit hash on {featureBranch}.",
+              "Be suspicious if Git says nothing is staged, the active branch is wrong, or the commit includes unexpected files."
+            ),
+          }),
+          prompt("Ask Codex to prepare sandbox work for host review", "Inside this Docker Sandbox clone, inspect the current Git state. Create or switch to {featureBranch}, review the changes, run the relevant tests, and make one or more clean commits.\n\nDo not push or open a pull request unless I explicitly authorize it.\n\nWhen finished, tell me:\n1. the branch name,\n2. the commit hashes,\n3. the validation results,\n4. any uncommitted files, and\n5. the exact host commands to fetch and inspect sandbox-{sandboxName}/{featureBranch}."),
+          note("Agent push is a separate authorized path", `
+            <p>If Git hosting credentials are configured inside the sandbox, you may explicitly ask the agent to push <code>{featureBranch}</code> to <code>origin</code> and open a pull request. That skips the host fetch path, so use it only when direct agent publishing is intended and you still review the resulting PR.</p>
+          `, "warn", { logoKey: "docker" }),
+          command("Fetch and inspect the sandbox feature branch from the host", {
+            common: {
+              all: "git remote -v\ngit fetch sandbox-{sandboxName}\ngit log --oneline --decorate sandbox-{sandboxName}/{featureBranch}\ngit diff {defaultBranch}..sandbox-{sandboxName}/{featureBranch}",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: inspect host remotes, fetch the running sandbox clone, then inspect its feature-branch commits and diff from the default branch.",
+              "Plain wording: download the sandbox work into the normal repository for review without changing host files yet.",
+              "Normal output shows the sandbox remote, task commits, and the expected feature diff.",
+              "Be suspicious if the sandbox is stopped, the remote or branch is missing, or unrelated changes appear."
+            ),
+          }),
+          choice("Choose the host feature-branch state", "sandbox-host-feature-state", [
+            { label: "Feature branch does not exist locally", value: "new-host-feature" },
+            { label: "Feature branch already exists locally", value: "existing-host-feature" },
+          ], "Choose whether the normal host repository needs to create the feature branch from the sandbox or merge sandbox commits into an existing local feature branch."),
+          command("Create the host feature branch from the sandbox branch", {
+            common: {
+              all: "git switch -c {featureBranch} sandbox-{sandboxName}/{featureBranch}",
+            },
+          }, "", {
+            choiceGroup: "sandbox-host-feature-state",
+            choiceValue: "new-host-feature",
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: create a local feature branch at the fetched sandbox feature-branch commit.",
+              "Plain wording: turn the reviewed sandbox work into a normal host work lane.",
+              "Normal output confirms a new local branch at the expected commit.",
+              "Be suspicious if the branch already exists or the sandbox branch is not the work you reviewed."
+            ),
+          }),
+          command("Merge the sandbox branch into the existing host feature branch", {
+            common: {
+              all: "git switch {featureBranch}\ngit merge sandbox-{sandboxName}/{featureBranch}",
+            },
+          }, "", {
+            choiceGroup: "sandbox-host-feature-state",
+            choiceValue: "existing-host-feature",
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: switch to the existing local feature branch and merge the fetched sandbox feature branch.",
+              "Plain wording: combine the reviewed sandbox commits with the host's existing task branch.",
+              "Normal output fast-forwards or creates a clear merge; conflicts require deliberate resolution.",
+              "Be suspicious if you are on the default branch, the histories are unrelated, or unexpected conflicts appear."
+            ),
+          }),
+          command("Push the reviewed feature branch to origin", {
+            common: {
+              all: "git status\ngit push -u origin {featureBranch}",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: gitExplain(
+              "Git wording: verify the host feature branch and publish it to origin with upstream tracking.",
+              "Plain wording: upload the reviewed work lane so it can be backed up and used for a pull request.",
+              "Normal output confirms origin/{featureBranch} tracking.",
+              "Be suspicious if the current branch, origin URL, or files differ from what you reviewed."
+            ),
+          }),
+          note("Sandbox lifecycle and wanted work", `
+            <p><code>sbx stop</code> preserves the private clone but makes its Git remote unavailable until the sandbox runs again. <code>sbx rm</code> deletes the private clone and removes its host remote.</p>
+            <p>Fetch or push every commit you want to keep before removing the sandbox.</p>
+          `, "warn", { logoKey: "docker" }),
+        ],
+      },
+      {
+        id: "streamlit-runtime",
+        kind: "appendix",
+        logoKey: "python",
+        title: "C. Optional: Run A Streamlit App Locally Or In Docker Sandbox",
+        summary: "Choose the simplest local feedback loop or the more isolated sandbox path, then start, reach, inspect, and stop the app deliberately.",
+        cards: [
+          note("Why choose where the app runs", `
+            <p><strong>Local execution</strong> is the simplest feedback loop: the app uses the normal project files and local virtual environment, and the browser connects directly.</p>
+            <p><strong>Sandbox execution</strong> isolates packages and processes from the host, but the server must bind inside the sandbox and a port must be published before the host browser can reach it.</p>
+            <p>Choose local for ordinary trusted development. Choose the sandbox when environment isolation or agent-run testing justifies the extra networking and process steps.</p>
+          `, "note", { logoKey: "python" }),
+          choice("Choose where Streamlit should run", "streamlit-runtime-location", [
+            { label: "Run locally", value: "local-streamlit" },
+            { label: "Run inside Docker Sandbox", value: "sandbox-streamlit" },
+          ], "Only the commands for the selected runtime location are shown."),
+          note("Local virtual environment reminder", `
+            <p>Use the same operating-system environment that created <code>.venv</code>. A virtual environment created by Windows Python is not a Linux/WSL virtual environment; create and install dependencies from the shell you intend to use.</p>
+          `, "note", { choiceGroup: "streamlit-runtime-location", choiceValue: "local-streamlit", logoKey: "python" }),
+          command("Start Streamlit from the local project folder", {
+            common: {
+              windows: {
+                powershell: "Set-Location \"{parentNative}\\{projectName}\"\n.\\.venv\\Scripts\\Activate.ps1\npython -m streamlit run app/streamlit/app.py --server.address 127.0.0.1 --server.port 8502",
+                cmd: "cd /d \"{parentNative}\\{projectName}\"\n.venv\\Scripts\\activate.bat\npython -m streamlit run app/streamlit/app.py --server.address 127.0.0.1 --server.port 8502",
+                bash: "cd \"{parentPosix}/{projectName}\"\nsource .venv/bin/activate\npython3 -m streamlit run app/streamlit/app.py --server.address 127.0.0.1 --server.port 8502",
+              },
+              macos: {
+                bash: "cd \"{parentPosix}/{projectName}\"\nsource .venv/bin/activate\npython3 -m streamlit run app/streamlit/app.py --server.address 127.0.0.1 --server.port 8502",
+              },
+              linux: {
+                bash: "cd \"{parentPosix}/{projectName}\"\nsource .venv/bin/activate\npython3 -m streamlit run app/streamlit/app.py --server.address 127.0.0.1 --server.port 8502",
+              },
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "local-streamlit",
+            logoKey: "python",
+            explain: explain(
+              "Changes to the Project folder, activates its Python environment, and starts the Streamlit entry point on local port 8502.",
+              "Local loopback keeps the development server reachable from this machine without exposing it to the network.",
+              "Normal output shows Streamlit startup messages and a local URL.",
+              "Be suspicious if the project path is wrong, .venv belongs to another operating system, Streamlit is missing, or port 8502 is already used."
+            ),
+          }),
+          note("Open the local app", `
+            <p>Keep the Streamlit terminal open and visit <a href="http://127.0.0.1:8502/">http://127.0.0.1:8502/</a>. Press <code>Ctrl+C</code> in the app terminal to stop the local server.</p>
+          `, "note", { choiceGroup: "streamlit-runtime-location", choiceValue: "local-streamlit", logoKey: "python" }),
+          note("Sandbox app workflow uses two host terminals", `
+            <p>Use one terminal for the foreground Streamlit process so logs and <code>Ctrl+C</code> stay visible. Use a second host terminal to publish, inspect, and later unpublish the port.</p>
+          `, "note", { choiceGroup: "streamlit-runtime-location", choiceValue: "sandbox-streamlit", logoKey: "docker" }),
+          command("Start Streamlit inside the sandbox", {
+            common: {
+              all: "sbx exec -it {sandboxName} bash -lc \"python3 -m streamlit run app/streamlit/app.py --server.address 0.0.0.0 --server.port 8501\"",
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "sandbox-streamlit",
+            logoKey: "docker",
+            explain: explain(
+              "Starts Streamlit in the sandbox and listens on every sandbox interface at port 8501.",
+              "The sandbox server must use 0.0.0.0 so a published host-to-sandbox port can reach it.",
+              "Normal output shows Streamlit startup logs and the process remains attached until Ctrl+C.",
+              "Be suspicious if dependencies are missing, the entry point is wrong, or another sandbox process already uses port 8501."
+            ),
+          }),
+          command("Publish sandbox port 8501 to host port 8501", {
+            common: {
+              all: "sbx ports {sandboxName} --publish 8501:8501",
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "sandbox-streamlit",
+            logoKey: "docker",
+            explain: explain(
+              "Publishes host port 8501 to sandbox port 8501 on the loopback interface.",
+              "Sandboxes are network-isolated, so the host browser needs an explicit port mapping.",
+              "Normal output confirms a 127.0.0.1:8501 to sandbox 8501 mapping.",
+              "Be suspicious if the sandbox is not running or host port 8501 is already occupied."
+            ),
+          }),
+          command("List published sandbox ports", {
+            common: {
+              all: "sbx ports {sandboxName}",
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "sandbox-streamlit",
+            logoKey: "docker",
+            explain: explain(
+              "Lists active host-to-sandbox port mappings.",
+              "Use this to verify the host port before opening the browser.",
+              "Normal output includes 127.0.0.1:8501 mapped to sandbox port 8501.",
+              "Be suspicious if the mapping is absent or points at a different host port."
+            ),
+          }),
+          note("Open the sandboxed app", `
+            <p>After the server and port mapping are active, visit <a href="http://127.0.0.1:8501/">http://127.0.0.1:8501/</a>.</p>
+            <p>Port notation is <code>HOST_PORT:SANDBOX_PORT</code>. Publishing is a separate step after the sandbox is running; it is not an option on <code>sbx create</code> or <code>sbx run</code>.</p>
+          `, "note", { choiceGroup: "streamlit-runtime-location", choiceValue: "sandbox-streamlit", logoKey: "docker" }),
+          command("List Streamlit processes in the sandbox", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"ps -ef | grep '[s]treamlit'\"",
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "sandbox-streamlit",
+            logoKey: "docker",
+            explain: explain(
+              "Lists Streamlit processes without listing the grep command itself.",
+              "Use this to find the process ID when the original app terminal is unavailable.",
+              "Normal output shows the Streamlit command and its PID.",
+              "Be suspicious if multiple apps are running unexpectedly."
+            ),
+          }),
+          command("Stop one Streamlit process by PID", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"kill <PID>\"",
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "sandbox-streamlit",
+            logoKey: "docker",
+            explain: explain(
+              "Sends a normal termination signal to one process ID.",
+              "Stopping one known PID is safer than stopping every Streamlit process.",
+              "Normal output is quiet and the selected process disappears from the process list.",
+              "Replace <PID> with the number from the process list; do not copy the placeholder literally or target an unrelated process."
+            ),
+          }),
+          command("Stop all Streamlit processes in this sandbox", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"pkill -f streamlit\"",
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "sandbox-streamlit",
+            logoKey: "docker",
+            explain: explain(
+              "Stops every process whose full command contains streamlit.",
+              "Use this broad cleanup only when every Streamlit app in this sandbox should stop.",
+              "Normal output is quiet and no Streamlit processes remain.",
+              "This can stop multiple apps. Prefer Ctrl+C or kill <PID> when only one process should end."
+            ),
+          }),
+          command("Unpublish sandbox port 8501", {
+            common: {
+              all: "sbx ports {sandboxName} --unpublish 8501:8501\nsbx ports {sandboxName}",
+            },
+          }, "", {
+            choiceGroup: "streamlit-runtime-location",
+            choiceValue: "sandbox-streamlit",
+            logoKey: "docker",
+            explain: explain(
+              "Removes the host-to-sandbox port mapping and lists remaining mappings.",
+              "Unpublish the port when the development server no longer needs to be reachable from the host.",
+              "Normal output confirms removal and no longer lists 8501:8501.",
+              "Be suspicious if the mapping remains; verify the exact host and sandbox ports shown by sbx ports."
             ),
           }),
         ],
@@ -2327,12 +2740,13 @@
         id: "sandbox-artifacts",
         kind: "appendix",
         logoKey: "docker",
-        title: "C. Optional: Retrieve Generated Artifacts From Docker Sandbox",
-        summary: "Use this when an agent generates uncommitted files inside a Docker Sandbox, such as Playwright videos, screenshots, traces, logs, reports, exports, or temporary analysis outputs.",
+        title: "D. Optional: Transfer Files And Retrieve Sandbox Artifacts",
+        summary: "Copy one-off inputs into a sandbox and retrieve generated outputs without putting large or temporary artifacts into Git.",
         cards: [
           note("When to use this", `
             <p>Use this workflow when useful output exists inside the sandbox but should not be committed to Git by default. Examples include Playwright videos, screenshots, traces, validation reports, logs, exported data, and temporary analysis files.</p>
-            <p>The examples use <code>{sandboxName}</code>. A real observed sandbox name was <code>projexcellent-codex</code>; replace the placeholder with your actual sandbox from <code>sbx ls</code>.</p>
+            <p>The examples use the Docker Sandbox name from Project context: <code>{sandboxName}</code>. Confirm that this exact name appears in <code>sbx ls</code> before copying a command.</p>
+            <p>Generated evidence can be large or temporary, so Git is often the wrong transfer mechanism. Retrieve wanted files before removing a clone-mode sandbox, because <code>sbx rm</code> deletes its private filesystem.</p>
           `, "note", { logoKey: "docker" }),
           command("Confirm the sandbox name", {
             common: {
@@ -2346,13 +2760,112 @@
             explain: explain(
               "Lists Docker Sandboxes known to the sbx CLI.",
               "You need the exact sandbox name before running sbx exec or sbx cp.",
-              "Normal output includes the sandbox you want to inspect, for example projexcellent-codex.",
+              "Normal output includes the Docker Sandbox name from Project context: {sandboxName}.",
               "Be suspicious if the expected sandbox is missing or stopped in a way that prevents exec/copy commands."
+            ),
+          }),
+          note("How `sbx cp` addresses its two locations", `
+            <p>Exactly one side of <code>sbx cp</code> must use <code>SANDBOX:PATH</code>. The other side is a path on the host. Copying directly from one sandbox to another is not supported.</p>
+            <p>Use a relative host path from a folder you have verified. Quote paths that may contain spaces, and do not copy credentials, secrets, or private datasets merely to make them visible to an agent.</p>
+          `, "note", { logoKey: "docker" }),
+          command("Confirm a one-off host input exists", {
+            common: {
+              windows: {
+                powershell: "Get-Item \".\\artifacts\\bug-reports\\issue.png\"",
+                cmd: "dir \".\\artifacts\\bug-reports\\issue.png\"",
+                bash: "ls -l \"artifacts/bug-reports/issue.png\"",
+              },
+              macos: {
+                bash: "ls -l \"artifacts/bug-reports/issue.png\"",
+              },
+              linux: {
+                bash: "ls -l \"artifacts/bug-reports/issue.png\"",
+              },
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: explain(
+              "Checks that the example input file exists on the host before copying it.",
+              "Relative paths are evaluated from the current host folder; verifying first prevents confusing source-not-found errors.",
+              "Normal output shows the file and a non-zero size.",
+              "Replace the example path with the real local input path and be suspicious if the terminal is in the wrong project folder."
+            ),
+          }),
+          command("Create a temporary sandbox input folder", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"mkdir -p /tmp/debug-input && ls -ld /tmp/debug-input\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: explain(
+              "Creates and verifies an ephemeral input folder inside the sandbox.",
+              "A known destination avoids copy failures and keeps one-off debugging inputs separate from project source.",
+              "Normal output lists /tmp/debug-input.",
+              "Be suspicious if the sandbox cannot start or the destination cannot be created."
+            ),
+          }),
+          command("Copy one host file into the sandbox and verify it", {
+            common: {
+              windows: {
+                powershell: "sbx cp \".\\artifacts\\bug-reports\\issue.png\" \"{sandboxName}:/tmp/debug-input/issue.png\"\nsbx exec {sandboxName} bash -lc \"ls -l /tmp/debug-input/issue.png\"",
+                cmd: "sbx cp \".\\artifacts\\bug-reports\\issue.png\" \"{sandboxName}:/tmp/debug-input/issue.png\"\nsbx exec {sandboxName} bash -lc \"ls -l /tmp/debug-input/issue.png\"",
+                bash: "sbx cp \"artifacts/bug-reports/issue.png\" \"{sandboxName}:/tmp/debug-input/issue.png\"\nsbx exec {sandboxName} bash -lc \"ls -l /tmp/debug-input/issue.png\"",
+              },
+              macos: {
+                bash: "sbx cp \"artifacts/bug-reports/issue.png\" \"{sandboxName}:/tmp/debug-input/issue.png\"\nsbx exec {sandboxName} bash -lc \"ls -l /tmp/debug-input/issue.png\"",
+              },
+              linux: {
+                bash: "sbx cp \"artifacts/bug-reports/issue.png\" \"{sandboxName}:/tmp/debug-input/issue.png\"\nsbx exec {sandboxName} bash -lc \"ls -l /tmp/debug-input/issue.png\"",
+              },
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: explain(
+              "Copies one verified host file to /tmp inside the named sandbox, then confirms the destination.",
+              "Use this for a one-off input that should be available to tools or an agent but does not belong in Git.",
+              "Normal output shows /tmp/debug-input/issue.png with the expected size.",
+              "If it fails, check the sandbox name, running state, host working folder, source quoting, and destination directory."
+            ),
+          }),
+          note("If a copy fails", `
+            <ul>
+              <li>Confirm the sandbox appears in <code>sbx ls</code>.</li>
+              <li>Confirm the local relative path from the current host folder.</li>
+              <li>Confirm the sandbox destination directory exists.</li>
+              <li>Use the quoting rules for the selected host shell.</li>
+              <li>Confirm exactly one path uses <code>{sandboxName}:</code>.</li>
+            </ul>
+          `, "warn", { logoKey: "docker" }),
+          prompt("Ask Codex to reproduce a bug from the copied image", "Inspect /tmp/debug-input/issue.png and fix the demonstrated issue.\n\nRun the app and reproduce the bug with Playwright before editing. Capture before and after evidence with a 1440 x 900 viewport. Store validation artifacts under artifacts/playwright-validation/.\n\nReport:\n1. how you reproduced the issue,\n2. the root cause,\n3. which files changed,\n4. which validation you ran, and\n5. the paths to the before and after artifacts."),
+          command("Print a sandbox text file without pagination", {
+            common: {
+              all: "sbx exec {sandboxName} bash -lc \"cat -- docs/README.md\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: explain(
+              "Prints a reasonably sized text file from the sandbox to the host terminal.",
+              "Use cat when you want all content at once and the file is not large.",
+              "Normal output is the text from docs/README.md.",
+              "Replace the example with the intended relative path; do not use cat for very large or binary files."
+            ),
+          }),
+          command("Open a sandbox text file with pagination", {
+            common: {
+              all: "sbx exec -it {sandboxName} bash -lc \"less -- docs/README.md\"",
+            },
+          }, "", {
+            logoKey: "docker",
+            explain: explain(
+              "Opens a text file in the interactive less pager inside the sandbox.",
+              "Use pagination for longer files so you can scroll and search without printing everything.",
+              "Normal output opens the file; use arrow keys or Page Up/Page Down and press q to exit.",
+              "Replace the example path with the intended text file and keep -it so the pager receives a terminal."
             ),
           }),
           note("Run Linux find inside the sandbox", `
             <p>Windows <code>find</code> is not the same tool as Linux <code>find</code>. Run Linux file searches inside the sandbox through <code>sbx exec {sandboxName} bash -lc "find ..."</code>.</p>
-            <p>One observed useful path was <code>/c/Users/rmeer/CodeLibrary/projexcellent-app/artifacts/playwright-validation/run-20260702-try-again/videos/page@cd8eb53229a8deb4edfcfb161f871e273.webm</code>.</p>
+            <p>Project-owned paths should come from Project context or be relative to the sandbox project root. A typical relative result is <code>artifacts/playwright-validation/&lt;run-name&gt;/videos/&lt;video-name&gt;.webm</code>.</p>
           `, "note", { logoKey: "docker" }),
           command("Locate generated files inside the sandbox", {
             common: {
@@ -2389,7 +2902,7 @@
           note("Package folders with tar, not zip", `
             <p>Prefer <code>tar</code> because <code>zip</code> may not be installed in the sandbox. Create the archive in <code>/tmp</code> because it is easy to copy from.</p>
             <p><code>{PROJECT_DIR}</code> is the project root as seen inside the sandbox. <code>{RELATIVE_ARTIFACT_FOLDER}</code> is the folder to package. <code>{ARTIFACT_NAME}</code> is the archive name without the <code>.tar.gz</code> suffix.</p>
-            <p>Concrete example: <code>sbx exec projexcellent-codex bash -lc "cd /c/Users/rmeer/CodeLibrary/projexcellent-app && tar -czf /tmp/playwright-validation-run.tar.gz artifacts/playwright-validation/run-20260702-try-again"</code></p>
+            <p>The command below deliberately uses generic placeholders for the sandbox-side project directory, artifact folder, and archive name. First use <code>pwd</code> and <code>find</code> to replace them with values from the current project.</p>
           `, "note", { logoKey: "docker" }),
           command("Create a tar archive inside the sandbox", {
             common: {
@@ -2458,8 +2971,8 @@
           command("Open a Playwright video locally", {
             common: {
               windows: {
-                powershell: "Start-Process \"artifacts\\playwright-validation\\run-20260702-try-again\\videos\\page@cd8eb53229a8deb4edfcfb161f871e273.webm\"",
-                cmd: "start artifacts\\playwright-validation\\run-20260702-try-again\\videos\\page@cd8eb53229a8deb4edfcfb161f871e273.webm",
+                powershell: "Start-Process \"artifacts\\playwright-validation\\{PLAYWRIGHT_RUN_FOLDER}\\videos\\{VIDEO_FILE}.webm\"",
+                cmd: "start artifacts\\playwright-validation\\{PLAYWRIGHT_RUN_FOLDER}\\videos\\{VIDEO_FILE}.webm",
               },
             },
           }, "", {
@@ -2468,7 +2981,7 @@
               "Opens an extracted Playwright .webm video from the Windows host.",
               "Use this to inspect browser validation recordings locally in Chrome, Edge, or VLC.",
               "Normal output opens the video in the default associated app.",
-              "Be suspicious if the path does not exist; inspect the extracted folder and update the run folder or filename."
+              "Replace {PLAYWRIGHT_RUN_FOLDER} and {VIDEO_FILE} with names found by the earlier file-list command. Be suspicious if the resulting path does not exist."
             ),
           }),
           note("Decide what belongs in Git", `
@@ -2498,11 +3011,12 @@
         id: "playwright",
         kind: "appendix",
         logoKey: "playwright",
-        title: "D. Optional: Playwright Installed In This Repository",
+        title: "E. Optional: Playwright Installed In This Repository",
         summary: "Use this when the project has a browser UI. For Streamlit apps, Playwright can still be useful, but it is optional.",
         cards: [
           note("When to check Playwright", `
-            <p>Check Playwright installed in this repository only after the repository and its root files already exist. This step is relevant when the project has a browser UI, and optional for Streamlit work.</p>
+            <p>Playwright controls a real browser, so it can catch navigation, form, rendering, and end-to-end integration problems that unit tests do not exercise.</p>
+            <p>Check Playwright installed in this repository only after the repository and its browser UI exist. Manual checking may be enough for a tiny disposable prototype; repeatable browser tests become more useful as user flows or regressions matter. It remains optional for many Streamlit proofs of concept.</p>
           `, "note", { logoKey: "playwright" }),
           prompt("Playwright check prompt", "Help me check whether Playwright is installed in this repository. Explain the difference between Playwright installed in this repository and npx temporarily downloading Playwright. If missing, help me install it in this repository."),
           command("Playwright commands", { common: { all: "npm list @playwright/test\nnpx playwright --version\nnpx playwright install --dry-run" } }, "", { logoKey: "playwright" }),
@@ -2513,7 +3027,7 @@
       {
         id: "spec-kit",
         kind: "appendix",
-        title: "E. Optional: Spec Kit Workflow",
+        title: "F. Optional: Spec Kit Workflow",
         summary: "Use Spec Kit to turn a rough feature idea into a specification, plan, task list, implementation, and final check.",
         cards: [
           note("What Spec Kit is for", `
@@ -2599,9 +3113,13 @@
       {
         id: "context7",
         kind: "appendix",
-        title: "F. Optional: Context7",
+        title: "G. Optional: Context7",
         summary: "Use Context7 when the agent needs current docs for fast-moving libraries or frameworks.",
         cards: [
+          note("Why use current external documentation", `
+            <p>Fast-moving libraries can change after an agent's built-in knowledge was learned. Context7 can supply current API and setup documentation when version details materially affect the answer.</p>
+            <p>Use it for unfamiliar or changing library behavior. Skip it for stable project-local facts: it does not replace reading this repository, checking installed versions, or testing the result.</p>
+          `),
           prompt("Context7 setup prompt", "Help me configure Context7 as an MCP server for my current coding agent on {platformLabel}. After setup, show me how to verify that the agent can fetch current documentation for React, Streamlit, Playwright, Azure, or Databricks."),
           note("Use it especially for", `
             <ul>
@@ -2618,9 +3136,13 @@
       {
         id: "troubleshooting",
         kind: "appendix",
-        title: "G. Troubleshooting And Git Hygiene",
+        title: "H. Troubleshooting And Git Hygiene",
         summary: "Use this when something looks wrong. Keep cleanup commands out of the main flow unless the symptom appears.",
         cards: [
+          note("Why troubleshooting starts with inspection", `
+            <p>Recovery commands change state and can hide the evidence that explains a problem. First inspect files, history, branches, and remotes; then choose the smallest reversible action that matches the symptom.</p>
+            <p>Skip this chapter during normal startup. Use destructive cleanup only when you have identified what should be discarded.</p>
+          `, "warn"),
           command("Inspect local changes", { common: { all: "git status\ngit diff" } }),
           command("Inspect history", { common: { all: "git log --oneline --decorate --graph --max-count=12 --all" } }),
           command("Clean local Codex refs if fetch or pull fails on `refs/codex`", {
@@ -2641,6 +3163,90 @@
           note("Avoid broad restore commands unless intentional", `
             <p><code>git restore .</code> discards uncommitted work. Use it only when you have verified that the changes are disposable.</p>
           `, "warn"),
+          note("Recovery only: make the local default branch exactly match origin", `
+            <p>Use the following path only when you intentionally want local <code>{defaultBranch}</code> to point at exactly the same commit as <code>origin/{defaultBranch}</code>. It can permanently discard tracked and untracked work.</p>
+            <p>Ordinary updates should use <code>git pull --ff-only</code>. Exact reset is for a known cleanup or recovery need, not routine synchronization.</p>
+          `, "warn"),
+          command("Inspect before exact-reset recovery", {
+            common: {
+              all: "git status\ngit branch --show-current\ngit diff\ngit log --oneline --decorate --graph --max-count=12 --all",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: inspect the working tree, active branch, uncommitted patch, and recent branch graph.",
+              "Plain wording: identify exactly what would be lost and which branch you are about to change.",
+              "Normal output makes every local change and relevant branch visible.",
+              "Do not continue if any wanted work is not committed, stashed, or backed up."
+            ),
+          }),
+          choice("Choose what to do with current local changes", "exact-reset-local-changes", [
+            { label: "Keep them in a stash", value: "stash-before-reset" },
+            { label: "Discard them intentionally", value: "discard-before-reset" },
+          ], "Choose the preservation path before switching to and resetting the default branch."),
+          command("Stash tracked and untracked changes before reset", {
+            common: {
+              all: "git stash push --include-untracked -m \"before exact default-branch reset\"\ngit switch {defaultBranch}",
+            },
+          }, "", {
+            choiceGroup: "exact-reset-local-changes",
+            choiceValue: "stash-before-reset",
+            explain: gitExplain(
+              "Git wording: save tracked and untracked changes in a named stash, then switch to the default branch.",
+              "Plain wording: put current unfinished files aside so they can be recovered after the cleanup.",
+              "Normal output creates a stash and confirms the branch switch.",
+              "Be suspicious if ignored files contain wanted work; --include-untracked does not include ignored files."
+            ),
+          }),
+          command("Discard current tracked changes before reset", {
+            common: {
+              all: "git reset --hard\ngit switch {defaultBranch}",
+            },
+          }, "", {
+            choiceGroup: "exact-reset-local-changes",
+            choiceValue: "discard-before-reset",
+            explain: gitExplain(
+              "Git wording: discard tracked changes on the current branch, then switch to the default branch.",
+              "Plain wording: permanently throw away unsaved tracked edits in the current work lane before continuing.",
+              "Normal output reports the reset commit and confirms the branch switch.",
+              "This is destructive. Stop if any tracked edit should be kept."
+            ),
+          }),
+          command("Reset the local default branch to origin", {
+            common: {
+              all: "git fetch origin\ngit reset --hard origin/{defaultBranch}\ngit status",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: fetch origin, then move the checked-out default branch and tracked files to exactly origin/{defaultBranch}.",
+              "Plain wording: make the local shared branch an exact tracked-file copy of the online shared branch.",
+              "Normal output shows HEAD at the origin commit and a clean tracked working tree.",
+              "Be suspicious if the current branch is not {defaultBranch}, origin is wrong, or authentication/fetch failed."
+            ),
+          }),
+          command("List and preview untracked cleanup", {
+            common: {
+              all: "git ls-files --others --exclude-standard\ngit clean -nd",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: list untracked non-ignored files, then dry-run deletion of untracked files and directories.",
+              "Plain wording: see exactly which extra files would be removed before deleting any of them.",
+              "Normal output is empty or a list prefixed with Would remove.",
+              "Do not continue if the preview contains wanted files."
+            ),
+          }),
+          command("Delete previewed untracked files and directories", {
+            common: {
+              all: "git clean -fd\ngit status",
+            },
+          }, "", {
+            explain: gitExplain(
+              "Git wording: force-delete untracked files and directories, then show the final repository status.",
+              "Plain wording: permanently remove only the extra files shown by the dry run and verify the checkout is clean.",
+              "Normal output lists removed paths and then shows a clean working tree.",
+              "This is destructive. It does not remove ignored files; do not add -x unless separately intended."
+            ),
+          }),
         ],
       },
       {
@@ -2649,6 +3255,10 @@
         title: "I. Get Started",
         summary: "Open the workspace, update from the remote, then start a new feature branch or continue unfinished work.",
         cards: [
+          note("Why every work session starts from known history", `
+            <p>Starting from the latest shared state reduces avoidable conflicts and prevents new work from being based on commits that were already replaced or merged.</p>
+            <p>VS Code is the simpler direct-file workflow. Docker Sandbox adds isolation; in clone mode its Git commands must run in the private clone. In both locations, a feature branch keeps one task separate from the shared default branch.</p>
+          `),
           choice("Choose workspace for today", "daily-workspace", [
             { label: "Use VS Code", value: "vscode" },
             { label: "Use Docker Sandbox", value: "docker-sandbox" },
@@ -2693,14 +3303,29 @@
               "Be suspicious if the sandbox name is unknown, Docker is not running, or the sandbox opens a different repository."
             ),
           }),
-          command("Update local default branch from remote", {
+          command("Open a sandbox shell for daily Git commands", {
+            common: {
+              all: "sbx exec -it {sandboxName} bash",
+            },
+          }, "", {
+            choiceGroup: "daily-workspace",
+            choiceValue: "docker-sandbox",
+            logoKey: "docker",
+            explain: gitExplain(
+              "Tool wording: from a separate host terminal, open an interactive Bash shell in the sandbox's current project folder.",
+              "Plain wording: leave the agent session open if needed, then enter the private workspace where the following Git update and branch commands should run.",
+              "Normal output shows a Bash prompt inside the sandbox clone.",
+              "Be suspicious if pwd or git status shows a different repository."
+            ),
+          }),
+          command("Update the selected workspace default branch from remote", {
             common: {
               all: "git switch {defaultBranch}\ngit fetch --prune origin\ngit pull --ff-only origin {defaultBranch}",
             },
           }, "", {
             explain: gitExplain(
-              "Git wording: switch to the default branch, fetch remote refs, prune deleted refs, and fast-forward the local default branch from origin.",
-              "Plain wording: go back to the shared starting line, check the online copy for updates, remove old references, and bring your local folder up to date without creating a messy merge.",
+              "Git wording: in the selected local repo or sandbox clone, switch to the default branch, fetch remote refs, prune deleted refs, and fast-forward from origin.",
+              "Plain wording: in the workspace you chose, return to the shared starting line and update it without creating an unexpected merge.",
               "Normal output says you switched branches and then either 'Already up to date.' or shows a fast-forward update.",
               "Be suspicious if Git reports local uncommitted changes, divergent branches, or a remote/authentication error."
             ),
@@ -2745,6 +3370,10 @@
         title: "II. Keep Committing",
         summary: "Inspect changes, include the files that belong together, and save logical checkpoints with clear messages.",
         cards: [
+          note("Why commit in small logical checkpoints", `
+            <p>Small commits make review, rollback, debugging, and agent handoff easier because each checkpoint has one understandable purpose.</p>
+            <p>Staging chooses which files belong in the next checkpoint; committing records that selected set. The correct handoff depends on whether the changed files already live in the host repo or remain inside a clone-mode sandbox.</p>
+          `),
           choice("Choose where today's changes live", "daily-commit-location", [
             { label: "Local files", value: "local-files" },
             { label: "Inside Docker Sandbox", value: "docker-sandbox" },
@@ -2797,7 +3426,8 @@
           }),
           note("Docker Sandbox clone path", `
             <p>Use this path when the agent changed files inside a Docker Sandbox created with <code>sbx create --clone --name {sandboxName} codex .</code>.</p>
-            <p>With clone mode, the sandbox has its own private Git clone. First inspect the sandbox remote and branch, then merge the sandbox work onto your local feature branch, then push that feature branch to <code>origin</code>.</p>
+            <p>With clone mode, the sandbox has its own private Git clone. <strong>The host can fetch commits, not uncommitted file edits.</strong> Before using the host commands below, complete the inspect, selective-stage, validation, and commit steps in <a href="#sandbox">Extras B: Docker Sandbox</a>, or use its agent handoff prompt.</p>
+            <p>Then inspect the sandbox remote and branch, merge the committed sandbox work onto your local feature branch, and push that feature branch to <code>origin</code>.</p>
           `, "warn", { choiceGroup: "daily-commit-location", choiceValue: "docker-sandbox", logoKey: "docker" }),
           command("Inspect host repo state and remotes", {
             common: {
@@ -2860,12 +3490,12 @@
             ),
           }),
           note("Choose the sandbox branch to merge", `
-            <p>Use the sandbox remote branch that actually contains the work you identified. Common candidates are <code>sandbox-{sandboxName}/{defaultBranch}</code> and <code>sandbox-{sandboxName}/{featureBranch}</code>.</p>
-            <p>The command below uses the default-branch candidate. Replace it with the visible sandbox branch if the work is somewhere else. If conflicts occur, stop and resolve them before continuing.</p>
+            <p>The normal clone-mode path commits work on <code>sandbox-{sandboxName}/{featureBranch}</code>, and the command below uses that branch.</p>
+            <p>If older work was accidentally committed on <code>sandbox-{sandboxName}/{defaultBranch}</code>, confirm the commits with <code>git log</code> before substituting that fallback. If conflicts occur, stop and resolve them before continuing.</p>
           `, "note", { choiceGroup: "daily-commit-location", choiceValue: "docker-sandbox", logoKey: "docker" }),
           command("Merge sandbox work onto the feature branch", {
             common: {
-              all: "git merge sandbox-{sandboxName}/{defaultBranch}",
+              all: "git merge sandbox-{sandboxName}/{featureBranch}",
             },
           }, "", {
             choiceGroup: "daily-commit-location",
@@ -2875,7 +3505,7 @@
               "Git wording: merge the selected sandbox remote branch into the current local feature branch.",
               "Plain wording: bring the agent's sandbox work into your normal feature branch so it can be reviewed and pushed.",
               "Normal output either creates a merge commit, fast-forwards, or reports conflicts to resolve.",
-              "Be suspicious if you are not on {featureBranch} or if the sandbox work is actually on sandbox-{sandboxName}/{featureBranch}; replace the branch name before running."
+              "Be suspicious if you are not on {featureBranch}, the sandbox feature branch is missing, or the commits differ from what you reviewed."
             ),
           }),
           command("Inspect the merge result", {
@@ -2934,6 +3564,10 @@
         title: "III. Finish Clean",
         summary: "Save outstanding work, publish the feature branch, create and merge a pull request when the feature is done, then update the local default branch.",
         cards: [
+          note("Why finish the whole work loop", `
+            <p>A local commit is only one checkpoint. Pushing backs up and shares the feature branch; a pull request creates a reviewable merge point; refreshing the local default branch makes the next task start from the result everyone now shares.</p>
+            <p>Finish this loop when the feature is ready. Keep using Chapter II while work is still incomplete.</p>
+          `),
           note("Docker Sandbox handoff first", `
             <p>If today's work happened inside a Docker Sandbox clone, finish the Docker Sandbox path in <strong>II. Keep Committing</strong> first. The local <code>{featureBranch}</code> must contain the fetched and merged sandbox work before you create the pull request.</p>
             <p>If that path already pushed the branch, the push command below may simply say everything is up to date.</p>
