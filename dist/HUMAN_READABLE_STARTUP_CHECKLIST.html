@@ -3008,6 +3008,63 @@
         ],
       },
       {
+        id: "supervised-pipeline",
+        kind: "appendix",
+        title: "Optional: Supervised Builder → Reviewer Pipeline",
+        summary: "An advanced local workflow: one committed task, one builder, one independent reviewer, then a human decision.",
+        cards: [
+          note("Choose the workflow", `
+            <p><strong>Recommended default:</strong> use a single interactive agent and the existing startup path. Choose this supervised pipeline when you want separate builder and reviewer workspaces and explicit Git evidence.</p>
+            <p>Submit exactly one task at a time. A Claude builder implements it, a Codex reviewer independently checks it, and you decide what happens next. There is deliberately no automatic reviewer-to-builder follow-up.</p>
+          `),
+          note("Download the optional starter", `
+            <div class="download-row"><a class="download-link" href="agent-pipeline-demo-starter.zip" download>Download pipeline starter ZIP</a><a class="download-link" href="agent-pipeline-demo-starter.zip.sha256" download>Download SHA-256 checksum</a></div>
+            <p>The ZIP and checksum are distributed alongside this HTML in <code>dist/</code>. Keep the filenames unchanged. If you received only the HTML, all core guidance and the interface still work; this optional download may be unavailable.</p>
+            <p>Fallback after publication: <a href="https://raw.githubusercontent.com/Rens88/personal-repo-init-guide/main/dist/agent-pipeline-demo-starter.zip">ZIP on GitHub main</a> · <a href="https://raw.githubusercontent.com/Rens88/personal-repo-init-guide/main/dist/agent-pipeline-demo-starter.zip.sha256">checksum on GitHub main</a>. Download both from the same revision.</p>
+          `),
+          note("Prerequisites and platform", `
+            <p>Use Windows PowerShell 5.1 or PowerShell 7, Git, Docker Desktop with Docker Sandboxes (<code>sbx</code>), and authenticated Claude Code and Codex access. Select <strong>Windows → PowerShell</strong> above for the copy-ready commands. Node.js is needed in both agent environments for the calculator tests; no npm dependencies are required.</p>
+            <p>Read the extracted starter's README before running it. The agent workspaces are disposable dedicated checkouts with broad agent permissions inside Docker Sandbox.</p>
+          `),
+          command("Check pipeline prerequisites and authenticate", { common: { windows: { powershell: "$PSVersionTable.PSVersion\ngit --version\ndocker --version\nsbx --help\nsbx secret set anthropic\nsbx secret set openai --oauth" } } }, "Run on the Windows host; use your own authorized accounts.", {
+            explain: explain("Checks host tools and configures sandbox authentication.", "Both agents need access before noninteractive jobs start.", "Tool versions and successful authentication.", "Never paste credentials into task files or Git.")
+          }),
+          command("Verify and extract the pipeline ZIP", { common: { windows: { powershell: "$actual = (Get-FileHash ./agent-pipeline-demo-starter.zip -Algorithm SHA256).Hash\n$expected = ((Get-Content ./agent-pipeline-demo-starter.zip.sha256 -Raw).Trim() -split '\\s+')[0]\nif ($actual -ne $expected) { throw 'ZIP checksum mismatch' }\nExpand-Archive ./agent-pipeline-demo-starter.zip -DestinationPath ./pipeline-starter\nSet-Location ./pipeline-starter/agent-pipeline-demo-starter" } } }, "Run in the directory containing the downloaded ZIP and checksum. Use a fresh extraction directory."),
+          note("Understand the generated layout", `
+            <p><code>origin.git/</code> is a <strong>local bare Git remote</strong>, not your GitHub repository. <code>control/</code> is your checkout and dispatcher; <code>builder/</code> and <code>reviewer/</code> are separate agent checkouts. <code>logs/</code> stores transcripts and <code>state/</code> records dispatcher progress outside Git.</p>
+            <p>The initializer creates all six directories beneath the destination. Agents commit locally; the host validates and pushes those commits to the local remote.</p>
+          `),
+          command("Initialize the pipeline demo", { common: { windows: { powershell: "Set-ExecutionPolicy -Scope Process Bypass\n./Initialize-Demo.ps1 -Destination \"$HOME/CodeLibrary/agent-pipeline-demo\"" } } }, "From the extracted starter directory. The destination must not exist.", {
+            explain: explain("Creates a calculator project, local bare remote and three checkouts.", "Keeps each role's work independently inspectable.", "A new demo directory and setup instructions.", "Process execution policy is optional and must comply with your organization policy.")
+          }),
+          command("Start the dispatcher from control", { common: { windows: { powershell: "Set-Location \"$HOME/CodeLibrary/agent-pipeline-demo/control\"\n./automation/Start-AgentPipeline.ps1" } } }, "Keep this PowerShell window open. Stop with Ctrl+C."),
+          command("Create and submit exactly one task", { common: { windows: { powershell: "Set-Location \"$HOME/CodeLibrary/agent-pipeline-demo/control\"\nCopy-Item ./examples/TASK-0001-add-multiply.md ./builder-instructions/TASK-0001-add-multiply.md\nGet-Content ./builder-instructions/TASK-0001-add-multiply.md\n./automation/Submit-Task.ps1 -Path ./builder-instructions/TASK-0001-add-multiply.md" } } }, "Run in a second PowerShell window after reading the task.", {
+            explain: explain("The helper commits and pushes the task with routing trailers.", "The instruction commit freezes the task for both agents.", "One instruction commit, then builder and reviewer activity in the first window.", "Only this new task may be pending. Use a unique TASK-xxxx-description.md name and matching id; never edit an already submitted task.")
+          }),
+          note("Machine-readable commit protocol", `
+            <p>Every event carries <code>Agent-Event</code> and <code>Task-ID</code>. An <code>instruction</code> also has <code>Task-File</code>. A <code>build-complete</code> adds <code>Task-File</code> and <code>Instruction-Commit</code>. A <code>review-complete</code> has <code>Instruction-Commit</code>, <code>Implementation-Commit</code> and <code>Verdict</code> (<code>PASS</code> or <code>CHANGES_REQUESTED</code>).</p>
+            <p>The builder makes exactly one commit. The reviewer makes exactly one commit containing only <code>reviews/TASK-xxxx.md</code>. The host rejects protected-file changes and invalid protocol results.</p>
+          `),
+          command("Inspect logs, workspaces and reviewed state", { common: { windows: { powershell: "Set-Location \"$HOME/CodeLibrary/agent-pipeline-demo/control\"\nGet-ChildItem ../logs\ngit -C ../builder status --short\ngit -C ../reviewer status --short\n# After the review is published:\ngit pull --ff-only origin main\nGet-Content ./reviews/TASK-0001.md\ngit log --format=full -5" } } }, "Read relevant log files with Get-Content. Open builder/reviewer files directly to inspect changes and artifacts."),
+          note("Human decision after either verdict", `
+            <p><strong>PASS:</strong> inspect the diff, tests and report before accepting or sharing the result. <strong>CHANGES_REQUESTED:</strong> decide whether to revise the requirements or submit a new task for fixes. Neither verdict automatically starts another builder run or publishes to GitHub.</p>
+            <p>Wait for review and pull into control before submitting another unique task. Save useful logs and browser artifacts before retrying or starting another run: agent checkout synchronization resets and cleans those dedicated workspaces.</p>
+          `),
+          note("Optional validation and planning tools", `
+            <p><strong>Playwright:</strong> <code>validation-profile: default</code> runs <code>npm test</code>; <code>web-ui</code> also runs <code>npx playwright test</code>. Prepare a browser project, committed test configuration and browser installation in both sandboxes first. Reports in <code>test-results/</code> and <code>playwright-report/</code> are inspectable and uncommitted. The default calculator stays dependency-free.</p>
+            <p><strong>Context7:</strong> optional current framework documentation, configured and verified separately in each agent environment. Never commit API keys. Its failure alone does not determine the review verdict; repository contents and deterministic tests remain authoritative.</p>
+            <p><strong>Spec Kit:</strong> for larger or ambiguous features, use <code>/speckit-constitution → /speckit-specify → /speckit-plan → /speckit-tasks → pipeline submission</code>. For submitted tasks this pipeline replaces <code>/speckit-implement</code> and <code>/speckit-converge</code>. Commit the artifact first and set both <code>spec-path</code> and <code>spec-commit</code> to a safe repository path and full commit hash. The task remains authoritative; agents report conflicts and follow it.</p>
+            <p>The starter README includes current installation guidance and example tasks. None of these integrations is automatically installed or invoked by the dispatcher.</p>
+          `),
+          prompt("Draft a pipeline task for human review", "Draft one TASK-xxxx-description.md with a matching id and concrete acceptance criteria. Choose default validation unless this project already has Playwright configured in both agent environments. If referencing a Spec Kit artifact, use both spec-path and its full committed spec-commit. Report conflicts and keep the task authoritative. Show me the task for review before submission; do not start agents or submit it."),
+          note("Pipeline troubleshooting", `
+            <p><strong>Execution policy:</strong> if allowed, run <code>Set-ExecutionPolicy -Scope Process Bypass</code> in each PowerShell window. <strong>Wrong folder:</strong> initialize in the extracted starter, then start and submit from <code>control</code>.</p>
+            <p><strong>Existing named sandbox:</strong> confirm it mounts the correct dedicated workspace, or start with fresh <code>-BuilderSandbox my-demo-builder -ReviewerSandbox my-demo-reviewer</code> names. <strong>Authentication:</strong> verify sandbox secrets and inspect <code>logs/</code> for login failures.</p>
+            <p><strong>Retry:</strong> a failed event stops the dispatcher without marking that commit processed. Inspect and preserve work, fix the cause, then restart. Published matching events prevent duplicate runs. Keep <code>state/processed-commits.txt</code>; deleting it is not the normal retry procedure. A negative review needs a new human-submitted task, not an automatic retry loop.</p>
+          `, "warn"),
+        ],
+      },
+      {
         id: "playwright",
         kind: "appendix",
         logoKey: "playwright",
@@ -3039,74 +3096,78 @@
             <p>Skip the full workflow for one-line copy edits, simple commands, exact implementation instructions, typo fixes, or formatting-only work.</p>
           `),
           prompt("Spec Kit setup prompt", "I am in this repository. Help me initialize GitHub Spec Kit / specify from {shellLabel} on {platformLabel}. Use the current official instructions. I want the generated specs/plans/tasks to align with AGENTS.md, AGENTS_INIT.md, docs/, and project-brain/."),
-          note("$speckit.constitution", `
+          note("/speckit-constitution", `
             <p><strong>When:</strong> use before feature planning when the repository lacks clear project principles, constraints, or non-negotiables.</p>
             <p><strong>What it does:</strong> defines rules the agent should respect, such as target users, privacy, stack choices, testing expectations, forbidden dependencies, folder conventions, and deployment assumptions.</p>
             <p><strong>Expected output:</strong> proposed principles, constraints, and open questions if the rules are unclear.</p>
             <p><strong>Checkpoint:</strong> do not continue until the constitution is accepted or edited.</p>
           `),
-          prompt("$speckit.constitution prompt", "$speckit.constitution\n\nInspect this repository and help me define or update the project constitution. Focus on principles that should guide future agent work: user control, simple architecture, privacy, portability, testing expectations, and when to ask before making large changes."),
-          note("$speckit-specify", `
+          prompt("/speckit-constitution prompt", "/speckit-constitution\n\nInspect this repository and help me define or update the project constitution. Focus on principles that should guide future agent work: user control, simple architecture, privacy, portability, testing expectations, and when to ask before making large changes."),
+          note("/speckit-specify", `
             <p><strong>When:</strong> use when you have an idea but not yet a precise feature definition.</p>
             <p><strong>What it does:</strong> creates the feature specification: user problem, intended behavior, scope, non-goals, examples, edge cases, and acceptance criteria.</p>
             <p><strong>Expected output:</strong> feature name, goal, requirements, non-goals, acceptance criteria, assumptions, and questions.</p>
             <p><strong>Checkpoint:</strong> review the spec and correct the goal, scope, or non-goals before moving on.</p>
           `),
-          prompt("$speckit-specify prompt", "$speckit-specify\n\nI want to add the following feature:\n\n<describe the rough feature idea>\n\nCreate a feature specification. Include the user goal, scope, non-goals, expected behavior, edge cases, acceptance criteria, and any assumptions that need to be checked before planning."),
-          note("$speckit-clarify", `
+          prompt("/speckit-specify prompt", "/speckit-specify\n\nI want to add the following feature:\n\n<describe the rough feature idea>\n\nCreate a feature specification. Include the user goal, scope, non-goals, expected behavior, edge cases, acceptance criteria, and any assumptions that need to be checked before planning."),
+          note("/speckit-clarify", `
             <p><strong>When:</strong> use after the specification when assumptions, missing edge cases, or important choices remain.</p>
             <p><strong>What it does:</strong> asks targeted questions or proposes options so ambiguity is removed before planning.</p>
             <p><strong>Expected output:</strong> important clarifying questions, suggested options, and updated assumptions after answers.</p>
             <p><strong>Checkpoint:</strong> slow down here. A few good questions can prevent wasted implementation work later.</p>
           `),
-          prompt("$speckit-clarify prompt", "$speckit-clarify\n\nReview the current feature specification. Identify unclear requirements, hidden assumptions, missing edge cases, and decisions that must be made before implementation planning. Ask only the questions that materially affect the implementation."),
-          note("$speckit-plan", `
+          prompt("/speckit-clarify prompt", "/speckit-clarify\n\nReview the current feature specification. Identify unclear requirements, hidden assumptions, missing edge cases, and decisions that must be made before implementation planning. Ask only the questions that materially affect the implementation."),
+          note("/speckit-plan", `
             <p><strong>When:</strong> use once the feature specification is clear enough to implement.</p>
             <p><strong>What it does:</strong> translates the approved spec into a practical implementation plan after inspecting the repository.</p>
             <p><strong>Expected output:</strong> relevant files, proposed approach, likely file changes, data/model/UI flow if relevant, validation plan, risks, and open decisions.</p>
             <p><strong>Checkpoint:</strong> if the plan does not mention actual files in the repository, ask the agent to inspect more carefully.</p>
           `),
-          prompt("$speckit-plan prompt", "$speckit-plan\n\nUsing the approved feature specification and clarifications, inspect the repository and create an implementation plan. Include relevant existing files, proposed file changes, data flow, UI behavior if relevant, tests or manual checks, risks, and any decisions that still need approval."),
-          note("$speckit-tasks", `
+          prompt("/speckit-plan prompt", "/speckit-plan\n\nUsing the approved feature specification and clarifications, inspect the repository and create an implementation plan. Include relevant existing files, proposed file changes, data flow, UI behavior if relevant, tests or manual checks, risks, and any decisions that still need approval."),
+          note("/speckit-tasks", `
             <p><strong>When:</strong> use after the implementation plan is approved.</p>
             <p><strong>What it does:</strong> converts the plan into a small ordered task list that is easier to commit and review.</p>
             <p><strong>Expected output:</strong> ordered tasks, dependencies, suggested commit boundaries, validation steps, and approval gates.</p>
             <p><strong>Checkpoint:</strong> confirm tasks are small and ordered; ask the agent to split broad tasks further.</p>
           `),
-          prompt("$speckit-tasks prompt", "$speckit-tasks\n\nConvert the approved implementation plan into a small ordered task list. Group tasks into logical commits where possible. Include validation steps and mark any task that should require user approval before continuing."),
-          note("$speckit-implement", `
+          prompt("/speckit-tasks prompt", "/speckit-tasks\n\nConvert the approved implementation plan into a small ordered task list. Group tasks into logical commits where possible. Include validation steps and mark any task that should require user approval before continuing."),
+          note("Pipeline handoff instead of implementation", `
+            <p>For the supervised builder/reviewer workflow, stop after <code>/speckit-tasks</code>, commit the approved artifact and submit one immutable task with <code>spec-path</code> and <code>spec-commit</code>. Do not run implementation or convergence alongside the pipeline. The remaining cards describe the separate interactive Spec Kit path.</p>
+            <p>See the <a href="https://github.com/github/spec-kit">official Spec Kit workflow</a> for current agent-specific invocation syntax.</p>
+          `),
+          note("/speckit-implement", `
             <p><strong>When:</strong> use only after the spec, clarifications, plan, and task list are acceptable.</p>
             <p><strong>What it does:</strong> starts changing project files according to the approved tasks.</p>
             <p><strong>Expected output:</strong> code or file changes, progress summaries, validation results, and clear stop points if assumptions fail.</p>
             <p><strong>Checkpoint:</strong> review diffs regularly and stop if early implementation reveals a wrong assumption.</p>
           `),
-          prompt("$speckit-implement prompt", "$speckit-implement\n\nImplement the approved tasks one logical group at a time. After each group, summarize what changed, what files were touched, and which validation was run. Stop before making large architectural changes not already approved in the plan."),
-          note("$speckit-analyze", `
+          prompt("/speckit-implement prompt", "/speckit-implement\n\nImplement the approved tasks one logical group at a time. After each group, summarize what changed, what files were touched, and which validation was run. Stop before making large architectural changes not already approved in the plan."),
+          note("/speckit-analyze", `
             <p><strong>When:</strong> use after implementation, or when something feels wrong.</p>
             <p><strong>What it does:</strong> compares the result with the specification and identifies gaps, risks, and cleanup work.</p>
             <p><strong>Expected output:</strong> spec compliance check, missing requirements, risks, cleanup tasks, recommended checks, and merge readiness.</p>
             <p><strong>Checkpoint:</strong> use this before creating a pull request for larger features.</p>
           `),
-          prompt("$speckit-analyze prompt", "$speckit-analyze\n\nAnalyze the current implementation against the approved specification and task list. Identify missing requirements, unexpected changes, risky code, test gaps, documentation gaps, and cleanup tasks before this is merged."),
-          note("$speckit.check", `
+          prompt("/speckit-analyze prompt", "/speckit-analyze\n\nAnalyze the current implementation against the approved specification and task list. Identify missing requirements, unexpected changes, risky code, test gaps, documentation gaps, and cleanup tasks before this is merged."),
+          note("/speckit-converge", `
             <p><strong>When:</strong> use as the final quality gate before commit, PR, or merge.</p>
-            <p><strong>What it does:</strong> checks consistency across the specification, clarifications, plan, tasks, implementation, tests, and docs.</p>
+            <p><strong>What it does:</strong> checks the implementation against the specification and can perform further corrections until convergence. Use only in the interactive Spec Kit path, never alongside the supervised pipeline.</p>
             <p><strong>Expected output:</strong> ready/not-ready judgment, blockers, non-blocking improvements, and a suggested commit message or PR summary.</p>
             <p><strong>Checkpoint:</strong> commit or merge only once blockers are resolved or explicitly accepted.</p>
           `),
-          prompt("$speckit.check prompt", "$speckit.check\n\nRun a final consistency check across the specification, clarifications, plan, task list, implementation, tests, and documentation. Tell me whether this is ready to commit or merge, and list any blockers."),
+          prompt("/speckit-converge prompt", "/speckit-converge\n\nRun a final consistency check across the specification, clarifications, plan, task list, implementation, tests, and documentation. Tell me whether this is ready to commit or merge, and list any blockers."),
           note("Example full workflow", `
             <p>For a larger change, move through the workflow in order: specify, clarify, plan, tasks, implement, analyze, then final check. Constitution is optional when project rules already exist and are clear.</p>
           `),
-          prompt("Example Spec Kit workflow prompt", "$speckit-specify\n\nFeature idea: Add a Daily Dev toggle that lets the user choose whether changed files are local or inside a Docker Sandbox clone. The guide should then show the correct commit/push/merge instructions for that path.\n\n$speckit-clarify\n\nReview the feature spec and ask only the questions that materially affect implementation.\n\n$speckit-plan\n\nCreate an implementation plan for the approved spec. Inspect the standalone HTML checklist and identify the exact section/cards to update.\n\n$speckit-tasks\n\nBreak the approved plan into small ordered tasks with suggested commit boundaries.\n\n$speckit-implement\n\nImplement the approved tasks. Keep the standalone HTML working and avoid adding dependencies.\n\n$speckit-analyze\n\nCheck the implementation against the approved spec and identify gaps before commit.\n\n$speckit.check\n\nRun the final consistency check and suggest a PR summary."),
+          prompt("Example Spec Kit workflow prompt", "/speckit-specify\n\nFeature idea: Add a Daily Dev toggle that lets the user choose whether changed files are local or inside a Docker Sandbox clone. The guide should then show the correct commit/push/merge instructions for that path.\n\n/speckit-clarify\n\nReview the feature spec and ask only the questions that materially affect implementation.\n\n/speckit-plan\n\nCreate an implementation plan for the approved spec. Inspect the standalone HTML checklist and identify the exact section/cards to update.\n\n/speckit-tasks\n\nBreak the approved plan into small ordered tasks with suggested commit boundaries.\n\n/speckit-implement\n\nImplement the approved tasks. Keep the standalone HTML working and avoid adding dependencies.\n\n/speckit-analyze\n\nCheck the implementation against the approved spec and identify gaps before commit.\n\n/speckit-converge\n\nRun the final consistency check and suggest a PR summary."),
           note("Quick decision tree", `
             <p><strong>Tiny edit?</strong> Skip full Spec Kit; edit and commit.</p>
-            <p><strong>Feature idea still vague?</strong> Use <code>$speckit-specify</code>.</p>
-            <p><strong>Important unknowns?</strong> Use <code>$speckit-clarify</code>.</p>
-            <p><strong>Spec clear but implementation unclear?</strong> Use <code>$speckit-plan</code>.</p>
-            <p><strong>Plan approved?</strong> Use <code>$speckit-tasks</code>.</p>
-            <p><strong>Tasks approved?</strong> Use <code>$speckit-implement</code>.</p>
-            <p><strong>Implementation done but needs review?</strong> Use <code>$speckit-analyze</code> or <code>$speckit.check</code>.</p>
+            <p><strong>Feature idea still vague?</strong> Use <code>/speckit-specify</code>.</p>
+            <p><strong>Important unknowns?</strong> Use <code>/speckit-clarify</code>.</p>
+            <p><strong>Spec clear but implementation unclear?</strong> Use <code>/speckit-plan</code>.</p>
+            <p><strong>Plan approved?</strong> Use <code>/speckit-tasks</code>.</p>
+            <p><strong>Tasks approved?</strong> Use <code>/speckit-implement</code>.</p>
+            <p><strong>Implementation done but needs review?</strong> Use <code>/speckit-analyze</code> or <code>/speckit-converge</code>.</p>
           `),
         ],
       },

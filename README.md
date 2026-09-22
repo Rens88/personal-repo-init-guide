@@ -41,3 +41,48 @@ dist/HUMAN_READABLE_STARTUP_CHECKLIST.html
 ```
 
 If you update `src/bootstrap_repo.py`, `src/AGENTS.md`, or `src/AGENTS_INIT.md`, also check whether the embedded download copies inside the HTML need to be refreshed.
+
+## Optional supervised builder/reviewer starter
+
+The checklist's Extras include an advanced local pipeline alongside the recommended
+single interactive agent path. Its maintained files are:
+
+- `src/agent-pipeline-demo-starter/`: canonical starter source, including its README,
+  PowerShell initializer, dispatcher, prompts, task examples and calculator template.
+- `scripts/build_agent_pipeline_zip.py`: standard-library deterministic packager.
+- `dist/agent-pipeline-demo-starter.zip` and `.zip.sha256`: intentional versioned artifacts.
+- `tmp/`: ignored input/scratch only, never a source of truth.
+
+After **every** starter change, run from the repository root:
+
+```sh
+python3 scripts/build_agent_pipeline_zip.py --verify
+python3 scripts/build_agent_pipeline_zip.py --check
+```
+
+On Windows, use `python` instead of `python3` if needed. `--verify` rebuilds, extracts
+to a temporary directory and compares all distributable files byte-for-byte;
+`--check` checks the existing archive and checksum without rebuilding. To demonstrate
+reproducibility, run the build twice and compare its printed SHA-256 values.
+The archive uses sorted paths, fixed timestamps, fixed permissions and stored entries
+(no compression-version dependency). Source line endings are fixed through `.gitattributes`.
+Runtime data, caches, credentials and generated workspaces are excluded. Filename
+filtering is not a secret-content scanner: inspect new source for secrets before review.
+
+Keep the HTML workflow aligned with the starter scripts and README. Distribute the
+optional ZIP and checksum **alongside** the HTML in `dist/`; neither is embedded in
+HTML. The interface and core startup guidance still work without them. GitHub main
+fallback links become usable only once those artifacts are merged/pushed; rebuilding
+does not publish anything. Review source, ZIP, checksum and HTML together.
+
+Maintenance checks (no agent/dispatcher execution):
+
+```sh
+python3 scripts/test_build_agent_pipeline_zip.py
+```
+
+With PowerShell available, `pwsh -NoProfile -File scripts/test_agent_pipeline_metadata.ps1`
+checks metadata rejection rules and parses every starter PowerShell script. Run
+`npm test` in `src/agent-pipeline-demo-starter/template/` for the calculator tests.
+The starter release number is recorded in its `VERSION`; update it intentionally
+when releasing revised starter behavior.

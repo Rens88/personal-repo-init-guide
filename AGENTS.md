@@ -53,3 +53,15 @@ Do not:
 - assume the generic repo-bootstrap rules from `src/AGENTS.md` apply to this maintenance repo
 - edit `src/` and forget to update embedded downloads when the checklist ships those files
 - make the distributed HTML less portable without calling it out clearly
+
+## Supervised pipeline starter
+
+- `src/agent-pipeline-demo-starter/` is canonical source for the optional downstream pipeline.
+- `scripts/build_agent_pipeline_zip.py` creates the intentional versioned artifacts
+  `dist/agent-pipeline-demo-starter.zip` and `dist/agent-pipeline-demo-starter.zip.sha256`.
+- After any pipeline starter edit, run `python3 scripts/build_agent_pipeline_zip.py --verify`
+  and `python3 scripts/build_agent_pipeline_zip.py --check` (Windows may use `python`).
+- Keep HTML pipeline instructions aligned with the starter. The optional sibling ZIP
+  must not become a requirement for the HTML interface or core guidance.
+- `tmp/` holds ignored inputs and scratch work only; never maintain it as duplicate source.
+- Guidance in the pipeline's template files governs generated projects, not this maintenance repo.

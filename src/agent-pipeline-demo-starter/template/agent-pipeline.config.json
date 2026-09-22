@@ -1,0 +1,12 @@
+{
+  "validationProfiles": {
+    "default": {
+      "commands": ["npm test"],
+      "artifacts": []
+    },
+    "web-ui": {
+      "commands": ["npm test", "npx playwright test"],
+      "artifacts": ["test-results/", "playwright-report/"]
+    }
+  }
+}

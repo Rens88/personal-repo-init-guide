@@ -1,0 +1,13 @@
+node_modules/
+coverage/
+test-results/
+playwright-report/
+*.log
+.env
+.env.*
+!.env.example
+.codex/
+.claude/
+.mcp.json
+*.pem
+*.key

@@ -1,0 +1,5 @@
+# Keep starter bytes reproducible across Windows and Unix checkouts.
+/src/agent-pipeline-demo-starter/** text eol=lf
+/scripts/*.py text eol=lf
+/dist/*.zip binary
+/dist/*.sha256 text eol=lf
