@@ -8,5 +8,8 @@
       "commands": ["npm test", "npx playwright test"],
       "artifacts": ["test-results/", "playwright-report/"]
     }
+  },
+  "followups": {
+    "maxRounds": 3
   }
 }

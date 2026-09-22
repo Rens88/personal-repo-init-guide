@@ -1,6 +1,6 @@
 # Local builder/reviewer agent pipeline
 
-Starter version: **1.1.0** (also recorded in `VERSION`).
+Starter version: **1.2.0** (also recorded in `VERSION`).
 
 This starter creates a deliberately small JavaScript project plus a local Git-backed agent pipeline:
 
@@ -8,8 +8,8 @@ This starter creates a deliberately small JavaScript project plus a local Git-ba
 - a Claude builder receives that exact instruction commit in its own checkout;
 - Claude implements, tests, and commits the work;
 - a Codex reviewer receives the exact implementation commit in a separate checkout;
-- Codex reviews, tests, and commits only `reviews/TASK-xxxx.md`;
-- the pipeline stops there. A failed review does **not** call the builder again.
+- Codex reviews, tests, and commits `reviews/TASK-xxxx.md` plus, when it is not a PASS, a draft next task in `followups/TASK-xxxx.draft.md`;
+- the pipeline stops there. A draft is a proposal: you promote, edit and submit it, and that commit starts the next round.
 
 The two agent workspaces are ordinary host-visible folders. Docker Sandbox isolates their runtime environments, while direct mounts keep source, test output, screenshots, and other artifacts easy to inspect.
 
@@ -88,6 +88,9 @@ instruction commit
   -> Codex reviewer
   -> validated review-complete commit
   -> stop / human decision
+       PASS               -> thread complete
+       CHANGES_REQUESTED  -> promote draft, read it, submit  -> next round
+       DECISION_REQUIRED  -> answer its questions, submit    -> next round
 ```
 
 ## 4. Inspect the result
@@ -127,7 +130,39 @@ The dispatcher routes commits by Git trailers:
 | `build-complete` | `Task-ID`, `Task-File`, `Instruction-Commit` | Run reviewer |
 | `review-complete` | `Task-ID`, `Instruction-Commit`, `Implementation-Commit`, `Verdict` | Record only; never re-run builder |
 
-The builder must make exactly one clean commit and cannot change task instructions, reviews, agent rules, or pipeline automation. The reviewer must also make exactly one clean commit, and its diff may contain only `reviews/<Task-ID>.md`. The host reads job prompts from the separate control checkout. Violations stop the dispatcher before the commit is published.
+The builder must make exactly one clean commit and cannot change task instructions, reviews, follow-up drafts, agent rules, or pipeline automation. The reviewer must also make exactly one clean commit. The host reads job prompts from the separate control checkout. Violations stop the dispatcher before the commit is published.
+
+`Verdict` is one of `PASS`, `CHANGES_REQUESTED` or `DECISION_REQUIRED`, and it fixes the reviewer's permitted file set exactly:
+
+| Verdict | Meaning | Reviewer diff must be |
+|---|---|---|
+| `PASS` | No blocking findings. | only `reviews/<Task-ID>.md` |
+| `CHANGES_REQUESTED` | Blocking findings the reviewer can fully specify; no human judgment needed. | `reviews/<Task-ID>.md` **and** `followups/<Task-ID>.draft.md` |
+| `DECISION_REQUIRED` | A human must choose before work can continue. | the same two files; the draft must contain a `# Decisions required` section |
+
+A PASS therefore cannot smuggle in a follow-up, and a non-PASS cannot end a thread without one.
+
+## The follow-up loop
+
+Reviewers draft; they never submit. A draft has an **empty `id`**, so it is not a valid task and cannot trigger anything while it sits in `followups/`.
+
+```powershell
+git pull --ff-only
+Get-Content ./reviews/TASK-0001.md
+Get-Content ./followups/TASK-0001.draft.md
+
+./automation/Promote-Followup.ps1 -TaskId TASK-0001 -Slug fix-operand-validation
+# writes builder-instructions/TASK-0002-fix-operand-validation.md and stops
+
+# read it, edit it, answer any "Decisions required" questions and delete that section
+./automation/Submit-Task.ps1 -Path ./builder-instructions/TASK-0002-fix-operand-validation.md
+```
+
+`Promote-Followup.ps1` allocates the next free task id, copies the draft body unchanged, and **does not commit**. Your `Submit-Task.ps1` commit is the sign-off; there is no separate approval mechanism because the instruction commit already was one. The draft stays committed in `followups/` as the audit trail.
+
+The promoted task keeps `parent-task: TASK-0001`. The dispatcher walks that chain through committed files on every instruction, so a task cannot understate its own round, and refuses to start a round deeper than `followups.maxRounds` (default 3) in `agent-pipeline.config.json`. Cycles are rejected. The cap matters because a reviewer judging a fix to its own feedback is marking its own homework; after two or three rounds on the same finding, the instruction is usually what is wrong.
+
+To end a thread instead, just stop. Nothing expires and nothing retries on its own.
 
 ## Deliberate limitations
 
@@ -135,7 +170,7 @@ This is a local learning scaffold, not a production queue:
 
 - one dispatcher and one task at a time;
 - a local bare remote rather than GitHub/GitLab;
-- no automatic retry or review-to-builder loop;
+- no automatic retry, and no builder round without a human sign-off commit;
 - no notification service;
 - agents run with broad permissions inside Docker Sandbox, but only against their dedicated direct-mounted checkout.
 
@@ -274,5 +309,7 @@ or submit a new immutable task. See the [official workflow](https://github.com/g
   Already published matching events prevent duplicate jobs. Keep
   `../state/processed-commits.txt`; do not routinely delete it to request a retry.
 - **Human decision:** pull the review into control and inspect the code, tests and report
-  after PASS as well as CHANGES_REQUESTED. PASS is evidence, not automatic acceptance
-  or external publication. Create a new task ID for follow-up; never edit submitted instructions.
+  after every verdict. PASS is evidence, not automatic acceptance or external publication.
+  For a follow-up, use `Promote-Followup.ps1` to get a new task ID; never edit submitted
+  instructions. A `CHANGES_REQUESTED` draft still needs your reading — "no human decision
+  flagged" is the reviewer's opinion, not a guarantee.

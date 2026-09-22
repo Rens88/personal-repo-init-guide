@@ -29,6 +29,9 @@ function Invoke-Git {
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+if (Test-Path -LiteralPath (Join-Path (Split-Path $repoRoot -Parent) 'state/setup-pending')) {
+    throw 'Confirm initial pipeline setup before submitting tasks.'
+}
 $taskPath = (Resolve-Path -LiteralPath $Path).Path
 $repoUri = [System.Uri]::new($repoRoot.TrimEnd([char[]]@("\", "/")) + [System.IO.Path]::DirectorySeparatorChar)
 $taskUri = [System.Uri]::new($taskPath)

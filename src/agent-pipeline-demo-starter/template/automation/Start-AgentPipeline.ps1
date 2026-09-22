@@ -26,6 +26,10 @@ $reviewerPath = Join-Path $rootPath "reviewer"
 $logsPath = Join-Path $rootPath "logs"
 $statePath = Join-Path $rootPath "state"
 $processedPath = Join-Path $statePath "processed-commits.txt"
+if (Test-Path -LiteralPath (Join-Path $statePath 'setup-pending')) {
+    throw 'Review setup and run automation/Confirm-PipelineSetup.ps1 before starting the dispatcher.'
+}
+
 
 foreach ($requiredPath in @($originPath, $controlPath, $builderPath, $reviewerPath, $logsPath, $statePath)) {
     if (-not (Test-Path -LiteralPath $requiredPath)) {
@@ -236,11 +240,16 @@ function Assert-BuilderChangedNoProtectedFiles {
         "agent-pipeline.config.json",
         ".gitignore"
     )
+    $config = ConvertFrom-Json (Invoke-OriginGit @('show', "${BaseCommit}:agent-pipeline.config.json"))
+    if ($config.PSObject.Properties.Name -contains 'governancePaths') {
+        $protected += @($config.governancePaths)
+    }
     foreach ($file in $changedFiles) {
         if ($file -in $protected -or
             $file.StartsWith("automation/") -or
             $file.StartsWith("builder-instructions/") -or
             $file.StartsWith("examples/") -or
+            $file.StartsWith("followups/") -or
             $file.StartsWith("reviews/") -or
             $file.StartsWith("test-results/") -or
             $file.StartsWith("playwright-report/")) {
@@ -325,6 +334,7 @@ function Invoke-Reviewer {
     )
 
     $reportFile = "reviews/$TaskId.md"
+    $draftFile = "followups/$TaskId.draft.md"
     Assert-TaskMetadata $TaskId $TaskFile
     $validation = Get-CommittedTaskValidation $InstructionCommit $TaskId $TaskFile
     Write-Host "[$TaskId] Syncing reviewer to $ImplementationCommit" -ForegroundColor Cyan
@@ -336,6 +346,7 @@ function Invoke-Reviewer {
         INSTRUCTION_COMMIT = $InstructionCommit
         IMPLEMENTATION_COMMIT = $ImplementationCommit
         REPORT_FILE = $reportFile
+        DRAFT_FILE = $draftFile
     }
 
     $prompt = Expand-Prompt (Join-Path $controlPath "automation/prompts/reviewer.md") ($values + $validation)
@@ -362,9 +373,6 @@ function Invoke-Reviewer {
 
     $reviewCommit = Assert-CleanSingleCommit $reviewerPath $ImplementationCommit
     $changedFiles = @((Invoke-Git $reviewerPath @("diff", "--name-only", "$ImplementationCommit..$reviewCommit")) -split "`n" | Where-Object { $_ })
-    if ($changedFiles.Count -ne 1 -or $changedFiles[0] -ne $reportFile) {
-        throw "Reviewer may change only $reportFile. Changed: $($changedFiles -join ', ')"
-    }
 
     $body = Invoke-Git $reviewerPath @("show", "-s", "--format=%B", $reviewCommit)
     if ((Get-Trailer $body "Agent-Event" -Required) -ne "review-complete") { throw "Reviewer commit has the wrong Agent-Event." }
@@ -372,11 +380,41 @@ function Invoke-Reviewer {
     if ((Get-Trailer $body "Instruction-Commit" -Required) -ne $InstructionCommit) { throw "Reviewer commit has the wrong Instruction-Commit." }
     if ((Get-Trailer $body "Implementation-Commit" -Required) -ne $ImplementationCommit) { throw "Reviewer commit has the wrong Implementation-Commit." }
     $verdict = Get-Trailer $body "Verdict" -Required
-    if ($verdict -notin @("PASS", "CHANGES_REQUESTED")) { throw "Reviewer verdict must be PASS or CHANGES_REQUESTED." }
+    if ($verdict -notin @("PASS", "CHANGES_REQUESTED", "DECISION_REQUIRED")) {
+        throw "Reviewer verdict must be PASS, CHANGES_REQUESTED or DECISION_REQUIRED."
+    }
+
+    # The verdict fixes the permitted file set exactly: a PASS cannot smuggle in a
+    # follow-up, and a non-PASS cannot end the thread without one.
+    $expectedFiles = @($reportFile)
+    if ($verdict -ne "PASS") { $expectedFiles = @($reportFile, $draftFile) }
+    $unexpected = @($changedFiles | Where-Object { $_ -notin $expectedFiles })
+    $missing = @($expectedFiles | Where-Object { $_ -notin $changedFiles })
+    if ($unexpected.Count -or $missing.Count) {
+        throw "Verdict $verdict requires exactly: $($expectedFiles -join ', '). Unexpected: $($unexpected -join ', '). Missing: $($missing -join ', ')."
+    }
+
+    if ($verdict -ne "PASS") {
+        $draftContents = Invoke-Git $reviewerPath @("show", "${reviewCommit}:$draftFile")
+        $configuration = Invoke-OriginGit @("show", "${InstructionCommit}:agent-pipeline.config.json")
+        $null = Get-FollowupDraft $draftContents $configuration $TaskId $verdict
+    }
 
     Publish-Commit $reviewerPath $ImplementationCommit
     Write-Host "[$TaskId] Published review $reviewCommit with verdict $verdict" -ForegroundColor Green
-    Write-Host "[$TaskId] Pipeline stops here; no automatic builder follow-up." -ForegroundColor Magenta
+    switch ($verdict) {
+        "PASS" {
+            Write-Host "[$TaskId] Thread complete. Inspect the review before accepting." -ForegroundColor Magenta
+        }
+        "CHANGES_REQUESTED" {
+            Write-Host "[$TaskId] Follow-up drafted at $draftFile (no human decision needed)." -ForegroundColor Magenta
+            Write-Host "[$TaskId] Sign off with: ./automation/Promote-Followup.ps1 -TaskId $TaskId -Slug <slug>" -ForegroundColor Magenta
+        }
+        "DECISION_REQUIRED" {
+            Write-Host "[$TaskId] Follow-up drafted at $draftFile and it needs YOUR DECISION." -ForegroundColor Yellow
+            Write-Host "[$TaskId] Answer its 'Decisions required' section, then promote and submit." -ForegroundColor Yellow
+        }
+    }
 }
 
 $processed = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
@@ -425,6 +463,9 @@ while ($true) {
                     $taskId = Get-Trailer $body "Task-ID" -Required
                     $verdict = Get-Trailer $body "Verdict" -Required
                     Write-Host "[$taskId] Review recorded: $verdict ($commit)" -ForegroundColor Magenta
+                    if ($verdict -ne "PASS") {
+                        Write-Host "[$taskId] Awaiting your sign-off on followups/$taskId.draft.md." -ForegroundColor Magenta
+                    }
                 }
                 default {
                     Write-Host "Ignoring non-agent commit $($commit.Substring(0, 8))."

@@ -13,8 +13,18 @@
 
 ## Builder role
 
-Implement only the assigned task. Add or update tests. Make exactly one commit and leave a clean working tree.
+Implement only the assigned task. Add or update tests. Make exactly one commit and leave a clean working tree. Never write to `reviews/` or `followups/`.
 
 ## Reviewer role
 
-Do not alter implementation, tests, configuration, or instructions. Create only the requested Markdown report under `reviews/`, make exactly one commit, and leave a clean working tree.
+Do not alter implementation, tests, configuration, or instructions. Make exactly one commit and leave a clean working tree.
+
+Write `reviews/<Task-ID>.md` on every run. Choose one verdict:
+
+- `PASS` — no blocking findings; change no other file.
+- `CHANGES_REQUESTED` — blocking findings you can fully specify.
+- `DECISION_REQUIRED` — a human must make a choice before work can continue.
+
+For the two non-PASS verdicts, also write `followups/<Task-ID>.draft.md` with an empty
+`id` and `parent-task: <Task-ID>`. A draft is a proposal. Only a human promotes it into
+`builder-instructions/`, which is what starts the next round.
