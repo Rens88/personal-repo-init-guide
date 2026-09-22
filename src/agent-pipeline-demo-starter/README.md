@@ -45,6 +45,71 @@ sbx secret set openai --oauth
 
 Docker documents `sbx run claude <project>` and `sbx run codex <project>` as the supported launches. The starter uses Claude print mode and Codex `exec` mode so each job exits when it is done.
 
+## Alternative: start from an existing remote
+
+Use this instead of the demo initializer to retain an existing project's committed
+code, history, architecture and agent rules. First review local work and publish the
+intended baseline to the source branch through your normal workflow. Only that
+remote branch's commits are cloned; uncommitted work and ignored files are not copied.
+
+From the extracted starter folder:
+
+```powershell
+$pipelineRemote = Read-Host "Remote URL (no embedded credentials)"
+$sourceBranch = Read-Host "Source branch to clone"
+$pipelineRoot = Read-Host "New full pipeline folder path (outside existing repos)"
+$validationCommand = Read-Host "Documented offline test command"
+./Initialize-FromRemote.ps1 -Remote $pipelineRemote -SourceBranch $sourceBranch -Destination $pipelineRoot -ValidationCommand $validationCommand
+```
+
+For example, a unittest-based Python project can select
+`python -m unittest discover -s tests -v`; use the actual project's documented command.
+`-ValidationCommand` also accepts a PowerShell array of commands. They are stored in
+configuration, not executed by the initializer. Use your Git credential manager or
+SSH agent for clone access, never a token embedded in the URL.
+
+The destination must not exist and must be outside an existing working tree. The
+initializer creates a local setup commit and the same six-directory layout as the
+demo. Inside these copies the pipeline branch is `main`, even if the source branch
+has another name. The external remote is removed from the pipeline copies; their
+`origin` points only to the local bare repository. Your original checkout and remote
+are unchanged. Conflicting pipeline paths cause setup to stop without overwriting them.
+A failed setup may leave a partial destination; inspect it before choosing a fresh one.
+
+Before running agents:
+
+1. In `control`, inspect the setup commit, `agent-pipeline.config.json` and `.gitignore`.
+2. Check `governancePaths`. Root AGENTS/CLAUDE guidance is discovered with its existing
+   casing. Add linked risk models, constitutions or other governing files explicitly
+   so they are protected too; `-GovernancePath` can supply them during initialization.
+3. Prepare both agent environments according to the project. Synchronization uses
+   `git clean -fdx`: a `.venv` or dependencies inside a checkout will be deleted.
+   Keep environments outside the checkout in the agent environment, or use a
+   reproducible setup command before tests. Ignore generated caches and package
+   metadata; do not transfer application credentials or private data.
+4. Review and selectively commit any setup corrections, then push to local origin.
+5. With a clean control checkout, run `./automation/Confirm-PipelineSetup.ps1`.
+   This records existing history as baseline so historical events are not replayed.
+6. Start the dispatcher with unique sandbox names, for example
+   `./automation/Start-AgentPipeline.ps1 -BuilderSandbox project-builder -ReviewerSandbox project-reviewer`.
+7. Copy `examples/TASK-0100-project-task.md` into `builder-instructions/`, replace its
+   placeholders, choose an unused matching ID, and submit it with `Submit-Task.ps1`.
+
+Repository governance takes precedence over tasks. Within those constraints, a task
+can override its referenced feature spec, with the conflict reported. A non-PASS
+review produces a draft as described below. Your submission is the sign-off; the
+scripts do not prove that questions written in prose have been answered.
+
+To inspect accepted work from your normal checkout, stop the dispatcher, fetch
+`main` from the pipeline's `origin.git`, and create a local review branch at
+`FETCH_HEAD`. Review the changes before using your normal merge/PR workflow. The
+pipeline setup commit is included in that history. Nothing publishes externally.
+
+For a project with two repositories, use one pipeline folder and unique sandbox
+names per repository. Review the dependency first, make an exact accepted revision
+available, then submit a separate consumer task that pins and tests that revision.
+A shared editor workspace does not combine Git histories or sandbox access.
+
 ## 1. Create the demo
 
 From the extracted starter directory:
