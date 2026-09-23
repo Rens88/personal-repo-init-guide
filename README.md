@@ -44,6 +44,14 @@ If you update `src/bootstrap_repo.py`, `src/AGENTS.md`, or `src/AGENTS_INIT.md`,
 
 ## Optional supervised builder/reviewer starter
 
+For a worked example of daily use, task submission and follow-up signoff, see
+[the revised AMS startup notes](docs/startup-notes-agent-revised.md). These are
+personal operating notes for an existing pipeline, not a replacement for the
+standalone checklist or the general starter instructions.
+
+For a fresh support chat, share [the agent handoff](docs/agent-workflow-handoff.md).
+For a conceptual walkthrough, open [the visual workflow PDF](docs/builder-reviewer-workflow.pdf).
+
 The checklist's Extras include an advanced local pipeline alongside the recommended
 single interactive agent path. Its maintained files are:
 

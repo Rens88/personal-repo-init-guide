@@ -171,11 +171,24 @@ function Expand-Prompt {
         [hashtable]$Values
     )
 
-    $prompt = Get-Content -LiteralPath $TemplatePath -Raw
+    $prompt = Get-Content -LiteralPath $TemplatePath -Raw -Encoding UTF8
     foreach ($key in $Values.Keys) {
         $prompt = $prompt.Replace("{{$key}}", [string]$Values[$key])
     }
     return $prompt
+}
+
+function ConvertTo-AgentOutputText {
+    param([Parameter(ValueFromPipeline = $true)]$InputObject)
+    process {
+        if ($InputObject -is [System.Management.Automation.ErrorRecord]) {
+            # ToString() substitutes the exception type for empty native stderr lines.
+            $InputObject.Exception.Message
+        }
+        else {
+            [string]$InputObject
+        }
+    }
 }
 
 function Publish-Commit {
@@ -296,18 +309,22 @@ function Invoke-Builder {
     $logFile = Join-Path $logsPath "$TaskId-builder-$($InstructionCommit.Substring(0, 8)).log"
     Write-Host "[$TaskId] Starting Claude builder; log: $logFile" -ForegroundColor Yellow
     $previousErrorActionPreference = $ErrorActionPreference
+    $previousConsoleOutputEncoding = [Console]::OutputEncoding
     try {
         $ErrorActionPreference = "Continue"
+        [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
         if (Test-SandboxExists $BuilderSandbox) {
-            & sbx run --name $BuilderSandbox -- -p --output-format text $prompt 2>&1 | Tee-Object -FilePath $logFile
+            # Normalize native stderr records before logging/display; exit code determines failure.
+            & sbx run --name $BuilderSandbox -- -p --output-format text $prompt 2>&1 | ConvertTo-AgentOutputText | Tee-Object -FilePath $logFile
         }
         else {
-            & sbx run --name $BuilderSandbox claude $builderPath -- -p --output-format text $prompt 2>&1 | Tee-Object -FilePath $logFile
+            & sbx run --name $BuilderSandbox claude $builderPath -- -p --output-format text $prompt 2>&1 | ConvertTo-AgentOutputText | Tee-Object -FilePath $logFile
         }
         $agentExitCode = $LASTEXITCODE
     }
     finally {
         $ErrorActionPreference = $previousErrorActionPreference
+        [Console]::OutputEncoding = $previousConsoleOutputEncoding
     }
     if ($agentExitCode -ne 0) {
         throw "Claude builder exited with code $agentExitCode."
@@ -354,18 +371,30 @@ function Invoke-Reviewer {
     $logFile = Join-Path $logsPath "$TaskId-reviewer-$($ImplementationCommit.Substring(0, 8)).log"
     Write-Host "[$TaskId] Starting Codex reviewer; log: $logFile" -ForegroundColor Yellow
     $previousErrorActionPreference = $ErrorActionPreference
+    $previousOutputEncoding = $OutputEncoding
+    $previousConsoleOutputEncoding = [Console]::OutputEncoding
     try {
         $ErrorActionPreference = "Continue"
-        if (Test-SandboxExists $ReviewerSandbox) {
-            & sbx run --name $ReviewerSandbox -- exec --dangerously-bypass-approvals-and-sandbox $prompt 2>&1 | Tee-Object -FilePath $logFile
+        # Windows PowerShell 5.1 can split quoted multiline native arguments.
+        # Send the prompt as UTF-8 stdin; Codex's '-' reads it without argv parsing.
+        $OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+        [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+        if (-not (Test-SandboxExists $ReviewerSandbox)) {
+            & sbx create --name $ReviewerSandbox codex $reviewerPath 2>&1 | ConvertTo-AgentOutputText | Tee-Object -FilePath $logFile
+            $createExitCode = $LASTEXITCODE
+            if ($createExitCode -ne 0) {
+                throw "Creating reviewer sandbox failed with code $createExitCode."
+            }
         }
-        else {
-            & sbx run --name $ReviewerSandbox codex $reviewerPath -- exec --dangerously-bypass-approvals-and-sandbox $prompt 2>&1 | Tee-Object -FilePath $logFile
-        }
+        # Explicit stdin attachment avoids the sbx run agent launcher's piped-input path.
+        # Normalize native stderr records before logging/display; exit code determines failure.
+        $prompt | & sbx exec -i $ReviewerSandbox codex exec --dangerously-bypass-approvals-and-sandbox - 2>&1 | ConvertTo-AgentOutputText | Tee-Object -FilePath $logFile
         $agentExitCode = $LASTEXITCODE
     }
     finally {
         $ErrorActionPreference = $previousErrorActionPreference
+        $OutputEncoding = $previousOutputEncoding
+        [Console]::OutputEncoding = $previousConsoleOutputEncoding
     }
     if ($agentExitCode -ne 0) {
         throw "Codex reviewer exited with code $agentExitCode."

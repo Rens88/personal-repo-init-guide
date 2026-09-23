@@ -368,11 +368,27 @@ or submit a new immutable task. See the [official workflow](https://github.com/g
   `-BuilderSandbox my-demo-builder -ReviewerSandbox my-demo-reviewer`.
 - **Authentication:** configure Claude/Codex access via the sandbox secret mechanism;
   inspect `../logs/` if a noninteractive job cannot authenticate. Never commit credentials.
+- **Sandbox status output:** agent-launch stdout and stderr are displayed and logged as
+  plain text, so normal attachment messages do not appear as PowerShell error records.
+  Nonzero agent exit codes still stop the dispatcher with an error.
+- **Character encoding:** save task files and prompt templates as UTF-8; Unicode
+  punctuation and non-English text are allowed. The dispatcher explicitly reads prompt
+  templates as UTF-8 and decodes agent output as UTF-8. Blank stderr lines are preserved
+  instead of being displayed as `System.Management.Automation.RemoteException`.
 - **Failure/retry:** the dispatcher exits and does not mark a failing event processed.
   Inspect logs and preserve useful uncommitted agent files before restarting: checkout
   synchronization resets and cleans the dedicated workspace. Fix the cause, then restart.
   Already published matching events prevent duplicate jobs. Keep
   `../state/processed-commits.txt`; do not routinely delete it to request a retry.
+- **Reviewer prompt parsing:** `codex exec` receives the expanded prompt through UTF-8
+  standard input (`-`) via `sbx exec -i`, avoiding Windows PowerShell 5.1 argument
+  splitting at quotes and the `sbx run` piped-input launch path. A missing reviewer
+  sandbox is created first; `sbx exec` starts an existing stopped sandbox as needed.
+  If upgrading an existing dispatcher after a published build failed to launch review,
+  replace the dispatcher in `control` while it is stopped, then restart. Leave the
+  patch uncommitted until the pending review is published: an intervening push to
+  local `main` would fail the review's expected-parent check. Keep the processed state
+  and do not resubmit the task. Commit the launcher fix after pulling the review.
 - **Human decision:** pull the review into control and inspect the code, tests and report
   after every verdict. PASS is evidence, not automatic acceptance or external publication.
   For a follow-up, use `Promote-Followup.ps1` to get a new task ID; never edit submitted
